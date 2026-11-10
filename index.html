@@ -2,290 +2,731 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CAPQ | Walk-In Check-In</title>
-<style>
-*{box-sizing:border-box}
-body{
- margin:0;
- background:#101010;
- color:white;
- font-family:Arial,sans-serif;
-}
-main{max-width:480px;margin:auto;padding:30px 20px}
-header{text-align:center;margin-bottom:30px}
-h1{
- font-size:55px;
- color:#d4af37;
- margin:0;
- letter-spacing:5px;
-}
-.tag{color:#d4af37;letter-spacing:3px;font-size:12px}
-h2{text-align:center;font-size:24px;margin-top:35px}
-p{color:#aaa;text-align:center}
-label{display:block;margin:18px 0 8px}
-input,select{
- width:100%;
- padding:15px;
- border-radius:8px;
- border:1px solid #555;
- background:#202020;
- color:white;
- font-size:16px;
-}
-.option{
- border:1px solid #555;
- border-radius:10px;
- padding:18px;
- margin-top:12px;
- cursor:pointer;
-}
-.option.active{
- border:2px solid #d4af37;
- background:#29251a;
-}
-.option strong{display:block}
-.option small{color:#aaa}
-button{
- width:100%;
- background:#d4af37;
- color:#111;
- padding:17px;
- border:0;
- border-radius:8px;
- font-size:17px;
- font-weight:bold;
- margin-top:25px;
- cursor:pointer;
-}
-.hidden{display:none}
-.queue{
- margin-top:35px;
- border-top:1px solid #444;
- padding-top:15px;
-}
-.entry{
- background:#202020;
- padding:14px;
- border-radius:8px;
- margin:10px 0;
-}
-.entry small{
- display:block;
- color:#aaa;
- margin-top:5px;
-}
-.message{
- color:#d4af37;
- text-align:center;
- margin-top:15px;
-}
-</style>
-</head>
-
-<body>
-<main>
-<header>
-<h1>CAPQ</h1>
-<div class="tag">BUILT FOR BARBERS</div>
-</header>
-
-<h2>Walk-In Check-In</h2>
-<p>Join the line. We'll take care of the rest.</p>
-
-<form id="checkin">
-<label for="name">Your Name</label>
-<input
- id="name"
- required
- maxlength="60"
- placeholder="Enter your name"
->
-
-<label for="service">Select Service</label>
-<select id="service">
-<option>Haircut</option>
-<option>Haircut + Beard</option>
-<option>Kids Haircut</option>
-<option>Beard Trim</option>
-</select>
-
-<label>Choose Your Barber Preference</label>
-
-<div class="option active" id="nextOption"
- onclick="choose('next')">
-<strong>Wait for Next Barber</strong>
-<small>First available barber</small>
-</div>
-
-<div class="option" id="pickOption"
- onclick="choose('pick')">
-<strong>Pick Your Barber</strong>
-<small>Wait for your preferred barber</small>
-</div>
-
-<div id="barberBox" class="hidden">
-<label for="barber">Select Barber</label>
-<select id="barber">
-<option value="">Choose a barber</option>
-<option>Barber 1</option>
-<option>Barber 2</option>
-<option>Barber 3</option>
-</select>
-</div>
-
-<button type="submit">Join Waitlist</button>
-</form>
-
-<div class="message" id="message" role="status"></div>
-
-<section class="queue">
-<h2>Demo Waiting List</h2>
-<p id="count">0 customers waiting</p>
-<div id="queueList"></div>
-</section>
-</main>
-
-<script>
-let preference="next";
-let waiting=[];
-
-function choose(value){
- preference=value;
-
- document.getElementById("nextOption")
-  .classList.toggle("active",value==="next");
-
- document.getElementById("pickOption")
-  .classList.toggle("active",value==="pick");
-
- document.getElementById("barberBox")
-  .classList.toggle("hidden",value!=="pick");
-}
-
-document.getElementById("checkin")
-.addEventListener("submit",function(event){
- event.preventDefault();
-
- const name=document.getElementById("name").value.trim();
- const service=document.getElementById("service").value;
- const barber=document.getElementById("barber").value;
-
- if(!name)return;
-
- if(preference==="pick"&&!barber){
-  alert("Please select your barber.");
-  return;
- }
-
- waiting.push({
-  name:name,
-  service:service,
-  preference:preference==="next"
-   ? "Next Available Barber"
-   : barber
- });
-
- document.getElementById("message").textContent=
-  name+", you're on the demo waiting list!";
-
- this.reset();
- choose("next");
- renderQueue();
-});
-
-function renderQueue(){
- const list=document.getElementById("queueList");
- list.replaceChildren();
-
- waiting.forEach(function(customer,index){
-  const item=document.createElement("div");
-  item.className="entry";
-
-  const title=document.createElement("strong");
-  title.textContent=(index+1)+". "+customer.name;
-
-  const details=document.createElement("small");
-  details.textContent=customer.service+
-   " | "+customer.preference;
-
-  item.append(title,details);
-  list.appendChild(item);
- });
-
- document.getElementById("count").textContent=
-  waiting.length+" customers waiting";
-}
-</script>
-</body>
-</html>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101114">
+  <meta name="description" content="CAPQ helps barbers and barbershops organize walk-ins, manage their line, and connect with clients.">
+  <title>CAPQ | Built for Barbers</title>
+  <style>
+    :root {
+      --black: #101114;
+      --charcoal: #292D33;
+      --gold: #D6B45C;
+      --ivory: #F7F7F4;
+      --green: #16A77A;
+      --muted: #A9ADB5;
     }
 
-    main {
-      min-height: 100vh;
-      min-height: 100dvh;
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--black);
+      color: var(--ivory);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .container {
+      width: min(1140px, 92%);
+      margin: auto;
+    }
+
+    .nav {
+      border-bottom: 1px solid #303238;
+      background: #101114f5;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-inner {
       display: flex;
-      flex-direction: column;
       align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .brand-icon {
+      width: 46px;
+      height: 46px;
+      background: #08090b;
+      border: 1px solid #67572c;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 0 14px #16a77a22;
+      flex-shrink: 0;
+    }
+
+    .brand-icon span {
+      font-size: 35px;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--gold);
+    }
+
+    .brand-name {
+      font-size: 24px;
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .brand-name span { color: var(--gold); }
+
+    .brand-tag {
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .btn {
+      display: inline-flex;
       justify-content: center;
-      padding: 30px 20px;
+      align-items: center;
+      padding: 13px 22px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 14px;
+      transition: transform .2s, opacity .2s;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #101114;
+    }
+
+    .btn-outline {
+      border: 1px solid #777;
+      color: white;
+    }
+
+    .btn-green {
+      background: var(--green);
+      color: white;
+    }
+
+    .hero {
+      padding: 100px 0 85px;
+      background:
+        radial-gradient(ellipse at 85% 20%, #116c4b29, transparent 48%),
+        radial-gradient(ellipse at 15% 90%, #d6b45c10, transparent 45%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: 55px;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
     }
 
     h1 {
-      font-size: clamp(75px, 17vw, 150px);
-      letter-spacing: 5px;
-      margin: 0;
-      font-weight: 800;
+      font-size: clamp(39px, 5vw, 65px);
+      line-height: 1.12;
+      letter-spacing: -2px;
+      margin: 18px 0 22px;
     }
 
-    h2 {
-      color: #D4AF50;
-      font-size: clamp(24px, 5vw, 36px);
+    h1 span { color: var(--gold); }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 530px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .hero-note {
+      margin-top: 18px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .preview {
+      border: 1px solid #49443b;
+      border-radius: 22px;
+      padding: 22px;
+      background: linear-gradient(145deg, #24272d, #141619);
+      box-shadow: 0 25px 70px #0008;
+    }
+
+    .preview-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .preview-top strong { font-size: 19px; }
+
+    .demo-label {
+      color: var(--gold);
+      border: 1px solid #7b6737;
+      border-radius: 30px;
+      padding: 5px 10px;
+      font-size: 11px;
+    }
+
+    .preview-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .stat {
+      padding: 15px 8px;
+      background: #101114;
+      border: 1px solid #383c42;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 27px;
+      color: var(--gold);
+    }
+
+    .stat small {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .preview-heading {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .status { color: #48d7a1; }
+
+    .queue-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 14px;
+      margin-bottom: 9px;
+      background: #101114;
+      border: 1px solid #383c42;
+      border-radius: 11px;
+    }
+
+    .queue-item strong { display: block; font-size: 14px; }
+    .queue-item small { color: var(--muted); font-size: 11px; }
+
+    .pill {
+      padding: 5px 9px;
+      border-radius: 20px;
+      background: #123e30;
+      color: #67e8b7;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    section.content { padding: 80px 0; }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 38px;
+    }
+
+    .section-title h2 {
+      font-size: clamp(29px, 4vw, 42px);
+      margin: 9px 0;
+      line-height: 1.2;
+    }
+
+    .section-title p {
+      color: var(--muted);
+      max-width: 650px;
+      margin: 10px auto;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: 17px;
+      background: #1c1f24;
+      border: 1px solid #383c42;
+    }
+
+    .card-icon {
+      font-size: 29px;
+      margin-bottom: 13px;
+      color: var(--gold);
+    }
+
+    .card h3 { margin: 0 0 10px; font-size: 19px; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .audience {
+      background: #17191d;
+    }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .audience-card {
+      padding: 35px;
+      background: #24272d;
+      border: 1px solid #4b4d50;
+      border-radius: 18px;
+    }
+
+    .audience-card h3 { font-size: 25px; margin: 0 0 12px; }
+    .audience-card p { color: var(--muted); margin-bottom: 25px; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .step {
+      padding: 25px;
+      text-align: center;
+    }
+
+    .step-number {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #29251b;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      font-weight: 900;
+    }
+
+    .step p { color: var(--muted); font-size: 14px; }
+
+    .pricing {
+      background: #17191d;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 360px));
+      justify-content: center;
+      gap: 22px;
+    }
+
+    .price-card {
+      background: #24272d;
+      border: 1px solid #474b50;
+      padding: 32px;
+      border-radius: 18px;
+    }
+
+    .price-card.featured { border-color: var(--gold); }
+
+    .price-card h3 { font-size: 23px; margin: 0; }
+
+    .price {
+      font-size: 43px;
+      font-weight: 900;
+      margin: 15px 0;
+    }
+
+    .price small {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: normal;
+    }
+
+    .price-card p { color: var(--muted); }
+
+    .price-card ul {
+      list-style: none;
+      padding: 0;
       margin: 25px 0;
     }
 
-    p {
-      color: #BBBBBB;
-      font-size: clamp(18px, 3vw, 23px);
-      line-height: 1.6;
-      max-width: 600px;
-      margin: 25px auto 45px;
+    .price-card li {
+      margin: 12px 0;
+      font-size: 14px;
     }
 
-    .button {
-      display: inline-block;
-      background: #D4AF50;
-      color: #101010;
-      padding: 20px 45px;
-      border-radius: 12px;
-      font-size: 22px;
-      font-weight: bold;
+    .price-card li::before {
+      content: "✓";
+      color: var(--green);
+      margin-right: 10px;
     }
+
+    .price-card .btn { width: 100%; }
+
+    .pricing-note {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      margin-top: 25px;
+    }
+
+    .cta {
+      text-align: center;
+      padding: 85px 20px;
+      background: radial-gradient(ellipse at center, #116c4b25, transparent 65%);
+    }
+
+    .cta h2 { font-size: clamp(30px, 4vw, 45px); margin: 0 0 14px; }
+    .cta p { color: var(--muted); margin-bottom: 28px; }
 
     footer {
-      color: #777;
+      border-top: 1px solid #303238;
+      padding: 25px 0;
+      color: var(--muted);
       font-size: 13px;
-      margin-top: 70px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
+
+    @media (max-width: 850px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero { padding: 65px 0; }
+      .cards { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { gap: 12px; }
+      .nav-links .desktop-link { display: none; }
+    }
+
+    @media (max-width: 580px) {
+      .nav-links { font-size: 12px; }
+      .nav-links .btn { padding: 10px 12px; }
+      .brand-name { font-size: 21px; }
+      .brand-icon { width: 40px; height: 40px; }
+      .brand-icon span { font-size: 30px; }
+      .brand-tag { letter-spacing: 1px; }
+      .cards, .audience-grid, .steps, .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-actions .btn { flex: 1; }
+      section.content { padding: 60px 0; }
+      .preview { padding: 15px; }
+      .audience-card { padding: 25px; }
+      .footer-inner { flex-direction: column; }
     }
   </style>
 </head>
 <body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand" aria-label="CAPQ Home">
+        <div class="brand-icon"><span>C</span></div>
+        <div>
+          <div class="brand-name">CAP<span>Q</span></div>
+          <div class="brand-tag">BUILT FOR BARBERS</div>
+        </div>
+      </a>
+
+      <div class="nav-links">
+        <a href="#features" class="desktop-link">Features</a>
+        <a href="#pricing" class="desktop-link">Pricing</a>
+        <a href="login.html">Log In</a>
+        <a href="signup.html" class="btn btn-gold">Start Free</a>
+      </div>
+    </div>
+  </nav>
+
   <main>
-    <h1>CAPQ</h1>
-    <h2>Built for Barbers</h2>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">CAPQ • Built for Barbers</div>
+          <h1>Every Walk-In Counts. <span>Every Barber Matters.</span></h1>
+          <p>
+            Keep your line organized, connect with clients, and manage
+            your day with less confusion. CAPQ is being built for
+            independent barbers and barbershop owners.
+          </p>
+          <div class="hero-actions">
+            <a href="signup.html" class="btn btn-gold">Get Started</a>
+            <a href="checkin.html" class="btn btn-outline">Try Check-In Demo</a>
+          </div>
+          <div class="hero-note">
+            Early preview • Some features are still in development
+          </div>
+        </div>
 
-    <p>
-      Smarter walk-in management for
-      barbers and barbershops.
-    </p>
+        <div class="preview" aria-label="Example CAPQ dashboard">
+          <div class="preview-top">
+            <strong>CAPQ Dashboard</strong>
+            <span class="demo-label">DESIGN PREVIEW</span>
+          </div>
 
-    <div class="button">Coming Soon</div>
+          <div class="preview-stats">
+            <div class="stat"><strong>03</strong><small>Waiting</small></div>
+            <div class="stat"><strong>02</strong><small>Available</small></div>
+            <div class="stat"><strong>12</strong><small>Served Today</small></div>
+          </div>
 
-    <footer>
-      &copy; 2026 CAPQ. All rights reserved.
-    </footer>
+          <div class="preview-heading">
+            <strong>Walk-In Queue</strong>
+            <span class="status">● Sample Data</span>
+          </div>
+
+          <div class="queue-item">
+            <div>
+              <strong>Marcus T.</strong>
+              <small>Haircut • Next available</small>
+            </div>
+            <span class="pill">Waiting</span>
+          </div>
+
+          <div class="queue-item">
+            <div>
+              <strong>Jordan R.</strong>
+              <small>Haircut + Beard</small>
+            </div>
+            <span class="pill">Waiting</span>
+          </div>
+
+          <div class="queue-item">
+            <div>
+              <strong>Chris D.</strong>
+              <small>Beard Trim</small>
+            </div>
+            <span class="pill">Waiting</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="content">
+      <div class="container">
+        <div class="section-title">
+          <div class="eyebrow">Built Around Your Day</div>
+          <h2>Less Waiting. More Cutting.</h2>
+          <p>
+            The tools we're developing to help barbers
+            stay organized and keep customers moving.
+          </p>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">♟</div>
+            <h3>Walk-In Queue</h3>
+            <p>Organize customers by next available barber or their preferred barber.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">▦</div>
+            <h3>Booking Connections</h3>
+            <p>Give customers easy access to your existing booking links.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">♙</div>
+            <h3>Client Management</h3>
+            <p>Build client profiles and keep useful visit information in one place.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">↗</div>
+            <h3>Payment Links</h3>
+            <p>Connect customers to the payment methods you already use.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">▥</div>
+            <h3>Reports & Insights</h3>
+            <p>See walk-in activity and understand how your business is performing.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">∞</div>
+            <h3>CAPQ Connections</h3>
+            <p>Keep your professional links and barber profile together.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content audience">
+      <div class="container">
+        <div class="section-title">
+          <div class="eyebrow">One Platform. Two Ways to Work.</div>
+          <h2>Made for Your Setup.</h2>
+        </div>
+
+        <div class="audience-grid">
+          <div class="audience-card">
+            <div class="card-icon">✂</div>
+            <h3>Independent Barber</h3>
+            <p>
+              Manage your own walk-ins and clients, even if
+              your barbershop doesn't subscribe to CAPQ.
+            </p>
+            <a href="signup.html" class="btn btn-gold">Join as a Barber</a>
+          </div>
+
+          <div class="audience-card">
+            <div class="card-icon">▤</div>
+            <h3>Barbershop Owner</h3>
+            <p>
+              Build a smoother experience for your shop,
+              staff, and customers with one shared queue.
+            </p>
+            <a href="signup.html" class="btn btn-outline">Join as a Shop Owner</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+      <div class="container">
+        <div class="section-title">
+          <div class="eyebrow">The CAPQ Flow</div>
+          <h2>Simple From Day One.</h2>
+        </div>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3>Create Your Account</h3>
+            <p>Choose independent barber or barbershop owner.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3>Set Up Your Profile</h3>
+            <p>Add your services, barber details, and useful links.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3>Manage Your Line</h3>
+            <p>Let customers check in and keep your queue organized.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="content pricing">
+      <div class="container">
+        <div class="section-title">
+          <div class="eyebrow">Independent Barber Plans</div>
+          <h2>Simple Pricing.</h2>
+          <p>Planned pricing for independent barbers.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <div class="price-card">
+            <h3>Basic</h3>
+            <div class="price">$9.99 <small>/month</small></div>
+            <p>For barbers who want a more organized day.</p>
+            <ul>
+              <li>Personal barber profile</li>
+              <li>Walk-in queue tools</li>
+              <li>Booking and payment links</li>
+            </ul>
+            <a href="signup.html" class="btn btn-outline">Get Started</a>
+          </div>
+
+          <div class="price-card featured">
+            <h3>Pro</h3>
+            <div class="price">$19.99 <small>/month</small></div>
+            <p>For barbers ready to build and grow.</p>
+            <ul>
+              <li>Everything in Basic</li>
+              <li>Client management tools</li>
+              <li>Reports and business insights</li>
+              <li>Expanded connections</li>
+            </ul>
+            <a href="signup.html" class="btn btn-gold">Get Started</a>
+          </div>
+        </div>
+
+        <p class="pricing-note">
+          Plans and features are in development. Billing is not active yet.
+          Barbershop owner pricing will be announced separately.
+        </p>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <div class="eyebrow">CAPQ • Built for Barbers</div>
+        <h2>Ready for a Better Way to Manage Walk-Ins?</h2>
+        <p>Explore CAPQ as we build the next generation of barber tools.</p>
+        <a href="signup.html" class="btn btn-gold">Create Your Account</a>
+      </div>
+    </section>
   </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>© 2026 CAPQ. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="checkin.html">Check-In Demo</a>
+        <a href="login.html">Log In</a>
+        <a href="signup.html">Sign Up</a>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
