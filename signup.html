@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Join CAPQ | Built for Barbers</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #101010;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 440px;
+      background: #1c1c1c;
+      border: 1px solid #55451e;
+      border-radius: 18px;
+      padding: 28px;
+    }
+    .logo {
+      text-align: center;
+      color: #d4af37;
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: 3px;
+    }
+    .tagline {
+      text-align: center;
+      color: #aaa;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    h2 { text-align: center; margin: 28px 0 8px; }
+    .intro {
+      text-align: center;
+      color: #bbb;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .trial {
+      background: #302819;
+      border: 1px solid #806a2b;
+      color: #f2d67c;
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+      margin: 22px 0;
+      font-size: 14px;
+    }
+    .options { display: grid; gap: 12px; }
+    .option {
+      border: 1px solid #444;
+      background: #242424;
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+    }
+    .option.selected {
+      border: 2px solid #d4af37;
+      background: #30291b;
+    }
+    .option strong { display: block; margin-bottom: 5px; }
+    .option span { color: #aaa; font-size: 12px; }
+    label {
+      display: block;
+      margin: 16px 0 7px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 13px;
+      background: #121212;
+      border: 1px solid #444;
+      border-radius: 8px;
+      color: white;
+      font-size: 15px;
+    }
+    input:focus {
+      outline: none;
+      border-color: #d4af37;
+    }
+    button {
+      width: 100%;
+      background: #d4af37;
+      color: #111;
+      border: none;
+      border-radius: 9px;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 24px;
+    }
+    button:hover { background: #edcb60; }
+    button:disabled { opacity: .6; cursor: not-allowed; }
+    .footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 12px;
+      margin-top: 18px;
+    }
+    .footer a { color: #d4af37; }
+    .message {
+      color: #f2d67c;
+      text-align: center;
+      font-size: 13px;
+      margin-top: 12px;
+      min-height: 18px;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="logo">CAPQ</div>
+    <div class="tagline">BUILT FOR BARBERS</div>
+
+    <h2>Create Your Account</h2>
+    <p class="intro">
+      Manage walk-ins, grow your business,
+      and give customers a better experience.
+    </p>
+
+    <div class="trial">
+      Start your 14-day free trial
+    </div>
+
+    <form id="signupForm">
+      <div class="options">
+        <div class="option selected"
+             data-type="barber"
+             role="radio"
+             tabindex="0"
+             aria-checked="true">
+          <strong>✂ Independent Barber</strong>
+          <span>Manage my personal walk-ins and profile.</span>
+        </div>
+
+        <div class="option"
+             data-type="owner"
+             role="radio"
+             tabindex="0"
+             aria-checked="false">
+          <strong>♛ Barbershop Owner</strong>
+          <span>Manage my shop, barbers, and shared queue.</span>
+        </div>
+      </div>
+
+      <input type="hidden" id="accountType" value="barber">
+
+      <label for="fullName">Full Name</label>
+      <input id="fullName" type="text"
+             autocomplete="name" required
+             placeholder="Enter your full name">
+
+      <label for="email">Email Address</label>
+      <input id="email" type="email"
+             autocomplete="email" required
+             placeholder="you@example.com">
+
+      <label for="password">Create Password</label>
+      <input id="password" type="password"
+             autocomplete="new-password"
+             minlength="12" required
+             placeholder="At least 12 characters">
+
+      <label for="confirmPassword">Confirm Password</label>
+      <input id="confirmPassword" type="password"
+             autocomplete="new-password"
+             minlength="12" required
+             placeholder="Re-enter your password">
+
+      <button type="submit" id="submitBtn">
+        Create Account
+      </button>
+
+      <div class="message" id="message"
+           role="status" aria-live="polite"></div>
+    </form>
+
+    <div class="footer">
+      Already have an account?
+      <a href="login.html">Sign In</a>
+    </div>
+  </main>
+
+  <script>
+    const options = document.querySelectorAll(".option");
+    const accountType = document.getElementById("accountType");
+    const message = document.getElementById("message");
+
+    function selectAccount(option) {
+      options.forEach(item => {
+        const selected = item === option;
+        item.classList.toggle("selected", selected);
+        item.setAttribute("aria-checked", String(selected));
+      });
+      accountType.value = option.dataset.type;
+    }
+
+    options.forEach(option => {
+      option.addEventListener("click", () => selectAccount(option));
+      option.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          selectAccount(option);
+        }
+      });
+    });
+
+    document.getElementById("signupForm")
+      .addEventListener("submit", event => {
+        event.preventDefault();
+
+        const password =
+          document.getElementById("password").value;
+        const confirm =
+          document.getElementById("confirmPassword").value;
+
+        if (password !== confirm) {
+          message.textContent = "Passwords do not match.";
+          return;
+        }
+
+        message.textContent =
+          "CAPQ registration preview is ready. " +
+          "Secure account creation will be connected next.";
+      });
+  </script>
+</body>
+</html>
