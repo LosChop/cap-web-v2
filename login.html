@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign In | CAPQ</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #101010;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.card {
+  width: 100%;
+  max-width: 440px;
+  background: #1c1c1c;
+  border: 1px solid #55451e;
+  border-radius: 18px;
+  padding: 28px;
+}
+
+.logo {
+  text-align: center;
+  color: #d4af37;
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: 3px;
+}
+
+.tagline {
+  text-align: center;
+  color: #aaa;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+h2 {
+  text-align: center;
+  margin: 30px 0 8px;
+}
+
+.intro {
+  text-align: center;
+  color: #bbb;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+label {
+  display: block;
+  margin: 20px 0 8px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  background: #121212;
+  border: 1px solid #444;
+  border-radius: 9px;
+  color: white;
+  font-size: 15px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #d4af37;
+}
+
+button {
+  width: 100%;
+  background: #d4af37;
+  color: #111;
+  border: none;
+  border-radius: 9px;
+  padding: 15px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 25px;
+}
+
+button:hover { background: #edcb60; }
+
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.message {
+  color: #f2d67c;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+  min-height: 20px;
+  margin-top: 15px;
+}
+
+.message.error { color: #ff8888; }
+.message.success { color: #8fe0a5; }
+
+.footer {
+  text-align: center;
+  color: #aaa;
+  font-size: 13px;
+  margin-top: 22px;
+}
+
+.footer a { color: #d4af37; }
+
+.help {
+  text-align: right;
+  margin-top: 12px;
+  font-size: 12px;
+}
+
+.help a { color: #d4af37; }
+</style>
+</head>
+
+<body>
+
+<main class="card">
+  <div class="logo">CAPQ</div>
+  <div class="tagline">BUILT FOR BARBERS</div>
+
+  <h2>Welcome Back</h2>
+
+  <p class="intro">
+    Sign in to manage your walk-ins,
+    customers, and barber business.
+  </p>
+
+  <form id="loginForm">
+
+    <label for="email">Email Address</label>
+    <input
+      id="email"
+      type="email"
+      autocomplete="email"
+      required
+      placeholder="you@example.com"
+    >
+
+    <label for="password">Password</label>
+    <input
+      id="password"
+      type="password"
+      autocomplete="current-password"
+      required
+      placeholder="Enter your password"
+    >
+
+    <div class="help">
+      <a href="#" id="resetPassword">
+        Forgot password?
+      </a>
+    </div>
+
+    <button type="submit" id="loginBtn">
+      Sign In
+    </button>
+
+    <div
+      id="message"
+      class="message"
+      role="status"
+      aria-live="polite"
+    ></div>
+
+  </form>
+
+  <div class="footer">
+    New to CAPQ?
+    <a href="signup.html">Create Account</a>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+<script>
+
+// USE THE SAME VALUES FROM signup.html
+const SUPABASE_URL =
+  "PASTE_YOUR_PROJECT_URL_HERE";
+
+const SUPABASE_KEY =
+  "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+
+const message = document.getElementById("message");
+const loginBtn = document.getElementById("loginBtn");
+
+function showMessage(text, type = "") {
+  message.textContent = text;
+  message.className = "message " + type;
+}
+
+let capqDB = null;
+
+try {
+  if (
+    SUPABASE_URL.startsWith("https://") &&
+    (
+      SUPABASE_KEY.startsWith("sb_publishable_") ||
+      SUPABASE_KEY.startsWith("eyJ")
+    ) &&
+    window.supabase
+  ) {
+    capqDB = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+  }
+} catch (error) {
+  console.error("CAPQ setup error:", error);
+}
+
+document.getElementById("loginForm")
+  .addEventListener("submit", async event => {
+    event.preventDefault();
+
+    if (!capqDB) {
+      showMessage(
+        "Supabase is not connected. Check your project URL and publishable key.",
+        "error"
+      );
+      return;
+    }
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Signing In...";
+    showMessage("Checking your account...");
+
+    try {
+      const { data, error } =
+        await capqDB.auth.signInWithPassword({
+          email,
+          password
+        });
+
+      if (error) throw error;
+
+      if (!data.session) {
+        throw new Error("No active session was created.");
+      }
+
+      showMessage(
+        "You're signed in successfully!",
+        "success"
+      );
+
+      // Dashboard authentication protection
+      // will be connected in the next step.
+      // For now, remain on this page.
+
+    } catch (error) {
+      showMessage(
+        error.message || "Unable to sign in.",
+        "error"
+      );
+    } finally {
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Sign In";
+    }
+  });
+
+document.getElementById("resetPassword")
+  .addEventListener("click", async event => {
+    event.preventDefault();
+
+    if (!capqDB) {
+      showMessage("Supabase is not connected.", "error");
+      return;
+    }
+
+    const email = document.getElementById("email").value.trim();
+
+    if (!email) {
+      showMessage(
+        "Enter your email address first, then click Forgot password.",
+        "error"
+      );
+      return;
+    }
+
+    try {
+      const { error } =
+        await capqDB.auth.resetPasswordForEmail(email, {
+          redirectTo:
+            window.location.origin + "/login.html"
+        });
+
+      if (error) throw error;
+
+      showMessage(
+        "If an account exists for this email, you'll receive password reset instructions.",
+        "success"
+      );
+    } catch (error) {
+      showMessage(
+        error.message || "Could not request password reset.",
+        "error"
+      );
+    }
+  });
+
+</script>
+</body>
+</html>
