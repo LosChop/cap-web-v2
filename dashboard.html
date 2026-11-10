@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAPQ | Barber Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#101010;color:white;
+ font-family:Arial,sans-serif
+}
+main{max-width:540px;margin:auto;padding:25px 18px}
+header{text-align:center;margin-bottom:25px}
+h1{font-size:48px;color:#d4af37;margin:0}
+.subtitle{color:#d4af37;letter-spacing:2px;font-size:12px}
+h2{font-size:22px;margin-top:28px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat,.customer{
+ background:#202020;border-radius:12px;padding:18px
+}
+.stat small{color:#aaa}
+.stat strong{
+ display:block;font-size:32px;color:#d4af37;margin-top:7px
+}
+.customer{margin:12px 0}
+.customer strong{font-size:18px}
+.customer p{color:#aaa;font-size:14px;margin:7px 0}
+.status{color:#d4af37;font-size:13px}
+button{
+ background:#d4af37;color:#111;border:0;
+ border-radius:8px;padding:13px 16px;
+ font-size:15px;font-weight:bold;cursor:pointer
+}
+.action{width:100%;margin-top:12px}
+.secondary{background:#333;color:white}
+.nav{display:flex;gap:10px;margin-top:25px}
+.nav a{
+ flex:1;text-align:center;text-decoration:none;
+ background:#292929;color:white;padding:13px;
+ border-radius:8px
+}
+.note{color:#999;font-size:12px;text-align:center}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>CAPQ</h1>
+<div class="subtitle">BARBER DASHBOARD</div>
+</header>
+
+<div class="stats">
+<div class="stat">
+<small>Waiting</small>
+<strong id="waitingCount">0</strong>
+</div>
+<div class="stat">
+<small>In Chair</small>
+<strong id="chairCount">0</strong>
+</div>
+</div>
+
+<h2>Customer Queue</h2>
+<div id="customerList"></div>
+
+<div class="nav">
+<a href="index.html">Customer Check-In</a>
+<a href="dashboard.html">Dashboard</a>
+</div>
+
+<p class="note">
+Demo dashboard. Customer data is not yet
+shared with the check-in page.
+</p>
+</main>
+
+<script>
+let customers=[
+ {id:1,name:"Marcus",service:"Haircut",
+  barber:"Next Available",status:"Waiting"},
+ {id:2,name:"David",service:"Haircut + Beard",
+  barber:"Barber 2",status:"Waiting"},
+ {id:3,name:"Anthony",service:"Kids Haircut",
+  barber:"Next Available",status:"Waiting"}
+];
+
+function render(){
+ const list=document.getElementById("customerList");
+ list.replaceChildren();
+
+ document.getElementById("waitingCount").textContent=
+  customers.filter(c=>c.status==="Waiting").length;
+
+ document.getElementById("chairCount").textContent=
+  customers.filter(c=>c.status==="In Chair").length;
+
+ customers.forEach(customer=>{
+  const card=document.createElement("div");
+  card.className="customer";
+
+  const name=document.createElement("strong");
+  name.textContent=customer.name;
+
+  const service=document.createElement("p");
+  service.textContent=customer.service;
+
+  const barber=document.createElement("p");
+  barber.textContent="Barber: "+customer.barber;
+
+  const status=document.createElement("div");
+  status.className="status";
+  status.textContent=customer.status;
+
+  card.append(name,service,barber,status);
+
+  const button=document.createElement("button");
+  button.className="action";
+
+  if(customer.status==="Waiting"){
+   button.textContent="Call Customer";
+   button.onclick=()=>update(customer.id,"In Chair");
+  }else{
+   button.textContent="Complete Service";
+   button.onclick=()=>update(customer.id,"Completed");
+  }
+
+  card.appendChild(button);
+  list.appendChild(card);
+ });
+}
+
+function update(id,status){
+ customers=customers.map(customer=>
+  customer.id===id?{...customer,status}:customer
+ ).filter(customer=>customer.status!=="Completed");
+
+ render();
+}
+
+render();
+</script>
+</body>
+</html>
