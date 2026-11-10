@@ -4,142 +4,454 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101114">
 <title>CAPQ | Barber Dashboard</title>
+
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;background:#101010;color:white;
- font-family:Arial,sans-serif
+:root {
+  --black:#101114;
+  --charcoal:#292D33;
+  --gold:#D6B45C;
+  --green:#16A77A;
+  --white:#F7F7F4;
+  --muted:#A9ADB5;
 }
-main{max-width:540px;margin:auto;padding:25px 18px}
-header{text-align:center;margin-bottom:25px}
-h1{font-size:48px;color:#d4af37;margin:0}
-.subtitle{color:#d4af37;letter-spacing:2px;font-size:12px}
-h2{font-size:22px;margin-top:28px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.stat,.customer{
- background:#202020;border-radius:12px;padding:18px
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:var(--black);
+  color:var(--white);
+  font-family:Arial,Helvetica,sans-serif;
+  line-height:1.5;
 }
-.stat small{color:#aaa}
-.stat strong{
- display:block;font-size:32px;color:#d4af37;margin-top:7px
+
+main {
+  max-width:700px;
+  margin:auto;
+  padding:25px 18px 60px;
 }
-.customer{margin:12px 0}
-.customer strong{font-size:18px}
-.customer p{color:#aaa;font-size:14px;margin:7px 0}
-.status{color:#d4af37;font-size:13px}
-button{
- background:#d4af37;color:#111;border:0;
- border-radius:8px;padding:13px 16px;
- font-size:15px;font-weight:bold;cursor:pointer
+
+header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:35px;
+  padding-bottom:20px;
+  border-bottom:1px solid #35383d;
 }
-.action{width:100%;margin-top:12px}
-.secondary{background:#333;color:white}
-.nav{display:flex;gap:10px;margin-top:25px}
-.nav a{
- flex:1;text-align:center;text-decoration:none;
- background:#292929;color:white;padding:13px;
- border-radius:8px
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  color:white;
 }
-.note{color:#999;font-size:12px;text-align:center}
+
+.logo-icon {
+  width:54px;
+  height:54px;
+  background:#08090b;
+  border:1px solid #786434;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  box-shadow:0 0 18px #16a77a20;
+}
+
+.logo-icon span {
+  font-size:40px;
+  font-weight:900;
+  line-height:1;
+  color:var(--gold);
+}
+
+.logo-text {
+  font-size:29px;
+  font-weight:900;
+  font-style:italic;
+  letter-spacing:-1px;
+  line-height:1;
+}
+
+.logo-text span { color:var(--gold); }
+
+.subtitle {
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:2px;
+  margin-top:5px;
+}
+
+.demo-badge {
+  color:var(--gold);
+  border:1px solid #6c5a32;
+  padding:6px 11px;
+  border-radius:20px;
+  font-size:11px;
+  white-space:nowrap;
+}
+
+.welcome {
+  margin-bottom:25px;
+}
+
+.welcome h1 {
+  font-size:clamp(27px,5vw,36px);
+  margin:0 0 7px;
+}
+
+.welcome p {
+  color:var(--muted);
+  margin:0;
+  font-size:14px;
+}
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:25px 0 35px;
+}
+
+.stat {
+  background:#1c1f24;
+  border:1px solid #383c42;
+  border-radius:14px;
+  padding:18px;
+}
+
+.stat small {
+  color:var(--muted);
+  font-size:12px;
+}
+
+.stat strong {
+  display:block;
+  font-size:34px;
+  color:var(--gold);
+  margin-top:6px;
+}
+
+.stat.available strong {
+  color:var(--green);
+}
+
+.section-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:15px;
+}
+
+h2 {
+  font-size:23px;
+  margin:0;
+}
+
+.queue-label {
+  font-size:11px;
+  color:var(--green);
+  background:#123e30;
+  border-radius:20px;
+  padding:6px 10px;
+}
+
+.customer {
+  background:#1c1f24;
+  border:1px solid #383c42;
+  border-radius:15px;
+  padding:20px;
+  margin:12px 0;
+}
+
+.customer-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.customer strong {
+  font-size:18px;
+}
+
+.customer p {
+  color:var(--muted);
+  font-size:13px;
+  margin:6px 0;
+}
+
+.status {
+  display:inline-block;
+  border-radius:20px;
+  padding:6px 10px;
+  font-size:11px;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+.status.waiting {
+  color:#e8c96e;
+  background:#40361e;
+}
+
+.status.chair {
+  color:#6de6b4;
+  background:#123e30;
+}
+
+button {
+  border:0;
+  border-radius:9px;
+  padding:14px 17px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.action {
+  width:100%;
+  margin-top:14px;
+  background:var(--gold);
+  color:#111;
+}
+
+.action.complete {
+  background:var(--green);
+  color:white;
+}
+
+button:hover {
+  filter:brightness(1.08);
+}
+
+.empty {
+  text-align:center;
+  color:var(--muted);
+  padding:35px 15px;
+  background:#1c1f24;
+  border:1px dashed #45494f;
+  border-radius:14px;
+}
+
+.nav {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:35px;
+}
+
+.nav a {
+  text-align:center;
+  text-decoration:none;
+  background:var(--charcoal);
+  border:1px solid #44484e;
+  color:white;
+  padding:13px 8px;
+  border-radius:9px;
+  font-size:13px;
+}
+
+.nav a:hover {
+  border-color:var(--gold);
+  color:var(--gold);
+}
+
+.note {
+  color:var(--muted);
+  font-size:12px;
+  text-align:center;
+  margin-top:25px;
+}
+
+@media(max-width:480px) {
+  .stats { gap:8px; }
+  .stat { padding:13px 10px; }
+  .stat strong { font-size:28px; }
+  .stat small { font-size:10px; }
+  .logo-icon { width:46px;height:46px; }
+  .logo-icon span { font-size:35px; }
+  .logo-text { font-size:25px; }
+  .customer { padding:16px; }
+  .nav a { font-size:11px; }
+}
 </style>
 </head>
+
 <body>
 <main>
+
 <header>
-<h1>CAPQ</h1>
-<div class="subtitle">BARBER DASHBOARD</div>
+  <a href="index.html" class="brand">
+    <div class="logo-icon"><span>C</span></div>
+    <div>
+      <div class="logo-text">CAP<span>Q</span></div>
+      <div class="subtitle">BUILT FOR BARBERS</div>
+    </div>
+  </a>
+  <span class="demo-badge">DEMO MODE</span>
 </header>
 
-<div class="stats">
-<div class="stat">
-<small>Waiting</small>
-<strong id="waitingCount">0</strong>
-</div>
-<div class="stat">
-<small>In Chair</small>
-<strong id="chairCount">0</strong>
-</div>
-</div>
+<section class="welcome">
+  <h1>Barber Dashboard</h1>
+  <p>Stay on top of your line and keep your day moving.</p>
+</section>
 
-<h2>Customer Queue</h2>
-<div id="customerList"></div>
+<section class="stats">
+  <div class="stat">
+    <small>Waiting</small>
+    <strong id="waitingCount">0</strong>
+  </div>
 
-<div class="nav">
-<a href="index.html">Customer Check-In</a>
-<a href="dashboard.html">Dashboard</a>
-</div>
+  <div class="stat">
+    <small>In Chair</small>
+    <strong id="chairCount">0</strong>
+  </div>
+
+  <div class="stat available">
+    <small>Completed</small>
+    <strong id="completedCount">0</strong>
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <h2>Customer Queue</h2>
+    <span class="queue-label">● Demo Queue</span>
+  </div>
+
+  <div id="customerList"></div>
+</section>
+
+<nav class="nav">
+  <a href="index.html">Home</a>
+  <a href="checkin.html">Check-In</a>
+  <a href="dashboard.html">Dashboard</a>
+</nav>
 
 <p class="note">
-Demo dashboard. Customer data is not yet
-shared with the check-in page.
+  This is a demonstration dashboard with sample customers.
+  Customer data is not yet shared with the check-in page
+  or connected to Supabase.
 </p>
+
 </main>
 
 <script>
-let customers=[
- {id:1,name:"Marcus",service:"Haircut",
-  barber:"Next Available",status:"Waiting"},
- {id:2,name:"David",service:"Haircut + Beard",
-  barber:"Barber 2",status:"Waiting"},
- {id:3,name:"Anthony",service:"Kids Haircut",
-  barber:"Next Available",status:"Waiting"}
+let customers = [
+  {
+    id:1,
+    name:"Marcus",
+    service:"Haircut",
+    barber:"Next Available",
+    status:"Waiting"
+  },
+  {
+    id:2,
+    name:"David",
+    service:"Haircut + Beard",
+    barber:"Barber 2",
+    status:"Waiting"
+  },
+  {
+    id:3,
+    name:"Anthony",
+    service:"Kids Haircut",
+    barber:"Next Available",
+    status:"Waiting"
+  }
 ];
 
-function render(){
- const list=document.getElementById("customerList");
- list.replaceChildren();
+let completedCount = 0;
 
- document.getElementById("waitingCount").textContent=
-  customers.filter(c=>c.status==="Waiting").length;
+function render() {
+  const list = document.getElementById("customerList");
+  list.replaceChildren();
 
- document.getElementById("chairCount").textContent=
-  customers.filter(c=>c.status==="In Chair").length;
+  const waiting = customers.filter(
+    customer => customer.status === "Waiting"
+  ).length;
 
- customers.forEach(customer=>{
-  const card=document.createElement("div");
-  card.className="customer";
+  const inChair = customers.filter(
+    customer => customer.status === "In Chair"
+  ).length;
 
-  const name=document.createElement("strong");
-  name.textContent=customer.name;
+  document.getElementById("waitingCount").textContent = waiting;
+  document.getElementById("chairCount").textContent = inChair;
+  document.getElementById("completedCount").textContent = completedCount;
 
-  const service=document.createElement("p");
-  service.textContent=customer.service;
-
-  const barber=document.createElement("p");
-  barber.textContent="Barber: "+customer.barber;
-
-  const status=document.createElement("div");
-  status.className="status";
-  status.textContent=customer.status;
-
-  card.append(name,service,barber,status);
-
-  const button=document.createElement("button");
-  button.className="action";
-
-  if(customer.status==="Waiting"){
-   button.textContent="Call Customer";
-   button.onclick=()=>update(customer.id,"In Chair");
-  }else{
-   button.textContent="Complete Service";
-   button.onclick=()=>update(customer.id,"Completed");
+  if (customers.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "All caught up! No customers waiting.";
+    list.appendChild(empty);
+    return;
   }
 
-  card.appendChild(button);
-  list.appendChild(card);
- });
+  customers.forEach(customer => {
+    const card = document.createElement("div");
+    card.className = "customer";
+
+    const top = document.createElement("div");
+    top.className = "customer-top";
+
+    const name = document.createElement("strong");
+    name.textContent = customer.name;
+
+    const status = document.createElement("span");
+    status.className = "status " +
+      (customer.status === "Waiting" ? "waiting" : "chair");
+    status.textContent = customer.status;
+
+    top.append(name, status);
+
+    const service = document.createElement("p");
+    service.textContent = "Service: " + customer.service;
+
+    const barber = document.createElement("p");
+    barber.textContent = "Barber: " + customer.barber;
+
+    const button = document.createElement("button");
+    button.className = "action";
+
+    if (customer.status === "Waiting") {
+      button.textContent = "Call Customer";
+      button.onclick = () => update(customer.id, "In Chair");
+    } else {
+      button.textContent = "Complete Service";
+      button.classList.add("complete");
+      button.onclick = () => update(customer.id, "Completed");
+    }
+
+    card.append(top, service, barber, button);
+    list.appendChild(card);
+  });
 }
 
-function update(id,status){
- customers=customers.map(customer=>
-  customer.id===id?{...customer,status}:customer
- ).filter(customer=>customer.status!=="Completed");
+function update(id, status) {
+  if (status === "Completed") {
+    completedCount++;
+  }
 
- render();
+  customers = customers
+    .map(customer =>
+      customer.id === id
+        ? { ...customer, status }
+        : customer
+    )
+    .filter(customer => customer.status !== "Completed");
+
+  render();
 }
 
 render();
 </script>
+
 </body>
 </html>
