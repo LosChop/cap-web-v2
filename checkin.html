@@ -1,1 +1,366 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101114">
+<title>CAPQ | Walk-In Check-In</title>
+
+<style>
+:root {
+  --black: #101114;
+  --charcoal: #292D33;
+  --gold: #D6B45C;
+  --green: #16A77A;
+  --ivory: #F7F7F4;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--black);
+  color: var(--ivory);
+  font-family: Arial, sans-serif;
+}
+
+main {
+  max-width: 480px;
+  margin: auto;
+  padding: 25px 20px 60px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 58px;
+  height: 58px;
+  border: 1px solid #6b592e;
+  border-radius: 15px;
+  background: #08090b;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 18px #16a77a20;
+}
+
+.logo-icon span {
+  color: var(--gold);
+  font-size: 44px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.logo-text {
+  font-size: 40px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -2px;
+}
+
+.logo-text span { color: var(--gold); }
+
+.tag {
+  color: var(--gold);
+  letter-spacing: 3px;
+  font-size: 10px;
+  margin-top: 8px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 26px;
+  margin: 35px 0 8px;
+}
+
+p {
+  color: #a9adb5;
+  text-align: center;
+  line-height: 1.5;
+}
+
+label {
+  display: block;
+  margin: 18px 0 8px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+input, select {
+  width: 100%;
+  padding: 15px;
+  border-radius: 9px;
+  border: 1px solid #555;
+  background: #202227;
+  color: white;
+  font-size: 16px;
+}
+
+input:focus, select:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.option {
+  border: 1px solid #555;
+  border-radius: 11px;
+  padding: 18px;
+  margin-top: 12px;
+  cursor: pointer;
+  background: #1c1f24;
+}
+
+.option.active {
+  border: 2px solid var(--gold);
+  background: #29251a;
+}
+
+.option strong { display: block; }
+.option small { color: #aaa; }
+
+button {
+  width: 100%;
+  background: var(--gold);
+  color: #111;
+  padding: 17px;
+  border: 0;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  margin-top: 25px;
+  cursor: pointer;
+}
+
+button:hover { background: #e4c573; }
+
+.hidden { display: none; }
+
+.queue {
+  margin-top: 40px;
+  border-top: 1px solid #444;
+  padding-top: 20px;
+}
+
+.queue h2 {
+  text-align: center;
+  font-size: 22px;
+}
+
+.entry {
+  background: #202227;
+  border: 1px solid #383c42;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.entry small {
+  display: block;
+  color: #aaa;
+  margin-top: 5px;
+}
+
+.message {
+  color: var(--green);
+  text-align: center;
+  margin-top: 18px;
+  font-weight: bold;
+}
+
+.back {
+  display: block;
+  text-align: center;
+  color: var(--gold);
+  font-size: 13px;
+  text-decoration: none;
+  margin-top: 35px;
+}
+
+.demo-note {
+  color: #a9adb5;
+  font-size: 12px;
+  margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+<main>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon"><span>C</span></div>
+    <div class="logo-text">CAP<span>Q</span></div>
+  </div>
+  <div class="tag">BUILT FOR BARBERS</div>
+</header>
+
+<h1>Walk-In Check-In</h1>
+<p>Join the line. We'll take care of the rest.</p>
+
+<form id="checkin">
+
+  <label for="name">Your Name</label>
+  <input
+    id="name"
+    required
+    maxlength="60"
+    autocomplete="name"
+    placeholder="Enter your name"
+  >
+
+  <label for="service">Select Service</label>
+  <select id="service">
+    <option>Haircut</option>
+    <option>Haircut + Beard</option>
+    <option>Kids Haircut</option>
+    <option>Beard Trim</option>
+  </select>
+
+  <label>Choose Your Barber Preference</label>
+
+  <div class="option active" id="nextOption"
+       role="button" tabindex="0"
+       aria-pressed="true">
+    <strong>Next Available Barber</strong>
+    <small>First available barber</small>
+  </div>
+
+  <div class="option" id="pickOption"
+       role="button" tabindex="0"
+       aria-pressed="false">
+    <strong>Pick Your Barber</strong>
+    <small>Wait for your preferred barber</small>
+  </div>
+
+  <div id="barberBox" class="hidden">
+    <label for="barber">Select Barber</label>
+    <select id="barber">
+      <option value="">Choose a barber</option>
+      <option>Barber 1</option>
+      <option>Barber 2</option>
+      <option>Barber 3</option>
+    </select>
+  </div>
+
+  <button type="submit">Join Waitlist</button>
+
+</form>
+
+<div class="message" id="message" role="status"></div>
+
+<section class="queue">
+  <h2>Demo Waiting List</h2>
+  <p id="count">0 customers waiting</p>
+  <div id="queueList"></div>
+  <p class="demo-note">
+    Demo only. Customers appear on this page
+    until you refresh it. The list is not yet
+    connected to the live barber dashboard.
+  </p>
+</section>
+
+<a class="back" href="index.html">← Back to CAPQ Home</a>
+
+</main>
+
+<script>
+let preference = "next";
+let waiting = [];
+
+const nextOption = document.getElementById("nextOption");
+const pickOption = document.getElementById("pickOption");
+const barberBox = document.getElementById("barberBox");
+
+function choose(value) {
+  preference = value;
+
+  nextOption.classList.toggle("active", value === "next");
+  pickOption.classList.toggle("active", value === "pick");
+  barberBox.classList.toggle("hidden", value !== "pick");
+
+  nextOption.setAttribute("aria-pressed", value === "next");
+  pickOption.setAttribute("aria-pressed", value === "pick");
+}
+
+function makeSelectable(element, value) {
+  element.addEventListener("click", () => choose(value));
+  element.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      choose(value);
+    }
+  });
+}
+
+makeSelectable(nextOption, "next");
+makeSelectable(pickOption, "pick");
+
+document.getElementById("checkin")
+  .addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const service = document.getElementById("service").value;
+    const barber = document.getElementById("barber").value;
+
+    if (!name) return;
+
+    if (preference === "pick" && !barber) {
+      alert("Please select your barber.");
+      return;
+    }
+
+    waiting.push({
+      name,
+      service,
+      preference: preference === "next"
+        ? "Next Available Barber"
+        : barber
+    });
+
+    document.getElementById("message").textContent =
+      name + ", you're on the demo waiting list!";
+
+    this.reset();
+    choose("next");
+    renderQueue();
+  });
+
+function renderQueue() {
+  const list = document.getElementById("queueList");
+  list.replaceChildren();
+
+  waiting.forEach((customer, index) => {
+    const item = document.createElement("div");
+    item.className = "entry";
+
+    const title = document.createElement("strong");
+    title.textContent = (index + 1) + ". " + customer.name;
+
+    const details = document.createElement("small");
+    details.textContent =
+      customer.service + " | " + customer.preference;
+
+    item.append(title, details);
+    list.appendChild(item);
+  });
+
+  document.getElementById("count").textContent =
+    waiting.length + " customers waiting";
+}
+</script>
+
+</body>
+</html>
+
