@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAPQ | Built for Barbers</title>
+  <style>
+    body {
+      margin: 0;
+      background: #101010;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    main {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    h1 {
+      font-size: 72px;
+      letter-spacing: 5px;
+      margin: 0;
+    }
+    h2 {
+      color: #d4af37;
+      font-size: 22px;
+    }
+    p {
+      color: #cccccc;
+      max-width: 400px;
+      line-height: 1.6;
+    }
+    button {
+      background: #d4af37;
+      color: #111;
+      padding: 15px 35px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>CAPQ</h1>
+    <h2>Built for Barbers</h2>
+    <p>
+      Smarter walk-in management for barbers
+      and barbershops.
+    </p>
+    <button disabled>Coming Soon</button>
+  </main>
+</body>
+</html>
