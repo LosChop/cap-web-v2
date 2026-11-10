@@ -4,143 +4,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101114">
 <title>Sign In | CAPQ</title>
 
 <style>
-* { box-sizing: border-box; }
-
+:root {
+  --black:#101114;
+  --charcoal:#292D33;
+  --gold:#D6B45C;
+  --green:#16A77A;
+  --white:#F7F7F4;
+  --muted:#A9ADB5;
+}
+* { box-sizing:border-box; }
 body {
-  margin: 0;
-  background: #101010;
-  color: #fff;
-  font-family: Arial, sans-serif;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
+  margin:0;
+  background:var(--black);
+  color:var(--white);
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:24px 16px;
 }
-
 .card {
-  width: 100%;
-  max-width: 440px;
-  background: #1c1c1c;
-  border: 1px solid #55451e;
-  border-radius: 18px;
-  padding: 28px;
+  width:100%;
+  max-width:460px;
+  background:#1c1f24;
+  border:1px solid #3d4147;
+  border-radius:20px;
+  padding:32px;
 }
-
-.logo {
-  text-align: center;
-  color: #d4af37;
-  font-size: 38px;
-  font-weight: 900;
-  letter-spacing: 3px;
+.brand {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  text-decoration:none;
+  color:white;
 }
-
+.logo-icon {
+  width:56px;
+  height:56px;
+  background:#08090b;
+  border:1px solid #786434;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+}
+.logo-icon span {
+  color:var(--gold);
+  font-size:42px;
+  font-weight:900;
+  line-height:1;
+}
+.logo-text {
+  font-size:34px;
+  font-weight:900;
+  font-style:italic;
+  letter-spacing:-1px;
+  line-height:1;
+}
+.logo-text span { color:var(--gold); }
 .tagline {
-  text-align: center;
-  color: #aaa;
-  font-size: 13px;
-  margin-top: 4px;
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--muted);
+  margin-top:5px;
 }
-
-h2 {
-  text-align: center;
-  margin: 30px 0 8px;
+h1 {
+  text-align:center;
+  font-size:28px;
+  margin:32px 0 8px;
 }
-
 .intro {
-  text-align: center;
-  color: #bbb;
-  font-size: 14px;
-  line-height: 1.5;
+  color:var(--muted);
+  text-align:center;
+  font-size:14px;
+  line-height:1.6;
+  margin:0 0 28px;
 }
-
 label {
-  display: block;
-  margin: 20px 0 8px;
-  font-size: 13px;
-  font-weight: bold;
+  display:block;
+  margin:18px 0 8px;
+  font-size:13px;
+  font-weight:bold;
 }
-
 input {
-  width: 100%;
-  padding: 14px;
-  background: #121212;
-  border: 1px solid #444;
-  border-radius: 9px;
-  color: white;
-  font-size: 15px;
+  width:100%;
+  background:#101114;
+  border:1px solid #484c53;
+  border-radius:9px;
+  color:white;
+  padding:14px;
+  font-size:15px;
 }
-
 input:focus {
-  outline: none;
-  border-color: #d4af37;
+  outline:none;
+  border-color:var(--gold);
 }
-
-button {
-  width: 100%;
-  background: #d4af37;
-  color: #111;
-  border: none;
-  border-radius: 9px;
-  padding: 15px;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 25px;
+.password-wrap {
+  position:relative;
 }
-
-button:hover { background: #edcb60; }
-
-button:disabled {
-  opacity: .6;
-  cursor: not-allowed;
+.password-wrap input {
+  padding-right:70px;
 }
-
+.show-password {
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  background:transparent;
+  border:0;
+  color:var(--gold);
+  font-size:12px;
+  cursor:pointer;
+}
+.submit-btn {
+  width:100%;
+  background:var(--gold);
+  color:#111;
+  border:0;
+  border-radius:10px;
+  padding:15px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:25px;
+}
+.submit-btn:hover { filter:brightness(1.08); }
+.submit-btn:disabled {
+  opacity:.6;
+  cursor:not-allowed;
+}
 .message {
-  color: #f2d67c;
-  text-align: center;
-  font-size: 13px;
-  line-height: 1.5;
-  min-height: 20px;
-  margin-top: 15px;
+  min-height:18px;
+  text-align:center;
+  margin-top:15px;
+  color:var(--gold);
+  font-size:13px;
+  line-height:1.5;
 }
-
-.message.error { color: #ff8888; }
-.message.success { color: #8fe0a5; }
-
+.message.error { color:#ff9999; }
+.message.success { color:#8fe0a5; }
 .footer {
-  text-align: center;
-  color: #aaa;
-  font-size: 13px;
-  margin-top: 22px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  margin-top:24px;
 }
-
-.footer a { color: #d4af37; }
-
-.help {
-  text-align: right;
-  margin-top: 12px;
-  font-size: 12px;
+.footer a {
+  color:var(--gold);
+  text-decoration:none;
 }
-
-.help a { color: #d4af37; }
+.back {
+  display:block;
+  text-align:center;
+  margin-top:20px;
+  color:var(--muted);
+  font-size:12px;
+  text-decoration:none;
+}
+@media(max-width:480px) {
+  .card { padding:24px 19px; }
+}
 </style>
 </head>
 
 <body>
-
 <main class="card">
-  <div class="logo">CAPQ</div>
-  <div class="tagline">BUILT FOR BARBERS</div>
 
-  <h2>Welcome Back</h2>
+  <a href="index.html" class="brand">
+    <div class="logo-icon"><span>C</span></div>
+    <div>
+      <div class="logo-text">CAP<span>Q</span></div>
+      <div class="tagline">BUILT FOR BARBERS</div>
+    </div>
+  </a>
 
+  <h1>Welcome Back</h1>
   <p class="intro">
-    Sign in to manage your walk-ins,
-    customers, and barber business.
+    Sign in to manage your customers,
+    walk-ins, and daily queue.
   </p>
 
   <form id="loginForm">
@@ -150,28 +196,32 @@ button:disabled {
       id="email"
       type="email"
       autocomplete="email"
-      required
       placeholder="you@example.com"
+      required
     >
 
     <label for="password">Password</label>
-    <input
-      id="password"
-      type="password"
-      autocomplete="current-password"
-      required
-      placeholder="Enter your password"
-    >
-
-    <div class="help">
-      <a href="#" id="resetPassword">
-        Forgot password?
-      </a>
+    <div class="password-wrap">
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Enter your password"
+        required
+      >
+      <button
+        type="button"
+        class="show-password"
+        id="togglePassword"
+        aria-label="Show password"
+      >Show</button>
     </div>
 
-    <button type="submit" id="loginBtn">
-      Sign In
-    </button>
+    <button
+      type="submit"
+      class="submit-btn"
+      id="submitBtn"
+    >Sign In</button>
 
     <div
       id="message"
@@ -183,67 +233,84 @@ button:disabled {
   </form>
 
   <div class="footer">
-    New to CAPQ?
+    Don't have an account?
     <a href="signup.html">Create Account</a>
   </div>
+
+  <a href="index.html" class="back">
+    Return to CAPQ Homepage
+  </a>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
 <script>
-
-// USE THE SAME VALUES FROM signup.html
 const SUPABASE_URL =
-  "PASTE_YOUR_PROJECT_URL_HERE";
+  "https://nfazsevnpfmabsipkrrh.supabase.co";
 
 const SUPABASE_KEY =
-  "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
-
-const message = document.getElementById("message");
-const loginBtn = document.getElementById("loginBtn");
-
-function showMessage(text, type = "") {
-  message.textContent = text;
-  message.className = "message " + type;
-}
+  "sb_publishable_FtcxTtmcHvtyu3m2KJRjqA_3Nzkk2La";
 
 let capqDB = null;
 
 try {
-  if (
-    SUPABASE_URL.startsWith("https://") &&
-    (
-      SUPABASE_KEY.startsWith("sb_publishable_") ||
-      SUPABASE_KEY.startsWith("eyJ")
-    ) &&
-    window.supabase
-  ) {
+  if (window.supabase) {
     capqDB = window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_KEY
     );
   }
 } catch (error) {
-  console.error("CAPQ setup error:", error);
+  console.error("Supabase setup error:", error);
 }
+
+const message = document.getElementById("message");
+const submitBtn = document.getElementById("submitBtn");
+
+function showMessage(text, type = "") {
+  message.textContent = text;
+  message.className = "message " + type;
+}
+
+document.getElementById("togglePassword")
+  .addEventListener("click", () => {
+    const password =
+      document.getElementById("password");
+
+    const showing = password.type === "text";
+    password.type = showing ? "password" : "text";
+
+    const button =
+      document.getElementById("togglePassword");
+
+    button.textContent = showing ? "Show" : "Hide";
+    button.setAttribute(
+      "aria-label",
+      showing ? "Show password" : "Hide password"
+    );
+  });
 
 document.getElementById("loginForm")
   .addEventListener("submit", async event => {
     event.preventDefault();
 
+    const email =
+      document.getElementById("email").value.trim();
+
+    const password =
+      document.getElementById("password").value;
+
     if (!capqDB) {
       showMessage(
-        "Supabase is not connected. Check your project URL and publishable key.",
+        "Unable to connect to Supabase.",
         "error"
       );
       return;
     }
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-
-    loginBtn.disabled = true;
-    loginBtn.textContent = "Signing In...";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Signing In...";
     showMessage("Checking your account...");
 
     try {
@@ -255,70 +322,31 @@ document.getElementById("loginForm")
 
       if (error) throw error;
 
-      if (!data.session) {
-        throw new Error("No active session was created.");
+      if (data.session) {
+        showMessage(
+          "Login successful! Opening dashboard...",
+          "success"
+        );
+
+        window.location.href = "dashboard.html";
+      } else {
+        showMessage(
+          "Unable to sign in. Please try again.",
+          "error"
+        );
       }
-
-      showMessage(
-        "You're signed in successfully!",
-        "success"
-      );
-
-      // Dashboard authentication protection
-      // will be connected in the next step.
-      // For now, remain on this page.
-
     } catch (error) {
+      console.error("CAPQ login error:", error);
       showMessage(
-        error.message || "Unable to sign in.",
+        error.message || "Login failed.",
         "error"
       );
     } finally {
-      loginBtn.disabled = false;
-      loginBtn.textContent = "Sign In";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Sign In";
     }
   });
-
-document.getElementById("resetPassword")
-  .addEventListener("click", async event => {
-    event.preventDefault();
-
-    if (!capqDB) {
-      showMessage("Supabase is not connected.", "error");
-      return;
-    }
-
-    const email = document.getElementById("email").value.trim();
-
-    if (!email) {
-      showMessage(
-        "Enter your email address first, then click Forgot password.",
-        "error"
-      );
-      return;
-    }
-
-    try {
-      const { error } =
-        await capqDB.auth.resetPasswordForEmail(email, {
-          redirectTo:
-            window.location.origin + "/login.html"
-        });
-
-      if (error) throw error;
-
-      showMessage(
-        "If an account exists for this email, you'll receive password reset instructions.",
-        "success"
-      );
-    } catch (error) {
-      showMessage(
-        error.message || "Could not request password reset.",
-        "error"
-      );
-    }
-  });
-
 </script>
+
 </body>
 </html>
