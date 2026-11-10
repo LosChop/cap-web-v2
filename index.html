@@ -2,20 +2,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101010">
-  <meta name="description" content="CAPQ - Smarter walk-in management for barbers and barbershops.">
-  <title>CAPQ | Built for Barbers</title>
-  <style>
-    * { box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAPQ | Walk-In Check-In</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#101010;
+ color:white;
+ font-family:Arial,sans-serif;
+}
+main{max-width:480px;margin:auto;padding:30px 20px}
+header{text-align:center;margin-bottom:30px}
+h1{
+ font-size:55px;
+ color:#d4af37;
+ margin:0;
+ letter-spacing:5px;
+}
+.tag{color:#d4af37;letter-spacing:3px;font-size:12px}
+h2{text-align:center;font-size:24px;margin-top:35px}
+p{color:#aaa;text-align:center}
+label{display:block;margin:18px 0 8px}
+input,select{
+ width:100%;
+ padding:15px;
+ border-radius:8px;
+ border:1px solid #555;
+ background:#202020;
+ color:white;
+ font-size:16px;
+}
+.option{
+ border:1px solid #555;
+ border-radius:10px;
+ padding:18px;
+ margin-top:12px;
+ cursor:pointer;
+}
+.option.active{
+ border:2px solid #d4af37;
+ background:#29251a;
+}
+.option strong{display:block}
+.option small{color:#aaa}
+button{
+ width:100%;
+ background:#d4af37;
+ color:#111;
+ padding:17px;
+ border:0;
+ border-radius:8px;
+ font-size:17px;
+ font-weight:bold;
+ margin-top:25px;
+ cursor:pointer;
+}
+.hidden{display:none}
+.queue{
+ margin-top:35px;
+ border-top:1px solid #444;
+ padding-top:15px;
+}
+.entry{
+ background:#202020;
+ padding:14px;
+ border-radius:8px;
+ margin:10px 0;
+}
+.entry small{
+ display:block;
+ color:#aaa;
+ margin-top:5px;
+}
+.message{
+ color:#d4af37;
+ text-align:center;
+ margin-top:15px;
+}
+</style>
+</head>
 
-    body {
-      margin: 0;
-      background: #101010;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
+<body>
+<main>
+<header>
+<h1>CAPQ</h1>
+<div class="tag">BUILT FOR BARBERS</div>
+</header>
+
+<h2>Walk-In Check-In</h2>
+<p>Join the line. We'll take care of the rest.</p>
+
+<form id="checkin">
+<label for="name">Your Name</label>
+<input
+ id="name"
+ required
+ maxlength="60"
+ placeholder="Enter your name"
+>
+
+<label for="service">Select Service</label>
+<select id="service">
+<option>Haircut</option>
+<option>Haircut + Beard</option>
+<option>Kids Haircut</option>
+<option>Beard Trim</option>
+</select>
+
+<label>Choose Your Barber Preference</label>
+
+<div class="option active" id="nextOption"
+ onclick="choose('next')">
+<strong>Wait for Next Barber</strong>
+<small>First available barber</small>
+</div>
+
+<div class="option" id="pickOption"
+ onclick="choose('pick')">
+<strong>Pick Your Barber</strong>
+<small>Wait for your preferred barber</small>
+</div>
+
+<div id="barberBox" class="hidden">
+<label for="barber">Select Barber</label>
+<select id="barber">
+<option value="">Choose a barber</option>
+<option>Barber 1</option>
+<option>Barber 2</option>
+<option>Barber 3</option>
+</select>
+</div>
+
+<button type="submit">Join Waitlist</button>
+</form>
+
+<div class="message" id="message" role="status"></div>
+
+<section class="queue">
+<h2>Demo Waiting List</h2>
+<p id="count">0 customers waiting</p>
+<div id="queueList"></div>
+</section>
+</main>
+
+<script>
+let preference="next";
+let waiting=[];
+
+function choose(value){
+ preference=value;
+
+ document.getElementById("nextOption")
+  .classList.toggle("active",value==="next");
+
+ document.getElementById("pickOption")
+  .classList.toggle("active",value==="pick");
+
+ document.getElementById("barberBox")
+  .classList.toggle("hidden",value!=="pick");
+}
+
+document.getElementById("checkin")
+.addEventListener("submit",function(event){
+ event.preventDefault();
+
+ const name=document.getElementById("name").value.trim();
+ const service=document.getElementById("service").value;
+ const barber=document.getElementById("barber").value;
+
+ if(!name)return;
+
+ if(preference==="pick"&&!barber){
+  alert("Please select your barber.");
+  return;
+ }
+
+ waiting.push({
+  name:name,
+  service:service,
+  preference:preference==="next"
+   ? "Next Available Barber"
+   : barber
+ });
+
+ document.getElementById("message").textContent=
+  name+", you're on the demo waiting list!";
+
+ this.reset();
+ choose("next");
+ renderQueue();
+});
+
+function renderQueue(){
+ const list=document.getElementById("queueList");
+ list.replaceChildren();
+
+ waiting.forEach(function(customer,index){
+  const item=document.createElement("div");
+  item.className="entry";
+
+  const title=document.createElement("strong");
+  title.textContent=(index+1)+". "+customer.name;
+
+  const details=document.createElement("small");
+  details.textContent=customer.service+
+   " | "+customer.preference;
+
+  item.append(title,details);
+  list.appendChild(item);
+ });
+
+ document.getElementById("count").textContent=
+  waiting.length+" customers waiting";
+}
+</script>
+</body>
+</html>
+
     }
 
     main {
