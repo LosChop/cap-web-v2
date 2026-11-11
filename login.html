@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101114">
-<title>Sign In | CAPQ</title>
+<title>Sign In | CAPQ Pro</title>
 <style>
 :root {
   --black:#101114;
@@ -171,14 +171,16 @@ input:focus {
   .card { padding:24px 19px; }
 }
 </style>
+<link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
+<link rel="stylesheet" href="assets/capq-brand.css">
 </head>
 <body>
 <main class="card">
 
 <a href="index.html" class="brand">
-  <div class="logo-icon"><span>C</span></div>
+  <div class="logo-icon" aria-hidden="true"><span>C</span></div>
   <div>
-    <div class="logo-text">CAP<span>Q</span></div>
+    <img class="capq-pro-wordmark" src="assets/capq-wordmark.svg" alt="CAPQ Pro">
     <div class="tagline">BUILT FOR BARBERS</div>
   </div>
 </a>
@@ -282,7 +284,39 @@ document.getElementById("loginForm")
         "Login successful! Opening dashboard...",
         "success"
       );
-      window.location.replace("dashboard.html");
+
+      const { data: owned, error: ownerError } =
+        await supabase
+          .from("barber_shops")
+          .select("id")
+          .eq("owner_id", data.user.id)
+          .limit(1);
+
+      if (ownerError) throw ownerError;
+
+      if (owned?.length) {
+        window.location.replace("dashboard.html");
+        return;
+      }
+
+      const { data: staff, error: staffError } =
+        await supabase
+          .from("barbers")
+          .select("id")
+          .eq("user_id", data.user.id)
+          .limit(1);
+
+      if (staffError) throw staffError;
+
+      if (staff?.length) {
+        window.location.replace("barber-dashboard.html");
+        return;
+      }
+
+      showMessage(
+        "Signed in. Your shop or barber profile still needs to be linked.",
+        "success"
+      );
 
     } catch (error) {
       showMessage(
@@ -299,7 +333,8 @@ document.getElementById("forgotLink")
   .addEventListener("click", async event => {
     event.preventDefault();
 
-    const email = document.getElementById("email").value.trim();
+    const email =
+      document.getElementById("email").value.trim();
 
     if (!email ||
         !document.getElementById("email").checkValidity()) {
