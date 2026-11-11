@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101114">
 <title>Sign In | CAPQ</title>
-
 <style>
 :root {
   --black:#101114;
@@ -104,12 +103,8 @@ input:focus {
   outline:none;
   border-color:var(--gold);
 }
-.password-wrap {
-  position:relative;
-}
-.password-wrap input {
-  padding-right:70px;
-}
+.password-wrap { position:relative; }
+.password-wrap input { padding-right:70px; }
 .show-password {
   position:absolute;
   right:10px;
@@ -120,6 +115,14 @@ input:focus {
   color:var(--gold);
   font-size:12px;
   cursor:pointer;
+}
+.forgot {
+  display:block;
+  text-align:right;
+  color:var(--gold);
+  font-size:13px;
+  text-decoration:none;
+  margin-top:12px;
 }
 .submit-btn {
   width:100%;
@@ -133,7 +136,6 @@ input:focus {
   cursor:pointer;
   margin-top:25px;
 }
-.submit-btn:hover { filter:brightness(1.08); }
 .submit-btn:disabled {
   opacity:.6;
   cursor:not-allowed;
@@ -154,7 +156,7 @@ input:focus {
   font-size:13px;
   margin-top:24px;
 }
-.footer a {
+.footer a, .back {
   color:var(--gold);
   text-decoration:none;
 }
@@ -164,106 +166,74 @@ input:focus {
   margin-top:20px;
   color:var(--muted);
   font-size:12px;
-  text-decoration:none;
 }
 @media(max-width:480px) {
   .card { padding:24px 19px; }
 }
 </style>
 </head>
-
 <body>
 <main class="card">
 
-  <a href="index.html" class="brand">
-    <div class="logo-icon"><span>C</span></div>
-    <div>
-      <div class="logo-text">CAP<span>Q</span></div>
-      <div class="tagline">BUILT FOR BARBERS</div>
-    </div>
-  </a>
+<a href="index.html" class="brand">
+  <div class="logo-icon"><span>C</span></div>
+  <div>
+    <div class="logo-text">CAP<span>Q</span></div>
+    <div class="tagline">BUILT FOR BARBERS</div>
+  </div>
+</a>
 
-  <h1>Welcome Back</h1>
-  <p class="intro">
-    Sign in to manage your customers,
-    walk-ins, and daily queue.
-  </p>
+<h1>Welcome Back</h1>
+<p class="intro">
+  Sign in to manage your customers,
+  walk-ins, and daily queue.
+</p>
 
-  <form id="loginForm">
+<form id="loginForm">
+  <label for="email">Email Address</label>
+  <input id="email" type="email"
+    autocomplete="email"
+    placeholder="you@example.com" required>
 
-    <label for="email">Email Address</label>
-    <input
-      id="email"
-      type="email"
-      autocomplete="email"
-      placeholder="you@example.com"
-      required
-    >
-
-    <label for="password">Password</label>
-    <div class="password-wrap">
-      <input
-        id="password"
-        type="password"
-        autocomplete="current-password"
-        placeholder="Enter your password"
-        required
-      >
-      <button
-        type="button"
-        class="show-password"
-        id="togglePassword"
-        aria-label="Show password"
-      >Show</button>
-    </div>
-
-    <button
-      type="submit"
-      class="submit-btn"
-      id="submitBtn"
-    >Sign In</button>
-
-    <div
-      id="message"
-      class="message"
-      role="status"
-      aria-live="polite"
-    ></div>
-
-  </form>
-
-  <div class="footer">
-    Don't have an account?
-    <a href="signup.html">Create Account</a>
+  <label for="password">Password</label>
+  <div class="password-wrap">
+    <input id="password" type="password"
+      autocomplete="current-password"
+      placeholder="Enter your password" required>
+    <button type="button" class="show-password"
+      id="togglePassword">Show</button>
   </div>
 
-  <a href="index.html" class="back">
-    Return to CAPQ Homepage
+  <a href="#" id="forgotLink" class="forgot">
+    Forgot Password?
   </a>
+
+  <button type="submit" class="submit-btn"
+    id="submitBtn">Sign In</button>
+
+  <div id="message" class="message"
+    role="status" aria-live="polite"></div>
+</form>
+
+<div class="footer">
+  Don't have an account?
+  <a href="signup.html">Create Account</a>
+</div>
+
+<a href="index.html" class="back">
+  Return to CAPQ Homepage
+</a>
 
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script type="module">
+import { createClient } from
+  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-<script>
-const SUPABASE_URL =
-  "https://nfazsevnpfmabsipkrrh.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_FtcxTtmcHvtyu3m2KJRjqA_3Nzkk2La";
-
-let capqDB = null;
-
-try {
-  if (window.supabase) {
-    capqDB = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
-  }
-} catch (error) {
-  console.error("Supabase setup error:", error);
-}
+const supabase = createClient(
+  "https://nfazsevnpfmabsipkrrh.supabase.co",
+  "sb_publishable_FtcxTtmcHvtyu3m2KJRjqA_3Nzkk2La"
+);
 
 const message = document.getElementById("message");
 const submitBtn = document.getElementById("submitBtn");
@@ -275,20 +245,11 @@ function showMessage(text, type = "") {
 
 document.getElementById("togglePassword")
   .addEventListener("click", () => {
-    const password =
-      document.getElementById("password");
-
-    const showing = password.type === "text";
-    password.type = showing ? "password" : "text";
-
-    const button =
-      document.getElementById("togglePassword");
-
-    button.textContent = showing ? "Show" : "Hide";
-    button.setAttribute(
-      "aria-label",
-      showing ? "Show password" : "Hide password"
-    );
+    const input = document.getElementById("password");
+    const showing = input.type === "text";
+    input.type = showing ? "password" : "text";
+    document.getElementById("togglePassword")
+      .textContent = showing ? "Show" : "Hide";
   });
 
 document.getElementById("loginForm")
@@ -297,17 +258,8 @@ document.getElementById("loginForm")
 
     const email =
       document.getElementById("email").value.trim();
-
     const password =
       document.getElementById("password").value;
-
-    if (!capqDB) {
-      showMessage(
-        "Unable to connect to Supabase.",
-        "error"
-      );
-      return;
-    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = "Signing In...";
@@ -315,28 +267,24 @@ document.getElementById("loginForm")
 
     try {
       const { data, error } =
-        await capqDB.auth.signInWithPassword({
+        await supabase.auth.signInWithPassword({
           email,
           password
         });
 
       if (error) throw error;
 
-      if (data.session) {
-        showMessage(
-          "Login successful! Opening dashboard...",
-          "success"
-        );
-
-        window.location.href = "dashboard.html";
-      } else {
-        showMessage(
-          "Unable to sign in. Please try again.",
-          "error"
-        );
+      if (!data.session) {
+        throw new Error("No login session was created.");
       }
+
+      showMessage(
+        "Login successful! Opening dashboard...",
+        "success"
+      );
+      window.location.replace("dashboard.html");
+
     } catch (error) {
-      console.error("CAPQ login error:", error);
       showMessage(
         error.message || "Login failed.",
         "error"
@@ -346,7 +294,45 @@ document.getElementById("loginForm")
       submitBtn.textContent = "Sign In";
     }
   });
-</script>
 
+document.getElementById("forgotLink")
+  .addEventListener("click", async event => {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+
+    if (!email ||
+        !document.getElementById("email").checkValidity()) {
+      showMessage(
+        "Enter your valid email address first.",
+        "error"
+      );
+      document.getElementById("email").focus();
+      return;
+    }
+
+    showMessage("Requesting password reset email...");
+
+    try {
+      const { error } =
+        await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo:
+            window.location.origin + "/reset-password.html"
+        });
+
+      if (error) throw error;
+
+      showMessage(
+        "If this account exists, a password reset email will arrive shortly. Check your spam folder too.",
+        "success"
+      );
+    } catch (error) {
+      showMessage(
+        error.message || "Unable to request password reset.",
+        "error"
+      );
+    }
+  });
+</script>
 </body>
 </html>
