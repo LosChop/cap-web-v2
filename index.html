@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101114">
   <meta name="description" content="CAPQ helps barbers and barbershops organize walk-ins, manage their line, and connect with clients.">
-  <title>CAPQ | Built for Barbers</title>
+  <title>CAPQ Pro | Built for Barbers</title>
+  <link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
+  <link rel="stylesheet" href="assets/capq-brand.css">
   <style>
     :root {
       --black: #101114;
@@ -18,7 +20,6 @@
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -311,9 +312,7 @@
     .card h3 { margin: 0 0 10px; font-size: 19px; }
     .card p { margin: 0; color: var(--muted); font-size: 14px; }
 
-    .audience {
-      background: #17191d;
-    }
+    .audience { background: #17191d; }
 
     .audience-grid {
       display: grid;
@@ -357,9 +356,7 @@
 
     .step p { color: var(--muted); font-size: 14px; }
 
-    .pricing {
-      background: #17191d;
-    }
+    .pricing { background: #17191d; }
 
     .pricing-grid {
       display: grid;
@@ -376,7 +373,6 @@
     }
 
     .price-card.featured { border-color: var(--gold); }
-
     .price-card h3 { font-size: 23px; margin: 0; }
 
     .price {
@@ -425,7 +421,11 @@
       background: radial-gradient(ellipse at center, #116c4b25, transparent 65%);
     }
 
-    .cta h2 { font-size: clamp(30px, 4vw, 45px); margin: 0 0 14px; }
+    .cta h2 {
+      font-size: clamp(30px, 4vw, 45px);
+      margin: 0 0 14px;
+    }
+
     .cta p { color: var(--muted); margin-bottom: 28px; }
 
     footer {
@@ -442,7 +442,11 @@
       flex-wrap: wrap;
     }
 
-    .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
+    .footer-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
 
     @media (max-width: 850px) {
       .hero-grid { grid-template-columns: 1fr; }
@@ -459,9 +463,11 @@
       .brand-icon { width: 40px; height: 40px; }
       .brand-icon span { font-size: 30px; }
       .brand-tag { letter-spacing: 1px; }
+
       .cards, .audience-grid, .steps, .pricing-grid {
         grid-template-columns: 1fr;
       }
+
       .hero-actions .btn { flex: 1; }
       section.content { padding: 60px 0; }
       .preview { padding: 15px; }
@@ -470,14 +476,20 @@
     }
   </style>
 </head>
-<body>
 
+<body>
   <nav class="nav">
     <div class="container nav-inner">
       <a href="index.html" class="brand" aria-label="CAPQ Home">
-        <div class="brand-icon"><span>C</span></div>
+        <div class="brand-icon" aria-hidden="true">
+          <span>C</span>
+        </div>
         <div>
-          <div class="brand-name">CAP<span>Q</span></div>
+          <img
+            class="capq-pro-wordmark"
+            src="assets/capq-wordmark.svg"
+            alt="CAPQ Pro"
+          >
           <div class="brand-tag">BUILT FOR BARBERS</div>
         </div>
       </a>
@@ -486,7 +498,9 @@
         <a href="#features" class="desktop-link">Features</a>
         <a href="#pricing" class="desktop-link">Pricing</a>
         <a href="login.html">Log In</a>
-        <a href="signup.html" class="btn btn-gold">Start Free</a>
+        <a href="signup.html" class="btn btn-gold">
+          Start Free Trial
+        </a>
       </div>
     </div>
   </nav>
@@ -496,16 +510,25 @@
       <div class="container hero-grid">
         <div>
           <div class="eyebrow">CAPQ • Built for Barbers</div>
-          <h1>Every Walk-In Counts. <span>Every Barber Matters.</span></h1>
+          <h1>
+            Every Walk-In Counts.
+            <span>Every Barber Matters.</span>
+          </h1>
           <p>
             Keep your line organized, connect with clients, and manage
             your day with less confusion. CAPQ is being built for
             independent barbers and barbershop owners.
           </p>
+
           <div class="hero-actions">
-            <a href="signup.html" class="btn btn-gold">Get Started</a>
-            <a href="checkin.html" class="btn btn-outline">Try Check-In Demo</a>
+            <a href="signup.html" class="btn btn-gold">
+              Get Started
+            </a>
+            <a href="checkin.html" class="btn btn-outline">
+              Try Check-In Demo
+            </a>
           </div>
+
           <div class="hero-note">
             Early preview • Some features are still in development
           </div>
@@ -518,9 +541,18 @@
           </div>
 
           <div class="preview-stats">
-            <div class="stat"><strong>03</strong><small>Waiting</small></div>
-            <div class="stat"><strong>02</strong><small>Available</small></div>
-            <div class="stat"><strong>12</strong><small>Served Today</small></div>
+            <div class="stat">
+              <strong>03</strong>
+              <small>Waiting</small>
+            </div>
+            <div class="stat">
+              <strong>02</strong>
+              <small>Available</small>
+            </div>
+            <div class="stat">
+              <strong>12</strong>
+              <small>Served Today</small>
+            </div>
           </div>
 
           <div class="preview-heading">
@@ -570,37 +602,55 @@
           <div class="card">
             <div class="card-icon">♟</div>
             <h3>Walk-In Queue</h3>
-            <p>Organize customers by next available barber or their preferred barber.</p>
+            <p>
+              Organize customers by next available barber
+              or their preferred barber.
+            </p>
           </div>
 
           <div class="card">
             <div class="card-icon">▦</div>
             <h3>Booking Connections</h3>
-            <p>Give customers easy access to your existing booking links.</p>
+            <p>
+              Give customers easy access to your existing
+              booking links.
+            </p>
           </div>
 
           <div class="card">
             <div class="card-icon">♙</div>
             <h3>Client Management</h3>
-            <p>Build client profiles and keep useful visit information in one place.</p>
+            <p>
+              Build client profiles and keep useful visit
+              information in one place.
+            </p>
           </div>
 
           <div class="card">
             <div class="card-icon">↗</div>
             <h3>Payment Links</h3>
-            <p>Connect customers to the payment methods you already use.</p>
+            <p>
+              Connect customers to the payment methods
+              you already use.
+            </p>
           </div>
 
           <div class="card">
             <div class="card-icon">▥</div>
             <h3>Reports & Insights</h3>
-            <p>See walk-in activity and understand how your business is performing.</p>
+            <p>
+              See walk-in activity and understand how
+              your business is performing.
+            </p>
           </div>
 
           <div class="card">
             <div class="card-icon">∞</div>
             <h3>CAPQ Connections</h3>
-            <p>Keep your professional links and barber profile together.</p>
+            <p>
+              Keep your professional links and barber
+              profile together.
+            </p>
           </div>
         </div>
       </div>
@@ -609,7 +659,9 @@
     <section class="content audience">
       <div class="container">
         <div class="section-title">
-          <div class="eyebrow">One Platform. Two Ways to Work.</div>
+          <div class="eyebrow">
+            One Platform. Two Ways to Work.
+          </div>
           <h2>Made for Your Setup.</h2>
         </div>
 
@@ -621,7 +673,9 @@
               Manage your own walk-ins and clients, even if
               your barbershop doesn't subscribe to CAPQ.
             </p>
-            <a href="signup.html" class="btn btn-gold">Join as a Barber</a>
+            <a href="signup.html" class="btn btn-gold">
+              Join as a Barber
+            </a>
           </div>
 
           <div class="audience-card">
@@ -631,7 +685,9 @@
               Build a smoother experience for your shop,
               staff, and customers with one shared queue.
             </p>
-            <a href="signup.html" class="btn btn-outline">Join as a Shop Owner</a>
+            <a href="signup.html" class="btn btn-outline">
+              Join as a Shop Owner
+            </a>
           </div>
         </div>
       </div>
@@ -648,17 +704,25 @@
           <div class="step">
             <div class="step-number">1</div>
             <h3>Create Your Account</h3>
-            <p>Choose independent barber or barbershop owner.</p>
+            <p>
+              Choose independent barber or barbershop owner.
+            </p>
           </div>
+
           <div class="step">
             <div class="step-number">2</div>
             <h3>Set Up Your Profile</h3>
-            <p>Add your services, barber details, and useful links.</p>
+            <p>
+              Add your services, barber details, and useful links.
+            </p>
           </div>
+
           <div class="step">
             <div class="step-number">3</div>
             <h3>Manage Your Line</h3>
-            <p>Let customers check in and keep your queue organized.</p>
+            <p>
+              Let customers check in and keep your queue organized.
+            </p>
           </div>
         </div>
       </div>
@@ -667,41 +731,66 @@
     <section id="pricing" class="content pricing">
       <div class="container">
         <div class="section-title">
-          <div class="eyebrow">Independent Barber Plans</div>
-          <h2>Simple Pricing.</h2>
-          <p>Planned pricing for independent barbers.</p>
+          <div class="eyebrow">CAPQ PRO PLANS</div>
+          <h2>Keep Your Bookings. Manage Your Walk-Ins.</h2>
+          <p>
+            28 days to experience CAPQ Pro.
+            No credit card required to try.
+          </p>
         </div>
 
         <div class="pricing-grid">
-          <div class="price-card">
-            <h3>Basic</h3>
-            <div class="price">$9.99 <small>/month</small></div>
-            <p>For barbers who want a more organized day.</p>
+          <div class="price-card featured capq-gold-border">
+            <div class="eyebrow">ANNUAL · BEST VALUE</div>
+            <h3>CAPQ Pro</h3>
+            <div class="price">
+              $22.42
+              <small>/month equivalent · per location</small>
+            </div>
+            <p>
+              <strong style="color:#f3d58c">
+                $269 billed annually
+              </strong>
+              · Save $79 compared with monthly billing.
+            </p>
             <ul>
-              <li>Personal barber profile</li>
-              <li>Walk-in queue tools</li>
-              <li>Booking and payment links</li>
+              <li>14 days full Pro, then 14 days Starter trial</li>
+              <li>Walk-in queue and barber acceptance</li>
+              <li>Owner and barber dashboards</li>
+              <li>Premium features as they launch</li>
             </ul>
-            <a href="signup.html" class="btn btn-outline">Get Started</a>
+            <a href="signup.html" class="btn btn-gold">
+              Start Free Trial
+            </a>
           </div>
 
-          <div class="price-card featured">
-            <h3>Pro</h3>
-            <div class="price">$19.99 <small>/month</small></div>
-            <p>For barbers ready to build and grow.</p>
+          <div class="price-card">
+            <div class="eyebrow">FLEXIBLE BILLING</div>
+            <h3>CAPQ Pro Monthly</h3>
+            <div class="price">
+              $29
+              <small>/month · per location</small>
+            </div>
+            <p>
+              Pay month to month. Cancel anytime.
+            </p>
             <ul>
-              <li>Everything in Basic</li>
-              <li>Client management tools</li>
-              <li>Reports and business insights</li>
-              <li>Expanded connections</li>
+              <li>Same Pro feature access</li>
+              <li>No long-term commitment</li>
+              <li>14-day Pro + 14-day Starter trial</li>
+              <li>No credit card needed for trial</li>
             </ul>
-            <a href="signup.html" class="btn btn-gold">Get Started</a>
+            <a href="signup.html" class="btn btn-outline">
+              Start Free Trial
+            </a>
           </div>
         </div>
 
         <p class="pricing-note">
-          Plans and features are in development. Billing is not active yet.
-          Barbershop owner pricing will be announced separately.
+          Planned pricing; payments, subscription enforcement,
+          and some premium features are not live yet.
+          Multi-location plans will be offered separately.
+          No refunds for paid billing periods, subject to applicable law.
         </p>
       </div>
     </section>
@@ -710,8 +799,13 @@
       <div class="container">
         <div class="eyebrow">CAPQ • Built for Barbers</div>
         <h2>Ready for a Better Way to Manage Walk-Ins?</h2>
-        <p>Explore CAPQ as we build the next generation of barber tools.</p>
-        <a href="signup.html" class="btn btn-gold">Create Your Account</a>
+        <p>
+          Explore CAPQ as we build the next generation
+          of barber tools.
+        </p>
+        <a href="signup.html" class="btn btn-gold">
+          Create Your Account
+        </a>
       </div>
     </section>
   </main>
@@ -727,6 +821,5 @@
       </div>
     </div>
   </footer>
-
 </body>
 </html>
