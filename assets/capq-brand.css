@@ -1,0 +1,40 @@
+
+/* CAPQ PRO — SHARED BRAND STYLES */
+
+:root {
+  --capq-black: #101114;
+  --capq-charcoal: #292D33;
+  --capq-gold: #D6B45C;
+  --capq-silver: #C4C8CE;
+  --capq-green: #16A77A;
+  --capq-white: #F7F7F4;
+}
+
+.capq-pro-wordmark {
+  display: block;
+  width: 155px;
+  max-width: 100%;
+  height: auto;
+}
+
+.capq-gold-border {
+  border: 1px solid var(--capq-gold) !important;
+}
+
+.capq-panel-border {
+  border-color: #655735 !important;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--capq-gold);
+  outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .capq-pro-wordmark {
+    width: 130px;
+  }
+}
