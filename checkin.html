@@ -135,8 +135,24 @@ button:disabled {
 .shop-name {
   text-align:center;
   color:var(--gold);
-  font-size:13px;
+  font-size:14px;
   margin-top:10px;
+}
+.success {
+  border:1px solid var(--green);
+  background:#123e30;
+  border-radius:12px;
+  padding:20px;
+  margin-top:20px;
+}
+.success h2 {
+  text-align:center;
+  margin:0 0 10px;
+  color:#7ff0c3;
+}
+.success p {
+  color:var(--ivory);
+  margin:0;
 }
 </style>
 </head>
@@ -153,22 +169,23 @@ button:disabled {
 </header>
 
 <h1>Walk-In Check-In</h1>
-<p>Add a walk-in customer to your shop's live queue.</p>
+<p>Welcome! Join the walk-in queue in just a few seconds.</p>
 
 <div id="shopName" class="shop-name">
-  Checking shop access...
+  CAPO Test Barbershop 1
 </div>
 
-<form id="checkin" hidden>
+<form id="checkin">
 
-  <label for="name">Customer Name</label>
+  <label for="name">Your Name</label>
   <input
     id="name"
     type="text"
     required
+    minlength="2"
     maxlength="60"
-    autocomplete="off"
-    placeholder="Enter customer name"
+    autocomplete="name"
+    placeholder="Enter your name"
   >
 
   <label for="service">Select Service</label>
@@ -179,31 +196,26 @@ button:disabled {
     <option value="Beard Trim">Beard Trim</option>
   </select>
 
-  <label for="preference">Barber Preference</label>
-  <select id="preference">
-    <option value="Next Available">
-      Next Available Barber
-    </option>
-  </select>
-
   <button id="submitBtn" type="submit">
     Join Waitlist
   </button>
 
 </form>
 
-<div id="message" class="message" role="status"
-     aria-live="polite"></div>
+<div id="message" class="message"
+     role="status" aria-live="polite"></div>
+
+<div id="successBox" class="success" hidden>
+  <h2>You're Checked In!</h2>
+  <p id="successText"></p>
+</div>
 
 <p class="note">
-  CAPQ Live Test: Owner-assisted check-in only.
-  Public QR check-in and SMS verification are not
-  enabled yet.
+  CAPQ Public Check-In Test.
+  The barber will review your request and provide
+  an estimated wait time. Text notifications are
+  not enabled yet.
 </p>
-
-<a class="back" href="dashboard.html">
-  View Live Dashboard
-</a>
 
 <a class="back" href="index.html">
   Back to CAPQ Home
@@ -226,9 +238,8 @@ const SHOP_ID =
 const form = document.getElementById("checkin");
 const message = document.getElementById("message");
 const submitBtn = document.getElementById("submitBtn");
-const shopName = document.getElementById("shopName");
-
-let authorized = false;
+const successBox = document.getElementById("successBox");
+const successText = document.getElementById("successText");
 
 function showMessage(text, error = false) {
   message.textContent = text;
@@ -237,57 +248,8 @@ function showMessage(text, error = false) {
     : "message";
 }
 
-async function verifyOwner() {
-  try {
-    const {
-      data: { user },
-      error: authError
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      shopName.textContent = "Owner login required";
-      showMessage(
-        "Please sign in to add customers.",
-        true
-      );
-      return;
-    }
-
-    const { data: shop, error } = await supabase
-      .from("barber_shops")
-      .select("id,name")
-      .eq("id", SHOP_ID)
-      .eq("owner_id", user.id)
-      .maybeSingle();
-
-    if (error) throw error;
-
-    if (!shop) {
-      shopName.textContent = "Access unavailable";
-      showMessage(
-        "This account is not the owner of the test shop.",
-        true
-      );
-      return;
-    }
-
-    authorized = true;
-    shopName.textContent = shop.name;
-    form.hidden = false;
-
-  } catch (error) {
-    shopName.textContent = "Connection error";
-    showMessage(
-      "Unable to verify shop: " + error.message,
-      true
-    );
-  }
-}
-
 form.addEventListener("submit", async event => {
   event.preventDefault();
-
-  if (!authorized) return;
 
   const name =
     document.getElementById("name").value.trim();
@@ -295,39 +257,41 @@ form.addEventListener("submit", async event => {
   const service =
     document.getElementById("service").value;
 
-  const preference =
-    document.getElementById("preference").value;
-
-  if (!name || name.length > 60) {
-    showMessage("Enter a valid customer name.", true);
+  if (name.length < 2 || name.length > 60) {
+    showMessage("Please enter a valid name.", true);
     return;
   }
 
   submitBtn.disabled = true;
-  submitBtn.textContent = "Adding Customer...";
-  showMessage("Saving customer to CAPQ...");
+  submitBtn.textContent = "Checking You In...";
+  showMessage("Adding you to the queue...");
 
   try {
-    const { data, error } = await supabase
-      .from("capq_queue")
-      .insert({
-        customer_name: name,
-        service: service,
-        barber_preference: preference,
-        status: "Waiting",
-        shop_id: SHOP_ID
-      })
-      .select("id,customer_name")
-      .single();
+    const { data, error } = await supabase.rpc(
+      "capq_public_checkin",
+      {
+        p_shop_id: SHOP_ID,
+        p_customer_name: name,
+        p_service: service
+      }
+    );
 
     if (error) throw error;
 
-    showMessage(
-      data.customer_name +
-      ", you're successfully added to the live queue!"
-    );
+    if (!data) {
+      throw new Error("No check-in confirmation received.");
+    }
 
-    form.reset();
+    form.hidden = true;
+    showMessage("");
+
+    successText.textContent =
+      name +
+      ", you've joined the queue for " +
+      service +
+      ". Please wait for your barber to accept your request.";
+
+    successBox.hidden = false;
 
   } catch (error) {
     showMessage(
@@ -339,8 +303,6 @@ form.addEventListener("submit", async event => {
     submitBtn.textContent = "Join Waitlist";
   }
 });
-
-await verifyOwner();
 </script>
 
 </body>
