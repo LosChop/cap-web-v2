@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101114">
-<title>CAPQ | Barber Dashboard</title>
+<title>CAPQ Pro | Barber Dashboard</title>
 
 <style>
 :root {
@@ -268,6 +268,8 @@ button:disabled {
   .nav a { font-size:11px; }
 }
 </style>
+<link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
+<link rel="stylesheet" href="assets/capq-brand.css">
 </head>
 
 <body>
@@ -275,9 +277,9 @@ button:disabled {
 
 <header>
   <a href="index.html" class="brand">
-    <div class="logo-icon"><span>C</span></div>
+    <div class="logo-icon" aria-hidden="true"><span>C</span></div>
     <div>
-      <div class="logo-text">CAP<span>Q</span></div>
+      <img class="capq-pro-wordmark" src="assets/capq-wordmark.svg" alt="CAPQ Pro">
       <div class="subtitle">BUILT FOR BARBERS</div>
     </div>
   </a>
@@ -295,11 +297,11 @@ button:disabled {
 </section>
 
 <section class="stats">
-  <div class="stat">
+  <div class="stat capq-panel-border">
     <small>Waiting</small>
     <strong id="waitingCount">0</strong>
   </div>
-  <div class="stat">
+  <div class="stat capq-panel-border">
     <small>Accepted</small>
     <strong id="acceptedCount">0</strong>
   </div>
