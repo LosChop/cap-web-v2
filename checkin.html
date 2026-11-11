@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101114">
-<title>CAPQ | Walk-In Check-In</title>
+<title>CAPQ Pro | Walk-In Check-In</title>
 
 <style>
 :root {
@@ -155,6 +155,9 @@ button:disabled {
   margin:0;
 }
 </style>
+
+<link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
+<link rel="stylesheet" href="assets/capq-brand.css">
 </head>
 
 <body>
@@ -162,14 +165,42 @@ button:disabled {
 
 <header>
   <div class="logo">
-    <div class="logo-icon"><span>C</span></div>
-    <div class="logo-text">CAP<span>Q</span></div>
+    <div class="logo-icon" aria-hidden="true">
+      <span>C</span>
+    </div>
+    <img
+      class="capq-pro-wordmark"
+      src="assets/capq-wordmark.svg"
+      alt="CAPQ Pro"
+    >
   </div>
   <div class="tag">BUILT FOR BARBERS</div>
 </header>
 
-<h1>Walk-In Check-In</h1>
-<p>Welcome! Join the walk-in queue in just a few seconds.</p>
+<div style="display:flex;justify-content:flex-end;gap:8px">
+  <button
+    type="button"
+    id="langEN"
+    style="width:auto;margin:0;padding:8px 12px;font-size:12px"
+    aria-pressed="true"
+  >
+    EN
+  </button>
+  <button
+    type="button"
+    id="langES"
+    style="width:auto;margin:0;padding:8px 12px;font-size:12px;background:#292D33;color:white"
+    aria-pressed="false"
+  >
+    ES
+  </button>
+</div>
+
+<h1 id="checkinTitle">Walk-In Check-In</h1>
+
+<p id="checkinIntro">
+  Welcome! Join the walk-in queue in just a few seconds.
+</p>
 
 <div id="shopName" class="shop-name">
   CAPO Test Barbershop 1
@@ -177,7 +208,8 @@ button:disabled {
 
 <form id="checkin">
 
-  <label for="name">Your Name</label>
+  <label for="name" id="nameLabel">Your Name</label>
+
   <input
     id="name"
     type="text"
@@ -188,12 +220,42 @@ button:disabled {
     placeholder="Enter your name"
   >
 
-  <label for="service">Select Service</label>
+  <label for="service" id="serviceLabel">
+    Select Service
+  </label>
+
   <select id="service" required>
-    <option value="Haircut">Haircut</option>
-    <option value="Haircut + Beard">Haircut + Beard</option>
-    <option value="Kids Haircut">Kids Haircut</option>
-    <option value="Beard Trim">Beard Trim</option>
+    <option
+      value="Haircut"
+      data-en="Haircut"
+      data-es="Corte de cabello"
+    >
+      Haircut
+    </option>
+
+    <option
+      value="Haircut + Beard"
+      data-en="Haircut + Beard"
+      data-es="Corte + barba"
+    >
+      Haircut + Beard
+    </option>
+
+    <option
+      value="Kids Haircut"
+      data-en="Kids Haircut"
+      data-es="Corte para niños"
+    >
+      Kids Haircut
+    </option>
+
+    <option
+      value="Beard Trim"
+      data-en="Beard Trim"
+      data-es="Recorte de barba"
+    >
+      Beard Trim
+    </option>
   </select>
 
   <button id="submitBtn" type="submit">
@@ -202,15 +264,19 @@ button:disabled {
 
 </form>
 
-<div id="message" class="message"
-     role="status" aria-live="polite"></div>
+<div
+  id="message"
+  class="message"
+  role="status"
+  aria-live="polite"
+></div>
 
 <div id="successBox" class="success" hidden>
-  <h2>You're Checked In!</h2>
+  <h2 id="successTitle">You're Checked In!</h2>
   <p id="successText"></p>
 </div>
 
-<p class="note">
+<p class="note" id="testNote">
   CAPQ Public Check-In Test.
   The barber will review your request and provide
   an estimated wait time. Text notifications are
@@ -235,14 +301,119 @@ const supabase = createClient(
 const SHOP_ID =
   "061c8b27-0d31-404a-b227-2839639acb35";
 
-const form = document.getElementById("checkin");
-const message = document.getElementById("message");
-const submitBtn = document.getElementById("submitBtn");
-const successBox = document.getElementById("successBox");
-const successText = document.getElementById("successText");
+let currentLang = "en";
+
+const translations = {
+  en: {
+    title: "Walk-In Check-In",
+    intro: "Welcome! Join the walk-in queue in just a few seconds.",
+    name: "Your Name",
+    placeholder: "Enter your name",
+    service: "Select Service",
+    join: "Join Waitlist",
+    success: "You're Checked In!",
+    back: "Back to CAPQ Home",
+    note: "CAPQ public check-in test. Your barber will review your request and provide an estimated wait time. Text notifications are not enabled yet.",
+    invalid: "Please enter a valid name.",
+    checking: "Checking You In...",
+    adding: "Adding you to the queue...",
+    failed: "Check-in failed: ",
+    done: (name, service) =>
+      `${name}, you've joined the queue for ${service}. Please wait for your barber to accept your request.`
+  },
+
+  es: {
+    title: "Registro sin cita",
+    intro: "¡Bienvenido! Anótate en la lista de espera en unos segundos.",
+    name: "Tu nombre",
+    placeholder: "Escribe tu nombre",
+    service: "Selecciona el servicio",
+    join: "Unirme a la lista",
+    success: "¡Registro completado!",
+    back: "Volver al inicio de CAPQ",
+    note: "Prueba del registro público de CAPQ. Tu barbero revisará tu solicitud y te dará un tiempo estimado de espera. Los mensajes de texto todavía no están habilitados.",
+    invalid: "Escribe un nombre válido.",
+    checking: "Registrando...",
+    adding: "Agregándote a la lista...",
+    failed: "Error de registro: ",
+    done: (name, service) =>
+      `${name}, estás en la lista para ${service}. Espera a que un barbero acepte tu solicitud.`
+  }
+};
+
+function translate(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+
+  const t = translations[lang];
+
+  for (const [id, key] of [
+    ["checkinTitle", "title"],
+    ["checkinIntro", "intro"],
+    ["nameLabel", "name"],
+    ["serviceLabel", "service"],
+    ["successTitle", "success"],
+    ["testNote", "note"]
+  ]) {
+    document.getElementById(id).textContent = t[key];
+  }
+
+  document.getElementById("name").placeholder =
+    t.placeholder;
+
+  document.getElementById("submitBtn").textContent =
+    t.join;
+
+  document.querySelector(".back").textContent =
+    t.back;
+
+  document.querySelectorAll("#service option")
+    .forEach(option => {
+      option.textContent = option.dataset[lang];
+    });
+
+  for (const code of ["en", "es"]) {
+    const button = document.getElementById(
+      "lang" + code.toUpperCase()
+    );
+
+    button.setAttribute(
+      "aria-pressed",
+      String(lang === code)
+    );
+
+    button.style.background =
+      lang === code ? "#D6B45C" : "#292D33";
+
+    button.style.color =
+      lang === code ? "#111" : "#fff";
+  }
+}
+
+document.getElementById("langEN").onclick =
+  () => translate("en");
+
+document.getElementById("langES").onclick =
+  () => translate("es");
+
+const form =
+  document.getElementById("checkin");
+
+const message =
+  document.getElementById("message");
+
+const submitBtn =
+  document.getElementById("submitBtn");
+
+const successBox =
+  document.getElementById("successBox");
+
+const successText =
+  document.getElementById("successText");
 
 function showMessage(text, error = false) {
   message.textContent = text;
+
   message.className = error
     ? "message error"
     : "message";
@@ -258,13 +429,21 @@ form.addEventListener("submit", async event => {
     document.getElementById("service").value;
 
   if (name.length < 2 || name.length > 60) {
-    showMessage("Please enter a valid name.", true);
+    showMessage(
+      translations[currentLang].invalid,
+      true
+    );
     return;
   }
 
   submitBtn.disabled = true;
-  submitBtn.textContent = "Checking You In...";
-  showMessage("Adding you to the queue...");
+
+  submitBtn.textContent =
+    translations[currentLang].checking;
+
+  showMessage(
+    translations[currentLang].adding
+  );
 
   try {
     const { data, error } = await supabase.rpc(
@@ -279,28 +458,36 @@ form.addEventListener("submit", async event => {
     if (error) throw error;
 
     if (!data) {
-      throw new Error("No check-in confirmation received.");
+      throw new Error(
+        "No check-in confirmation received."
+      );
     }
 
     form.hidden = true;
     showMessage("");
 
     successText.textContent =
-      name +
-      ", you've joined the queue for " +
-      service +
-      ". Please wait for your barber to accept your request.";
+      translations[currentLang].done(
+        name,
+        document.querySelector(
+          '#service option:checked'
+        ).textContent
+      );
 
     successBox.hidden = false;
 
   } catch (error) {
     showMessage(
-      "Check-in failed: " + error.message,
+      translations[currentLang].failed +
+      error.message,
       true
     );
+
   } finally {
     submitBtn.disabled = false;
-    submitBtn.textContent = "Join Waitlist";
+
+    submitBtn.textContent =
+      translations[currentLang].join;
   }
 });
 </script>
