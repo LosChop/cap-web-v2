@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101114">
 <title>CAPQ | Barber Dashboard</title>
+
 <style>
 :root {
   --black:#101114;
@@ -52,12 +53,10 @@ header {
   border-radius:15px;
   display:grid;
   place-items:center;
-  box-shadow:0 0 18px #16a77a20;
 }
 .logo-icon span {
   font-size:40px;
   font-weight:900;
-  line-height:1;
   color:var(--gold);
 }
 .logo-text {
@@ -162,11 +161,41 @@ h2 { font-size:23px; margin:0; }
   color:#e8c96e;
   background:#40361e;
 }
-.status.chair {
+.status.accepted {
   color:#6de6b4;
   background:#123e30;
 }
-button {
+.wait-title {
+  color:var(--white);
+  font-size:13px;
+  font-weight:bold;
+  margin-top:16px;
+}
+.wait-options {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-top:10px;
+}
+.wait-option {
+  background:#292D33;
+  border:1px solid #50545b;
+  color:var(--white);
+  padding:12px 5px;
+  border-radius:9px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.wait-option.selected {
+  background:var(--gold);
+  color:#111;
+  border-color:var(--gold);
+}
+.action {
+  width:100%;
+  margin-top:15px;
+  background:var(--green);
+  color:white;
   border:0;
   border-radius:9px;
   padding:14px 17px;
@@ -174,18 +203,10 @@ button {
   font-weight:bold;
   cursor:pointer;
 }
-button:disabled { opacity:.6; cursor:wait; }
-.action {
-  width:100%;
-  margin-top:14px;
-  background:var(--gold);
-  color:#111;
+button:disabled {
+  opacity:.6;
+  cursor:wait;
 }
-.action.complete {
-  background:var(--green);
-  color:white;
-}
-button:hover:not(:disabled) { filter:brightness(1.08); }
 .empty {
   text-align:center;
   color:var(--muted);
@@ -193,6 +214,12 @@ button:hover:not(:disabled) { filter:brightness(1.08); }
   background:#1c1f24;
   border:1px dashed #45494f;
   border-radius:14px;
+}
+.message {
+  color:#e8c96e;
+  font-size:13px;
+  min-height:20px;
+  margin:12px 0;
 }
 .nav {
   display:grid;
@@ -210,27 +237,19 @@ button:hover:not(:disabled) { filter:brightness(1.08); }
   border-radius:9px;
   font-size:13px;
 }
-.nav a:hover {
-  border-color:var(--gold);
-  color:var(--gold);
-}
 .note {
   color:var(--muted);
   font-size:12px;
   text-align:center;
   margin-top:25px;
 }
-.message {
-  color:#e8c96e;
-  font-size:13px;
-  margin:12px 0;
-  min-height:20px;
-}
 .signout {
   background:#292D33;
-  color:var(--white);
+  color:white;
+  border:0;
+  border-radius:9px;
   padding:9px 12px;
-  font-size:12px;
+  cursor:pointer;
 }
 .header-actions {
   display:flex;
@@ -242,7 +261,7 @@ button:hover:not(:disabled) { filter:brightness(1.08); }
   .stat { padding:13px 10px; }
   .stat strong { font-size:28px; }
   .stat small { font-size:10px; }
-  .logo-icon { width:46px;height:46px; }
+  .logo-icon { width:46px; height:46px; }
   .logo-icon span { font-size:35px; }
   .logo-text { font-size:25px; }
   .customer { padding:16px; }
@@ -250,6 +269,7 @@ button:hover:not(:disabled) { filter:brightness(1.08); }
 }
 </style>
 </head>
+
 <body>
 <main>
 
@@ -263,7 +283,7 @@ button:hover:not(:disabled) { filter:brightness(1.08); }
   </a>
   <div class="header-actions">
     <span class="demo-badge">LIVE TEST</span>
-    <button class="signout" id="signOutButton" type="button">
+    <button class="signout" id="signOutButton">
       Sign Out
     </button>
   </div>
@@ -280,12 +300,12 @@ button:hover:not(:disabled) { filter:brightness(1.08); }
     <strong id="waitingCount">0</strong>
   </div>
   <div class="stat">
-    <small>In Chair</small>
-    <strong id="chairCount">0</strong>
+    <small>Accepted</small>
+    <strong id="acceptedCount">0</strong>
   </div>
   <div class="stat available">
-    <small>Completed Today</small>
-    <strong id="completedCount">0</strong>
+    <small>Accepted Today</small>
+    <strong id="todayCount">0</strong>
   </div>
 </section>
 
@@ -294,9 +314,7 @@ button:hover:not(:disabled) { filter:brightness(1.08); }
     <h2>Customer Queue</h2>
     <span class="queue-label">● Live Queue</span>
   </div>
-  <p id="message" class="message" role="status">
-    Checking your login...
-  </p>
+  <p id="message" class="message" role="status"></p>
   <div id="customerList"></div>
 </section>
 
@@ -307,46 +325,56 @@ button:hover:not(:disabled) { filter:brightness(1.08); }
 </nav>
 
 <p class="note">
-  Connected to Supabase. This is an owner-only live queue test.
-  Customer self-check-in and barber acceptance are coming next.
+  CAPQ live acceptance test.
+  Customers receive an estimated wait after acceptance.
+  SMS notifications are not connected yet.
 </p>
 
 </main>
 
 <script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { createClient } from
+  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-const SUPABASE_URL = 'https://nfazsevnpfmabsipkrrh.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_FtcxTtmcHvtyu3m2KJRjqA_3Nzkk2La';
-const SHOP_ID = '061c8b27-0d31-404a-b227-2839639acb35';
+const SUPABASE_URL =
+  "https://nfazsevnpfmabsipkrrh.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_FtcxTtmcHvtyu3m2KJRjqA_3Nzkk2La";
+
+const SHOP_ID =
+  "061c8b27-0d31-404a-b227-2839639acb35";
 
 const supabase = createClient(
   SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
+  SUPABASE_KEY
 );
 
-const message = document.getElementById('message');
-const list = document.getElementById('customerList');
+const list = document.getElementById("customerList");
+const message = document.getElementById("message");
 
-let refreshing = false;
 let ready = false;
+let loading = false;
+let saving = false;
+let shopName = "";
 
 function setMessage(text) {
   message.textContent = text;
 }
 
-function showEmpty(text) {
-  list.replaceChildren();
-  const el = document.createElement('div');
-  el.className = 'empty';
-  el.textContent = text;
-  list.appendChild(el);
+function startOfToday() {
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
+  return date.toISOString();
 }
 
-function localDayStart() {
-  const d = new Date();
-  d.setHours(0,0,0,0);
-  return d.toISOString();
+function showEmpty(text) {
+  list.replaceChildren();
+
+  const empty = document.createElement("div");
+  empty.className = "empty";
+  empty.textContent = text;
+  list.appendChild(empty);
 }
 
 async function verifyOwner() {
@@ -356,166 +384,247 @@ async function verifyOwner() {
   } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    window.location.replace('login.html');
+    window.location.replace("login.html");
     return false;
   }
 
   const { data: shop, error } = await supabase
-    .from('barber_shops')
-    .select('id,name')
-    .eq('id', SHOP_ID)
-    .eq('owner_id', user.id)
+    .from("barber_shops")
+    .select("id,name")
+    .eq("id", SHOP_ID)
+    .eq("owner_id", user.id)
     .maybeSingle();
 
   if (error || !shop) {
     setMessage(
       error
-        ? 'Could not verify shop access: ' + error.message
-        : 'Your login is not assigned as owner of this test shop.'
+        ? "Shop access error: " + error.message
+        : "Your account is not assigned to this shop."
     );
-    showEmpty('Shop access unavailable.');
+    showEmpty("Shop access unavailable.");
     return false;
   }
 
-  document.getElementById('shopName').textContent =
-    shop.name + ' · Owner Dashboard';
+  shopName = shop.name;
+
+  document.getElementById("shopName").textContent =
+    shopName + " · Owner Dashboard";
 
   return true;
 }
 
-function render(customers, completedToday) {
-  document.getElementById('waitingCount').textContent =
-    customers.filter(c => c.status === 'Waiting').length;
+function render(customers, acceptedToday) {
+  const waiting = customers.filter(
+    c => c.status === "Waiting"
+  ).length;
 
-  document.getElementById('chairCount').textContent =
-    customers.filter(c => c.status === 'In Chair').length;
+  const accepted = customers.filter(
+    c => c.status === "Accepted"
+  ).length;
 
-  document.getElementById('completedCount').textContent =
-    completedToday;
+  document.getElementById("waitingCount").textContent =
+    waiting;
+
+  document.getElementById("acceptedCount").textContent =
+    accepted;
+
+  document.getElementById("todayCount").textContent =
+    acceptedToday;
 
   list.replaceChildren();
 
   if (!customers.length) {
-    showEmpty('All caught up! No customers waiting.');
+    showEmpty("No active customer requests.");
     return;
   }
 
-  for (const customer of customers) {
-    const card = document.createElement('div');
-    card.className = 'customer';
+  customers.forEach(customer => {
+    const card = document.createElement("div");
+    card.className = "customer";
 
-    const top = document.createElement('div');
-    top.className = 'customer-top';
+    const top = document.createElement("div");
+    top.className = "customer-top";
 
-    const name = document.createElement('strong');
-    name.textContent = customer.customer_name || 'Customer';
+    const name = document.createElement("strong");
+    name.textContent =
+      customer.customer_name || "Customer";
 
-    const status = document.createElement('span');
-    status.className = 'status ' +
-      (customer.status === 'Waiting' ? 'waiting' : 'chair');
+    const status = document.createElement("span");
+    status.className =
+      "status " +
+      (customer.status === "Waiting"
+        ? "waiting"
+        : "accepted");
+
     status.textContent = customer.status;
-
     top.append(name, status);
 
-    const service = document.createElement('p');
+    const service = document.createElement("p");
     service.textContent =
-      'Service: ' + (customer.service || 'Not specified');
+      "Service: " + (customer.service || "Haircut");
 
-    const barber = document.createElement('p');
+    const barber = document.createElement("p");
     barber.textContent =
-      'Barber: ' + (customer.barber_preference || 'Next Available');
+      "Preference: " +
+      (customer.barber_preference || "Next Available");
 
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'action';
+    card.append(top, service, barber);
 
-    const nextStatus =
-      customer.status === 'Waiting' ? 'In Chair' : 'Completed';
+    if (customer.status === "Waiting") {
+      const title = document.createElement("div");
+      title.className = "wait-title";
+      title.textContent =
+        "How many minutes until you're ready?";
 
-    button.textContent =
-      customer.status === 'Waiting'
-        ? 'Call Customer'
-        : 'Complete Service';
+      const options = document.createElement("div");
+      options.className = "wait-options";
 
-    if (nextStatus === 'Completed') {
-      button.classList.add('complete');
+      const times = [5, 10, 15, 20, 30, 45];
+      let selectedTime = 15;
+
+      const buttons = [];
+
+      times.forEach(minutes => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "wait-option";
+        button.textContent = minutes + " min";
+
+        if (minutes === selectedTime) {
+          button.classList.add("selected");
+        }
+
+        button.addEventListener("click", () => {
+          selectedTime = minutes;
+
+          buttons.forEach(btn => {
+            btn.classList.remove("selected");
+          });
+
+          button.classList.add("selected");
+        });
+
+        buttons.push(button);
+        options.appendChild(button);
+      });
+
+      const accept = document.createElement("button");
+      accept.className = "action";
+      accept.textContent = "Accept Customer";
+
+      accept.addEventListener("click", async () => {
+        if (saving) return;
+
+        saving = true;
+        accept.disabled = true;
+
+        setMessage("Accepting customer...");
+
+        const { data, error } = await supabase
+          .from("capq_queue")
+          .update({
+            status: "Accepted",
+            estimated_wait_minutes: selectedTime,
+            accepted_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+          .eq("id", customer.id)
+          .eq("shop_id", SHOP_ID)
+          .eq("status", "Waiting")
+          .select("id");
+
+        saving = false;
+
+        if (error) {
+          setMessage(
+            "Unable to accept customer: " + error.message
+          );
+          accept.disabled = false;
+          return;
+        }
+
+        if (!data || !data.length) {
+          setMessage(
+            "This customer was already handled. Refreshing..."
+          );
+        } else {
+          setMessage(
+            customer.customer_name +
+            " accepted. Estimated wait: " +
+            selectedTime + " minutes."
+          );
+        }
+
+        await loadQueue(true);
+      });
+
+      card.append(title, options, accept);
+
+    } else if (customer.status === "Accepted") {
+      const estimate = document.createElement("p");
+      estimate.style.color = "var(--green)";
+      estimate.style.fontWeight = "bold";
+
+      estimate.textContent =
+        "Accepted · Estimated wait: " +
+        (customer.estimated_wait_minutes ?? "Not set") +
+        " minutes";
+
+      card.appendChild(estimate);
     }
 
-    button.addEventListener('click', async () => {
-      button.disabled = true;
-      setMessage('Saving change...');
-
-      const { data, error } = await supabase
-        .from('capq_queue')
-        .update({
-          status: nextStatus,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', customer.id)
-        .eq('shop_id', SHOP_ID)
-        .eq('status', customer.status)
-        .select('id');
-
-      if (error) {
-        setMessage('Could not save: ' + error.message);
-        button.disabled = false;
-        return;
-      }
-
-      if (!data || !data.length) {
-        setMessage('Customer status changed elsewhere. Refreshing...');
-      }
-
-      await loadQueue();
-    });
-
-    card.append(top, service, barber, button);
     list.appendChild(card);
-  }
+  });
 }
 
-async function loadQueue() {
-  if (!ready || refreshing) return;
+async function loadQueue(preserveMessage = false) {
+  if (!ready || loading || saving) return;
 
-  refreshing = true;
+  loading = true;
 
   try {
-    const [activeResult, completedResult] = await Promise.all([
+    const [queueResult, countResult] = await Promise.all([
       supabase
-        .from('capq_queue')
-        .select('id,customer_name,service,barber_preference,status,created_at')
-        .eq('shop_id', SHOP_ID)
-        .in('status', ['Waiting', 'In Chair'])
-        .order('created_at', { ascending: true }),
+        .from("capq_queue")
+        .select(
+          "id,customer_name,service,barber_preference," +
+          "status,estimated_wait_minutes,created_at"
+        )
+        .eq("shop_id", SHOP_ID)
+        .in("status", ["Waiting", "Accepted"])
+        .order("created_at", { ascending: true }),
 
       supabase
-        .from('capq_queue')
-        .select('id', { count: 'exact', head: true })
-        .eq('shop_id', SHOP_ID)
-        .eq('status', 'Completed')
-        .gte('updated_at', localDayStart())
+        .from("capq_queue")
+        .select("id", { count: "exact", head: true })
+        .eq("shop_id", SHOP_ID)
+        .eq("status", "Accepted")
+        .gte("accepted_at", startOfToday())
     ]);
 
-    if (activeResult.error) throw activeResult.error;
-    if (completedResult.error) throw completedResult.error;
+    if (queueResult.error) throw queueResult.error;
+    if (countResult.error) throw countResult.error;
 
     render(
-      activeResult.data || [],
-      completedResult.count || 0
+      queueResult.data || [],
+      countResult.count || 0
     );
 
-    setMessage('');
+    if (!preserveMessage) {
+      setMessage("");
+    }
+
   } catch (error) {
-    setMessage('Could not load queue: ' + error.message);
+    setMessage("Unable to load queue: " + error.message);
   } finally {
-    refreshing = false;
+    loading = false;
   }
 }
 
-document.getElementById('signOutButton')
-  .addEventListener('click', async () => {
+document.getElementById("signOutButton")
+  .addEventListener("click", async () => {
     await supabase.auth.signOut();
-    window.location.replace('login.html');
+    window.location.replace("login.html");
   });
 
 if (await verifyOwner()) {
@@ -523,7 +632,9 @@ if (await verifyOwner()) {
   await loadQueue();
 
   setInterval(() => {
-    if (!document.hidden) loadQueue();
+    if (!document.hidden) {
+      loadQueue();
+    }
   }, 5000);
 }
 </script>
