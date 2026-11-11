@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101114">
+<title>CAPQ | Barber Dashboard</title>
+<style>
+:root {
+  --black:#101114;
+  --charcoal:#292D33;
+  --gold:#D6B45C;
+  --green:#16A77A;
+  --white:#F7F7F4;
+  --muted:#A9ADB5;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:var(--black);
+  color:var(--white);
+  font-family:Arial,Helvetica,sans-serif;
+}
+main {
+  max-width:650px;
+  margin:auto;
+  padding:25px 18px 60px;
+}
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #393c42;
+  padding-bottom:20px;
+}
+.logo {
+  font-size:32px;
+  font-weight:900;
+  font-style:italic;
+}
+.logo span {color:var(--gold)}
+small,.muted {color:var(--muted)}
+h1 {font-size:30px;margin:30px 0 5px}
+h2 {font-size:22px;margin:30px 0 15px}
+.stats {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:25px 0;
+}
+.stat,.customer {
+  background:#1c1f24;
+  border:1px solid #383c42;
+  border-radius:14px;
+  padding:18px;
+}
+.stat strong {
+  display:block;
+  font-size:34px;
+  color:var(--gold);
+  margin-top:5px;
+}
+.customer {margin-bottom:12px}
+.customer-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.customer-head strong {font-size:18px}
+.customer p {
+  color:var(--muted);
+  font-size:13px;
+}
+.badge {
+  background:#40361e;
+  color:var(--gold);
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:11px;
+}
+.badge.accepted {
+  background:#123e30;
+  color:#7ff0c3;
+}
+.wait-options {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-top:15px;
+}
+.wait-btn {
+  padding:12px;
+  background:var(--charcoal);
+  color:white;
+  border:1px solid #50545b;
+  border-radius:9px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.wait-btn.selected {
+  background:var(--gold);
+  border-color:var(--gold);
+  color:#111;
+}
+.accept {
+  width:100%;
+  padding:15px;
+  margin-top:15px;
+  background:var(--green);
+  color:white;
+  border:0;
+  border-radius:10px;
+  font-weight:bold;
+  font-size:15px;
+  cursor:pointer;
+}
+button:disabled {opacity:.6;cursor:wait}
+.signout {
+  background:var(--charcoal);
+  color:white;
+  border:1px solid #50545b;
+  border-radius:8px;
+  padding:10px;
+  cursor:pointer;
+}
+.empty {
+  border:1px dashed #444;
+  border-radius:12px;
+  padding:25px;
+  color:var(--muted);
+  text-align:center;
+}
+.message {color:var(--gold);font-size:13px}
+.note {
+  margin-top:30px;
+  color:var(--muted);
+  font-size:12px;
+  text-align:center;
+}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div>
+    <div class="logo">CAP<span>Q</span></div>
+    <small>BUILT FOR BARBERS</small>
+  </div>
+  <button id="signout" class="signout">Sign Out</button>
+</header>
+
+<h1 id="barberName">Barber Dashboard</h1>
+<p class="muted" id="shopName">Loading your shop...</p>
+<p id="message" class="message" role="status"></p>
+
+<div class="stats">
+  <div class="stat">
+    <small>Waiting</small>
+    <strong id="waitingCount">0</strong>
+  </div>
+  <div class="stat">
+    <small>My Accepted</small>
+    <strong id="acceptedCount">0</strong>
+  </div>
+</div>
+
+<h2>Available Walk-Ins</h2>
+<div id="waitingList"></div>
+
+<h2>My Accepted Customers</h2>
+<div id="acceptedList"></div>
+
+<p class="note">
+  CAPQ Barber Test · SMS notifications not yet enabled.
+</p>
+</main>
+
+<script type="module">
+import { createClient } from
+"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const supabase = createClient(
+  "https://nfazsevnpfmabsipkrrh.supabase.co",
+  "sb_publishable_FtcxTtmcHvtyu3m2KJRjqA_3Nzkk2La"
+);
+
+let barber = null;
+let loading = false;
+let accepting = false;
+
+const waitingList = document.getElementById("waitingList");
+const acceptedList = document.getElementById("acceptedList");
+const message = document.getElementById("message");
+
+function showMessage(text) {
+  message.textContent = text;
+}
+
+function empty(container,text) {
+  container.replaceChildren();
+  const div=document.createElement("div");
+  div.className="empty";
+  div.textContent=text;
+  container.appendChild(div);
+}
+
+async function initialize() {
+  const {data:{user},error:authError} =
+    await supabase.auth.getUser();
+
+  if (authError || !user) {
+    window.location.replace("login.html");
+    return;
+  }
+
+  const {data:profile,error:profileError} =
+    await supabase
+      .from("barbers")
+      .select("id,name,shop_id")
+      .eq("user_id",user.id)
+      .maybeSingle();
+
+  if (profileError || !profile) {
+    showMessage(
+      profileError
+      ? profileError.message
+      : "No barber profile linked to this login."
+    );
+    return;
+  }
+
+  barber=profile;
+  document.getElementById("barberName").textContent =
+    "Welcome, "+barber.name;
+
+  const {data:shop} = await supabase
+    .from("barber_shops")
+    .select("name")
+    .eq("id",barber.shop_id)
+    .maybeSingle();
+
+  document.getElementById("shopName").textContent =
+    shop?.name || "Your CAPQ Shop";
+
+  await loadQueue();
+
+  setInterval(()=>{
+    if(!document.hidden) loadQueue();
+  },5000);
+}
+
+function makeCard(customer,isWaiting) {
+  const card=document.createElement("div");
+  card.className="customer";
+
+  const head=document.createElement("div");
+  head.className="customer-head";
+
+  const name=document.createElement("strong");
+  name.textContent=customer.customer_name || "Customer";
+
+  const badge=document.createElement("span");
+  badge.className="badge"+(isWaiting?"":" accepted");
+  badge.textContent=isWaiting?"Waiting":"Accepted";
+
+  head.append(name,badge);
+  card.appendChild(head);
+
+  const service=document.createElement("p");
+  service.textContent="Service: "+customer.service;
+  card.appendChild(service);
+
+  if(isWaiting) {
+    const label=document.createElement("p");
+    label.textContent="How soon will you be ready?";
+    card.appendChild(label);
+
+    const options=document.createElement("div");
+    options.className="wait-options";
+    const buttons=[];
+    let minutes=15;
+
+    [5,10,15,20,30,45].forEach(value=>{
+      const btn=document.createElement("button");
+      btn.type="button";
+      btn.className="wait-btn";
+      btn.textContent=value+" min";
+      if(value===minutes)btn.classList.add("selected");
+
+      btn.onclick=()=>{
+        minutes=value;
+        buttons.forEach(b=>b.classList.remove("selected"));
+        btn.classList.add("selected");
+      };
+
+      buttons.push(btn);
+      options.appendChild(btn);
+    });
+
+    const accept=document.createElement("button");
+    accept.className="accept";
+    accept.textContent="Accept Customer";
+
+    accept.onclick=async()=>{
+      if(accepting)return;
+      accepting=true;
+      accept.disabled=true;
+      showMessage("Accepting customer...");
+
+      const {data,error}=await supabase.rpc(
+        "capq_barber_accept",
+        {
+          p_customer_id:customer.id,
+          p_wait_minutes:minutes
+        }
+      );
+
+      accepting=false;
+
+      if(error) {
+        showMessage("Error: "+error.message);
+        accept.disabled=false;
+        return;
+      }
+
+      if(data!==true) {
+        showMessage("Customer is no longer available.");
+      } else {
+        showMessage(
+          customer.customer_name+
+          " accepted. Estimated wait: "+minutes+" minutes."
+        );
+      }
+      await loadQueue();
+    };
+
+    card.append(options,accept);
+  } else {
+    const wait=document.createElement("p");
+    wait.style.color="var(--green)";
+    wait.textContent=
+      "Estimated wait: "+
+      (customer.estimated_wait_minutes ?? "Not set")+
+      " minutes";
+    card.appendChild(wait);
+  }
+  return card;
+}
+
+async function loadQueue() {
+  if(!barber || loading || accepting)return;
+  loading=true;
+
+  const {data,error}=await supabase
+    .from("capq_queue")
+    .select(
+      "id,customer_name,service,status,"+
+      "barber_id,estimated_wait_minutes,created_at"
+    )
+    .eq("shop_id",barber.shop_id)
+    .in("status",["Waiting","Accepted"])
+    .order("created_at",{ascending:true});
+
+  loading=false;
+
+  if(error) {
+    showMessage("Queue error: "+error.message);
+    return;
+  }
+
+  const waiting=(data||[]).filter(
+    c=>c.status==="Waiting"
+  );
+  const accepted=(data||[]).filter(
+    c=>c.status==="Accepted" &&
+       c.barber_id===barber.id
+  );
+
+  document.getElementById("waitingCount").textContent =
+    waiting.length;
+  document.getElementById("acceptedCount").textContent =
+    accepted.length;
+
+  waitingList.replaceChildren();
+  acceptedList.replaceChildren();
+
+  if(!waiting.length) {
+    empty(waitingList,"No walk-ins waiting.");
+  } else {
+    waiting.forEach(c=>
+      waitingList.appendChild(makeCard(c,true))
+    );
+  }
+
+  if(!accepted.length) {
+    empty(acceptedList,"No accepted customers yet.");
+  } else {
+    accepted.forEach(c=>
+      acceptedList.appendChild(makeCard(c,false))
+    );
+  }
+}
+
+document.getElementById("signout").onclick=async()=>{
+  await supabase.auth.signOut();
+  window.location.replace("login.html");
+};
+
+await initialize();
+</script>
+</body>
+</html>
