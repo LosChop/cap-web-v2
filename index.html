@@ -9,6 +9,7 @@
   <title>CAPQ Pro | Built for Barbers</title>
   <link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
   <link rel="stylesheet" href="assets/capq-brand.css">
+
   <style>
     :root {
       --black: #101114;
@@ -80,16 +81,6 @@
       color: var(--gold);
     }
 
-    .brand-name {
-      font-size: 24px;
-      font-weight: 900;
-      font-style: italic;
-      letter-spacing: -1px;
-      line-height: 1;
-    }
-
-    .brand-name span { color: var(--gold); }
-
     .brand-tag {
       font-size: 8px;
       letter-spacing: 2px;
@@ -97,10 +88,17 @@
       margin-top: 4px;
     }
 
+    .capq-pro-wordmark {
+      max-width: 160px;
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 22px;
+      gap: 16px;
       font-size: 14px;
     }
 
@@ -259,8 +257,15 @@
       border-radius: 11px;
     }
 
-    .queue-item strong { display: block; font-size: 14px; }
-    .queue-item small { color: var(--muted); font-size: 11px; }
+    .queue-item strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .queue-item small {
+      color: var(--muted);
+      font-size: 11px;
+    }
 
     .pill {
       padding: 5px 9px;
@@ -309,8 +314,16 @@
       color: var(--gold);
     }
 
-    .card h3 { margin: 0 0 10px; font-size: 19px; }
-    .card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 19px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
 
     .audience { background: #17191d; }
 
@@ -327,8 +340,15 @@
       border-radius: 18px;
     }
 
-    .audience-card h3 { font-size: 25px; margin: 0 0 12px; }
-    .audience-card p { color: var(--muted); margin-bottom: 25px; }
+    .audience-card h3 {
+      font-size: 25px;
+      margin: 0 0 12px;
+    }
+
+    .audience-card p {
+      color: var(--muted);
+      margin-bottom: 25px;
+    }
 
     .steps {
       display: grid;
@@ -354,7 +374,10 @@
       font-weight: 900;
     }
 
-    .step p { color: var(--muted); font-size: 14px; }
+    .step p {
+      color: var(--muted);
+      font-size: 14px;
+    }
 
     .pricing { background: #17191d; }
 
@@ -372,8 +395,14 @@
       border-radius: 18px;
     }
 
-    .price-card.featured { border-color: var(--gold); }
-    .price-card h3 { font-size: 23px; margin: 0; }
+    .price-card.featured {
+      border-color: var(--gold);
+    }
+
+    .price-card h3 {
+      font-size: 23px;
+      margin: 0;
+    }
 
     .price {
       font-size: 43px;
@@ -415,6 +444,39 @@
       margin-top: 25px;
     }
 
+    .connect-section {
+      padding: 80px 0;
+      background: #101114;
+    }
+
+    .connect-panel {
+      max-width: 800px;
+      margin: auto;
+      background: linear-gradient(145deg, #292D33, #191B20);
+      border: 1px solid #786434;
+      border-radius: 20px;
+      padding: 35px;
+      text-align: center;
+    }
+
+    .connect-panel h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      margin: 12px 0;
+    }
+
+    .connect-panel p {
+      color: var(--muted);
+      max-width: 580px;
+      margin: 12px auto 24px;
+    }
+
+    .connect-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
     .cta {
       text-align: center;
       padding: 85px 20px;
@@ -426,7 +488,10 @@
       margin: 0 0 14px;
     }
 
-    .cta p { color: var(--muted); margin-bottom: 28px; }
+    .cta p {
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
 
     footer {
       border-top: 1px solid #303238;
@@ -448,23 +513,31 @@
       flex-wrap: wrap;
     }
 
+    @media (max-width: 950px) {
+      .nav-links { gap: 10px; }
+      .nav-links .desktop-link { display: none; }
+    }
+
     @media (max-width: 850px) {
       .hero-grid { grid-template-columns: 1fr; }
       .hero { padding: 65px 0; }
       .cards { grid-template-columns: repeat(2, 1fr); }
-      .nav-links { gap: 12px; }
-      .nav-links .desktop-link { display: none; }
     }
 
     @media (max-width: 580px) {
-      .nav-links { font-size: 12px; }
-      .nav-links .btn { padding: 10px 12px; }
-      .brand-name { font-size: 21px; }
-      .brand-icon { width: 40px; height: 40px; }
-      .brand-icon span { font-size: 30px; }
-      .brand-tag { letter-spacing: 1px; }
+      .nav-inner { gap: 8px; }
+      .nav-links { gap: 7px; font-size: 12px; }
+      .nav-links .btn { padding: 9px 10px; font-size: 12px; }
+      .nav-links .login-link { display: none; }
+      .brand-icon { width: 36px; height: 36px; }
+      .brand-icon span { font-size: 27px; }
+      .brand-tag { letter-spacing: 1px; font-size: 7px; }
+      .capq-pro-wordmark { max-width: 105px; }
 
-      .cards, .audience-grid, .steps, .pricing-grid {
+      .cards,
+      .audience-grid,
+      .steps,
+      .pricing-grid {
         grid-template-columns: 1fr;
       }
 
@@ -473,17 +546,23 @@
       .preview { padding: 15px; }
       .audience-card { padding: 25px; }
       .footer-inner { flex-direction: column; }
+      .connect-section { padding: 60px 0; }
+      .connect-panel { padding: 24px 18px; }
+      .connect-actions .btn { width: 100%; }
     }
   </style>
 </head>
 
 <body>
+
   <nav class="nav">
     <div class="container nav-inner">
+
       <a href="index.html" class="brand" aria-label="CAPQ Home">
         <div class="brand-icon" aria-hidden="true">
           <span>C</span>
         </div>
+
         <div>
           <img
             class="capq-pro-wordmark"
@@ -497,23 +576,30 @@
       <div class="nav-links">
         <a href="#features" class="desktop-link">Features</a>
         <a href="#pricing" class="desktop-link">Pricing</a>
-        <a href="login.html">Log In</a>
+        <a href="barbers.html" class="desktop-link">Our Barbers</a>
+        <a href="login.html" class="login-link">Log In</a>
+        <a href="login.html" class="btn btn-outline">Dashboard</a>
         <a href="signup.html" class="btn btn-gold">
           Start Free Trial
         </a>
       </div>
+
     </div>
   </nav>
 
   <main>
+
     <section class="hero">
       <div class="container hero-grid">
+
         <div>
           <div class="eyebrow">CAPQ • Built for Barbers</div>
+
           <h1>
             Every Walk-In Counts.
             <span>Every Barber Matters.</span>
           </h1>
+
           <p>
             Keep your line organized, connect with clients, and manage
             your day with less confusion. CAPQ is being built for
@@ -524,8 +610,13 @@
             <a href="signup.html" class="btn btn-gold">
               Get Started
             </a>
+
             <a href="checkin.html" class="btn btn-outline">
               Try Check-In Demo
+            </a>
+
+            <a href="barbers.html" class="btn btn-outline">
+              Meet Our Barbers
             </a>
           </div>
 
@@ -535,24 +626,29 @@
         </div>
 
         <div class="preview" aria-label="Example CAPQ dashboard">
+
           <div class="preview-top">
             <strong>CAPQ Dashboard</strong>
             <span class="demo-label">DESIGN PREVIEW</span>
           </div>
 
           <div class="preview-stats">
+
             <div class="stat">
               <strong>03</strong>
               <small>Waiting</small>
             </div>
+
             <div class="stat">
               <strong>02</strong>
               <small>Available</small>
             </div>
+
             <div class="stat">
               <strong>12</strong>
               <small>Served Today</small>
             </div>
+
           </div>
 
           <div class="preview-heading">
@@ -583,12 +679,15 @@
             </div>
             <span class="pill">Waiting</span>
           </div>
+
         </div>
+
       </div>
     </section>
 
     <section id="features" class="content">
       <div class="container">
+
         <div class="section-title">
           <div class="eyebrow">Built Around Your Day</div>
           <h2>Less Waiting. More Cutting.</h2>
@@ -599,12 +698,13 @@
         </div>
 
         <div class="cards">
+
           <div class="card">
             <div class="card-icon">♟</div>
             <h3>Walk-In Queue</h3>
             <p>
-              Organize customers by next available barber
-              or their preferred barber.
+              Organize walk-in customers in a first-available
+              queue so the next available barber can accept them.
             </p>
           </div>
 
@@ -652,12 +752,14 @@
               profile together.
             </p>
           </div>
+
         </div>
       </div>
     </section>
 
     <section class="content audience">
       <div class="container">
+
         <div class="section-title">
           <div class="eyebrow">
             One Platform. Two Ways to Work.
@@ -666,6 +768,7 @@
         </div>
 
         <div class="audience-grid">
+
           <div class="audience-card">
             <div class="card-icon">✂</div>
             <h3>Independent Barber</h3>
@@ -689,18 +792,51 @@
               Join as a Shop Owner
             </a>
           </div>
+
         </div>
+      </div>
+    </section>
+
+    <section class="connect-section" id="barber-connect">
+      <div class="container">
+
+        <div class="connect-panel">
+          <div class="eyebrow">
+            CAPQ PRO • BARBER CONNECT
+          </div>
+
+          <h2>Meet Our Barbers</h2>
+
+          <p>
+            Explore barber profiles, view haircut portfolios,
+            and find booking links. For walk-ins, join our
+            first-available queue without choosing a barber.
+          </p>
+
+          <div class="connect-actions">
+            <a href="barbers.html" class="btn btn-gold">
+              Explore Our Barbers
+            </a>
+
+            <a href="checkin.html" class="btn btn-outline">
+              Join Walk-In Queue
+            </a>
+          </div>
+        </div>
+
       </div>
     </section>
 
     <section class="content">
       <div class="container">
+
         <div class="section-title">
           <div class="eyebrow">The CAPQ Flow</div>
           <h2>Simple From Day One.</h2>
         </div>
 
         <div class="steps">
+
           <div class="step">
             <div class="step-number">1</div>
             <h3>Create Your Account</h3>
@@ -724,12 +860,14 @@
               Let customers check in and keep your queue organized.
             </p>
           </div>
+
         </div>
       </div>
     </section>
 
     <section id="pricing" class="content pricing">
       <div class="container">
+
         <div class="section-title">
           <div class="eyebrow">CAPQ PRO PLANS</div>
           <h2>Keep Your Bookings. Manage Your Walk-Ins.</h2>
@@ -740,25 +878,30 @@
         </div>
 
         <div class="pricing-grid">
+
           <div class="price-card featured capq-gold-border">
             <div class="eyebrow">ANNUAL · BEST VALUE</div>
             <h3>CAPQ Pro</h3>
+
             <div class="price">
               $22.42
               <small>/month equivalent · per location</small>
             </div>
+
             <p>
               <strong style="color:#f3d58c">
                 $269 billed annually
               </strong>
               · Save $79 compared with monthly billing.
             </p>
+
             <ul>
               <li>14 days full Pro, then 14 days Starter trial</li>
               <li>Walk-in queue and barber acceptance</li>
               <li>Owner and barber dashboards</li>
               <li>Premium features as they launch</li>
             </ul>
+
             <a href="signup.html" class="btn btn-gold">
               Start Free Trial
             </a>
@@ -767,23 +910,28 @@
           <div class="price-card">
             <div class="eyebrow">FLEXIBLE BILLING</div>
             <h3>CAPQ Pro Monthly</h3>
+
             <div class="price">
               $29
               <small>/month · per location</small>
             </div>
+
             <p>
               Pay month to month. Cancel anytime.
             </p>
+
             <ul>
               <li>Same Pro feature access</li>
               <li>No long-term commitment</li>
               <li>14-day Pro + 14-day Starter trial</li>
               <li>No credit card needed for trial</li>
             </ul>
+
             <a href="signup.html" class="btn btn-outline">
               Start Free Trial
             </a>
           </div>
+
         </div>
 
         <p class="pricing-note">
@@ -792,34 +940,47 @@
           Multi-location plans will be offered separately.
           No refunds for paid billing periods, subject to applicable law.
         </p>
+
       </div>
     </section>
 
     <section class="cta">
       <div class="container">
+
         <div class="eyebrow">CAPQ • Built for Barbers</div>
+
         <h2>Ready for a Better Way to Manage Walk-Ins?</h2>
+
         <p>
           Explore CAPQ as we build the next generation
           of barber tools.
         </p>
+
         <a href="signup.html" class="btn btn-gold">
           Create Your Account
         </a>
+
       </div>
     </section>
+
   </main>
 
   <footer>
     <div class="container footer-inner">
+
       <div>© 2026 CAPQ. All rights reserved.</div>
+
       <div class="footer-links">
         <a href="index.html">Home</a>
+        <a href="barbers.html">Our Barbers</a>
         <a href="checkin.html">Check-In Demo</a>
+        <a href="login.html">Dashboard</a>
         <a href="login.html">Log In</a>
         <a href="signup.html">Sign Up</a>
       </div>
+
     </div>
   </footer>
+
 </body>
 </html>
