@@ -20,9 +20,7 @@
   --muted:#A9ADB5;
 }
 
-* {
-  box-sizing:border-box;
-}
+* { box-sizing:border-box; }
 
 body {
   margin:0;
@@ -73,18 +71,6 @@ header {
   line-height:1;
 }
 
-.logo-text {
-  font-size:29px;
-  font-weight:900;
-  font-style:italic;
-  letter-spacing:-1px;
-  line-height:1;
-}
-
-.logo-text span {
-  color:var(--gold);
-}
-
 .subtitle {
   color:var(--muted);
   font-size:9px;
@@ -117,9 +103,7 @@ header {
   cursor:pointer;
 }
 
-.welcome {
-  margin-top:30px;
-}
+.welcome { margin-top:30px; }
 
 h1 {
   font-size:clamp(27px,5vw,36px);
@@ -164,9 +148,7 @@ h2 {
   margin-top:6px;
 }
 
-.stat.accepted strong {
-  color:var(--green);
-}
+.stat.accepted strong { color:var(--green); }
 
 .section-heading {
   display:flex;
@@ -176,9 +158,7 @@ h2 {
   margin-bottom:15px;
 }
 
-.section-heading h2 {
-  margin:0;
-}
+.section-heading h2 { margin:0; }
 
 .queue-label {
   font-size:11px;
@@ -205,9 +185,7 @@ h2 {
   margin-bottom:12px;
 }
 
-.customer-head strong {
-  font-size:18px;
-}
+.customer-head strong { font-size:18px; }
 
 .customer p {
   color:var(--muted);
@@ -296,6 +274,38 @@ button:disabled {
   margin:14px 0;
 }
 
+/* BARBER CONNECT */
+
+.connect-card {
+  background:#1c1f24;
+  border:1px solid #786434;
+  border-radius:15px;
+  padding:22px;
+  margin-top:15px;
+}
+
+.connect-card p {
+  color:var(--muted);
+  font-size:14px;
+  margin:0;
+}
+
+.connect-button {
+  display:block;
+  text-align:center;
+  background:var(--gold);
+  color:var(--black);
+  padding:15px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:bold;
+  margin-top:18px;
+}
+
+.connect-button:hover {
+  background:#e8c96e;
+}
+
 .nav {
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -327,33 +337,17 @@ button:disabled {
     height:46px;
   }
 
-  .logo-icon span {
-    font-size:35px;
-  }
+  .logo-icon span { font-size:35px; }
 
-  .logo-text {
-    font-size:25px;
-  }
+  .stat { padding:15px; }
 
-  .stat {
-    padding:15px;
-  }
+  .stat strong { font-size:30px; }
 
-  .stat strong {
-    font-size:30px;
-  }
+  .customer { padding:16px; }
 
-  .customer {
-    padding:16px;
-  }
+  .nav a { font-size:11px; }
 
-  .nav a {
-    font-size:11px;
-  }
-
-  .live-badge {
-    display:none;
-  }
+  .live-badge { display:none; }
 }
 </style>
 </head>
@@ -391,7 +385,8 @@ button:disabled {
   </p>
 </section>
 
-<p id="message" class="message" role="status" aria-live="polite"></p>
+<p id="message" class="message"
+   role="status" aria-live="polite"></p>
 
 <section class="stats">
   <div class="stat capq-panel-border">
@@ -410,13 +405,32 @@ button:disabled {
     <h2>Available Walk-Ins</h2>
     <span class="queue-label">● Live Queue</span>
   </div>
-
   <div id="waitingList"></div>
 </section>
 
 <section>
   <h2>My Accepted Customers</h2>
   <div id="acceptedList"></div>
+</section>
+
+<!-- NEW BARBER CONNECT SECTION -->
+
+<section class="connect-section">
+  <h2>My Barber Connect</h2>
+
+  <div class="connect-card">
+    <p>
+      Create your professional barber profile.
+      Add the same cover photo you use on Booksy,
+      your booking link, social media accounts,
+      and optional haircut portfolio photos.
+    </p>
+
+    <a href="barber-connect.html"
+       class="connect-button">
+      Manage My Barber Connect
+    </a>
+  </div>
 </section>
 
 <nav class="nav">
