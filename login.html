@@ -5,7 +5,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101114">
+<meta name="description" content="Sign in to CAPQ Pro to manage your barbershop or barber dashboard.">
+
 <title>Sign In | CAPQ Pro</title>
+
+<link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
+<link rel="stylesheet" href="assets/capq-brand.css">
+
 <style>
 :root {
   --black:#101114;
@@ -15,7 +21,11 @@
   --white:#F7F7F4;
   --muted:#A9ADB5;
 }
-* { box-sizing:border-box; }
+
+* {
+  box-sizing:border-box;
+}
+
 body {
   margin:0;
   background:var(--black);
@@ -27,6 +37,7 @@ body {
   align-items:center;
   padding:24px 16px;
 }
+
 .card {
   width:100%;
   max-width:460px;
@@ -35,6 +46,7 @@ body {
   border-radius:20px;
   padding:32px;
 }
+
 .brand {
   display:flex;
   align-items:center;
@@ -43,6 +55,7 @@ body {
   text-decoration:none;
   color:white;
 }
+
 .logo-icon {
   width:56px;
   height:56px;
@@ -51,32 +64,36 @@ body {
   border-radius:15px;
   display:grid;
   place-items:center;
+  flex-shrink:0;
 }
+
 .logo-icon span {
   color:var(--gold);
   font-size:42px;
   font-weight:900;
   line-height:1;
 }
-.logo-text {
-  font-size:34px;
-  font-weight:900;
-  font-style:italic;
-  letter-spacing:-1px;
-  line-height:1;
+
+.capq-pro-wordmark {
+  display:block;
+  max-width:180px;
+  width:100%;
+  height:auto;
 }
-.logo-text span { color:var(--gold); }
+
 .tagline {
   font-size:10px;
   letter-spacing:2px;
   color:var(--muted);
   margin-top:5px;
 }
+
 h1 {
   text-align:center;
   font-size:28px;
   margin:32px 0 8px;
 }
+
 .intro {
   color:var(--muted);
   text-align:center;
@@ -84,12 +101,14 @@ h1 {
   line-height:1.6;
   margin:0 0 28px;
 }
+
 label {
   display:block;
   margin:18px 0 8px;
   font-size:13px;
   font-weight:bold;
 }
+
 input {
   width:100%;
   background:#101114;
@@ -99,12 +118,20 @@ input {
   padding:14px;
   font-size:15px;
 }
+
 input:focus {
   outline:none;
   border-color:var(--gold);
 }
-.password-wrap { position:relative; }
-.password-wrap input { padding-right:70px; }
+
+.password-wrap {
+  position:relative;
+}
+
+.password-wrap input {
+  padding-right:70px;
+}
+
 .show-password {
   position:absolute;
   right:10px;
@@ -116,6 +143,7 @@ input:focus {
   font-size:12px;
   cursor:pointer;
 }
+
 .forgot {
   display:block;
   text-align:right;
@@ -124,6 +152,7 @@ input:focus {
   text-decoration:none;
   margin-top:12px;
 }
+
 .submit-btn {
   width:100%;
   background:var(--gold);
@@ -136,10 +165,12 @@ input:focus {
   cursor:pointer;
   margin-top:25px;
 }
+
 .submit-btn:disabled {
   opacity:.6;
   cursor:not-allowed;
 }
+
 .message {
   min-height:18px;
   text-align:center;
@@ -148,18 +179,32 @@ input:focus {
   font-size:13px;
   line-height:1.5;
 }
-.message.error { color:#ff9999; }
-.message.success { color:#8fe0a5; }
+
+.message.error {
+  color:#ff9999;
+}
+
+.message.success {
+  color:#8fe0a5;
+}
+
+.message a {
+  color:var(--gold);
+}
+
 .footer {
   text-align:center;
   color:var(--muted);
   font-size:13px;
   margin-top:24px;
 }
-.footer a, .back {
+
+.footer a,
+.back {
   color:var(--gold);
   text-decoration:none;
 }
+
 .back {
   display:block;
   text-align:center;
@@ -167,207 +212,548 @@ input:focus {
   color:var(--muted);
   font-size:12px;
 }
+
+.account-help {
+  display:none;
+  margin-top:15px;
+  padding:15px;
+  background:#29251b;
+  border:1px solid #786434;
+  border-radius:10px;
+  text-align:center;
+}
+
+.account-help p {
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+  margin:0 0 12px;
+}
+
+.account-help a {
+  color:var(--gold);
+  font-size:13px;
+  font-weight:bold;
+  text-decoration:none;
+}
+
 @media(max-width:480px) {
-  .card { padding:24px 19px; }
+  .card {
+    padding:24px 19px;
+  }
+
+  .capq-pro-wordmark {
+    max-width:145px;
+  }
 }
 </style>
-<link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
-<link rel="stylesheet" href="assets/capq-brand.css">
 </head>
+
 <body>
+
 <main class="card">
 
-<a href="index.html" class="brand">
-  <div class="logo-icon" aria-hidden="true"><span>C</span></div>
-  <div>
-    <img class="capq-pro-wordmark" src="assets/capq-wordmark.svg" alt="CAPQ Pro">
-    <div class="tagline">BUILT FOR BARBERS</div>
-  </div>
-</a>
+  <a href="index.html" class="brand" aria-label="CAPQ Pro Home">
 
-<h1>Welcome Back</h1>
-<p class="intro">
-  Sign in to manage your customers,
-  walk-ins, and daily queue.
-</p>
+    <div class="logo-icon" aria-hidden="true">
+      <span>C</span>
+    </div>
 
-<form id="loginForm">
-  <label for="email">Email Address</label>
-  <input id="email" type="email"
-    autocomplete="email"
-    placeholder="you@example.com" required>
+    <div>
+      <img
+        class="capq-pro-wordmark"
+        src="assets/capq-wordmark.svg"
+        alt="CAPQ Pro"
+      >
 
-  <label for="password">Password</label>
-  <div class="password-wrap">
-    <input id="password" type="password"
-      autocomplete="current-password"
-      placeholder="Enter your password" required>
-    <button type="button" class="show-password"
-      id="togglePassword">Show</button>
-  </div>
+      <div class="tagline">
+        BUILT FOR BARBERS
+      </div>
+    </div>
 
-  <a href="#" id="forgotLink" class="forgot">
-    Forgot Password?
   </a>
 
-  <button type="submit" class="submit-btn"
-    id="submitBtn">Sign In</button>
+  <h1>Welcome Back</h1>
 
-  <div id="message" class="message"
-    role="status" aria-live="polite"></div>
-</form>
+  <p class="intro">
+    Sign in to manage your customers,
+    walk-ins, and daily queue.
+  </p>
 
-<div class="footer">
-  Don't have an account?
-  <a href="signup.html">Create Account</a>
-</div>
+  <form id="loginForm">
 
-<a href="index.html" class="back">
-  Return to CAPQ Homepage
-</a>
+    <label for="email">
+      Email Address
+    </label>
+
+    <input
+      id="email"
+      type="email"
+      autocomplete="email"
+      placeholder="you@example.com"
+      required
+    >
+
+    <label for="password">
+      Password
+    </label>
+
+    <div class="password-wrap">
+
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Enter your password"
+        required
+      >
+
+      <button
+        type="button"
+        class="show-password"
+        id="togglePassword"
+        aria-label="Show password"
+      >
+        Show
+      </button>
+
+    </div>
+
+    <a href="#" id="forgotLink" class="forgot">
+      Forgot Password?
+    </a>
+
+    <button
+      type="submit"
+      class="submit-btn"
+      id="submitBtn"
+    >
+      Sign In
+    </button>
+
+    <div
+      id="message"
+      class="message"
+      role="status"
+      aria-live="polite"
+    ></div>
+
+  </form>
+
+  <div id="accountHelp" class="account-help">
+
+    <p>
+      Your login is active, but we couldn't find a
+      barbershop or barber profile linked to your account.
+    </p>
+
+    <p>
+      If you already registered, your account may need
+      to be connected to your barber or shop record.
+    </p>
+
+    <a href="signup.html">
+      Go to Account Setup
+    </a>
+
+  </div>
+
+  <div class="footer">
+    Don't have an account?
+    <a href="signup.html">Create Account</a>
+  </div>
+
+  <a href="index.html" class="back">
+    Return to CAPQ Homepage
+  </a>
 
 </main>
 
 <script type="module">
+
 import { createClient } from
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+/* ========================================
+   SUPABASE CONNECTION
+======================================== */
 
 const supabase = createClient(
   "https://nfazsevnpfmabsipkrrh.supabase.co",
   "sb_publishable_FtcxTtmcHvtyu3m2KJRjqA_3Nzkk2La"
 );
 
-const message = document.getElementById("message");
-const submitBtn = document.getElementById("submitBtn");
+/* ========================================
+   ELEMENTS
+======================================== */
+
+const loginForm =
+  document.getElementById("loginForm");
+
+const emailInput =
+  document.getElementById("email");
+
+const passwordInput =
+  document.getElementById("password");
+
+const message =
+  document.getElementById("message");
+
+const submitBtn =
+  document.getElementById("submitBtn");
+
+const accountHelp =
+  document.getElementById("accountHelp");
+
+const togglePassword =
+  document.getElementById("togglePassword");
+
+/* ========================================
+   MESSAGE HELPER
+======================================== */
 
 function showMessage(text, type = "") {
   message.textContent = text;
   message.className = "message " + type;
 }
 
-document.getElementById("togglePassword")
-  .addEventListener("click", () => {
-    const input = document.getElementById("password");
-    const showing = input.type === "text";
-    input.type = showing ? "password" : "text";
-    document.getElementById("togglePassword")
-      .textContent = showing ? "Show" : "Hide";
-  });
+/* ========================================
+   BUTTON LOADING STATE
+======================================== */
 
-document.getElementById("loginForm")
-  .addEventListener("submit", async event => {
+function setLoading(isLoading, text = "Sign In") {
+
+  submitBtn.disabled = isLoading;
+
+  submitBtn.textContent = isLoading
+    ? text
+    : "Sign In";
+
+}
+
+/* ========================================
+   PASSWORD VISIBILITY
+======================================== */
+
+togglePassword.addEventListener("click", () => {
+
+  const showing =
+    passwordInput.type === "text";
+
+  passwordInput.type =
+    showing ? "password" : "text";
+
+  togglePassword.textContent =
+    showing ? "Show" : "Hide";
+
+  togglePassword.setAttribute(
+    "aria-label",
+    showing ? "Show password" : "Hide password"
+  );
+
+});
+
+/* ========================================
+   DASHBOARD ROUTING
+
+   Shop owner:
+     dashboard.html
+
+   Barber:
+     barber-dashboard.html
+
+   No linked profile:
+     Show setup message
+
+   IMPORTANT:
+   Owner role is checked first.
+======================================== */
+
+async function routeUser(user) {
+
+  if (!user || !user.id) {
+    throw new Error(
+      "Unable to identify the signed-in account."
+    );
+  }
+
+  showMessage(
+    "Checking your CAPQ account..."
+  );
+
+  accountHelp.style.display = "none";
+
+  /* Check shop ownership */
+
+  const {
+    data: ownedShops,
+    error: ownerError
+  } = await supabase
+    .from("barber_shops")
+    .select("id")
+    .eq("owner_id", user.id)
+    .limit(1);
+
+  if (ownerError) {
+    throw new Error(
+      "Unable to check your shop account: " +
+      ownerError.message
+    );
+  }
+
+  if (ownedShops && ownedShops.length > 0) {
+
+    showMessage(
+      "Welcome back! Opening your shop dashboard...",
+      "success"
+    );
+
+    window.location.replace("dashboard.html");
+
+    return true;
+  }
+
+  /* Check barber account */
+
+  const {
+    data: barberRecords,
+    error: barberError
+  } = await supabase
+    .from("barbers")
+    .select("id")
+    .eq("user_id", user.id)
+    .limit(1);
+
+  if (barberError) {
+    throw new Error(
+      "Unable to check your barber account: " +
+      barberError.message
+    );
+  }
+
+  if (barberRecords && barberRecords.length > 0) {
+
+    showMessage(
+      "Welcome back! Opening your barber dashboard...",
+      "success"
+    );
+
+    window.location.replace(
+      "barber-dashboard.html"
+    );
+
+    return true;
+  }
+
+  /* No linked shop or barber profile */
+
+  showMessage(
+    "You're signed in, but your account setup is incomplete."
+  );
+
+  accountHelp.style.display = "block";
+
+  return false;
+
+}
+
+/* ========================================
+   SIGN IN
+======================================== */
+
+loginForm.addEventListener(
+  "submit",
+  async event => {
+
     event.preventDefault();
 
     const email =
-      document.getElementById("email").value.trim();
-    const password =
-      document.getElementById("password").value;
+      emailInput.value.trim();
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Signing In...";
-    showMessage("Checking your account...");
+    const password =
+      passwordInput.value;
+
+    accountHelp.style.display = "none";
+
+    setLoading(true, "Signing In...");
+
+    showMessage("Signing in securely...");
 
     try {
-      const { data, error } =
-        await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
 
-      if (error) throw error;
+      const {
+        data,
+        error
+      } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
-      if (!data.session) {
-        throw new Error("No login session was created.");
+      if (error) {
+        throw error;
+      }
+
+      if (!data.session || !data.user) {
+        throw new Error(
+          "No login session was created."
+        );
       }
 
       showMessage(
-        "Login successful! Opening dashboard...",
+        "Login successful! Checking your dashboard...",
         "success"
       );
 
-      const { data: owned, error: ownerError } =
-        await supabase
-          .from("barber_shops")
-          .select("id")
-          .eq("owner_id", data.user.id)
-          .limit(1);
-
-      if (ownerError) throw ownerError;
-
-      if (owned?.length) {
-        window.location.replace("dashboard.html");
-        return;
-      }
-
-      const { data: staff, error: staffError } =
-        await supabase
-          .from("barbers")
-          .select("id")
-          .eq("user_id", data.user.id)
-          .limit(1);
-
-      if (staffError) throw staffError;
-
-      if (staff?.length) {
-        window.location.replace("barber-dashboard.html");
-        return;
-      }
-
-      showMessage(
-        "Signed in. Your shop or barber profile still needs to be linked.",
-        "success"
-      );
+      await routeUser(data.user);
 
     } catch (error) {
+
+      console.error(
+        "CAPQ login error:",
+        error
+      );
+
       showMessage(
-        error.message || "Login failed.",
+        error.message ||
+        "Unable to sign in. Please try again.",
         "error"
       );
+
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Sign In";
+
+      setLoading(false);
+
     }
-  });
 
-document.getElementById("forgotLink")
-  .addEventListener("click", async event => {
-    event.preventDefault();
+  }
+);
 
-    const email =
-      document.getElementById("email").value.trim();
+/* ========================================
+   EXISTING SESSION CHECK
 
-    if (!email ||
-        !document.getElementById("email").checkValidity()) {
-      showMessage(
-        "Enter your valid email address first.",
-        "error"
-      );
-      document.getElementById("email").focus();
+   If already signed in, attempt to
+   open the correct dashboard.
+======================================== */
+
+async function checkExistingSession() {
+
+  try {
+
+    const {
+      data: { user },
+      error
+    } = await supabase.auth.getUser();
+
+    if (error || !user) {
       return;
     }
 
-    showMessage("Requesting password reset email...");
+    setLoading(
+      true,
+      "Opening Dashboard..."
+    );
 
-    try {
-      const { error } =
-        await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo:
-            window.location.origin + "/reset-password.html"
-        });
+    showMessage(
+      "You're already signed in. Opening your dashboard..."
+    );
 
-      if (error) throw error;
+    await routeUser(user);
+
+  } catch (error) {
+
+    console.error(
+      "CAPQ session check:",
+      error
+    );
+
+    showMessage(
+      "We couldn't open your dashboard automatically. You can try signing in again.",
+      "error"
+    );
+
+  } finally {
+
+    setLoading(false);
+
+  }
+
+}
+
+/* ========================================
+   FORGOT PASSWORD
+======================================== */
+
+document.getElementById("forgotLink")
+  .addEventListener(
+    "click",
+    async event => {
+
+      event.preventDefault();
+
+      const email =
+        emailInput.value.trim();
+
+      if (
+        !email ||
+        !emailInput.checkValidity()
+      ) {
+
+        showMessage(
+          "Enter your valid email address first.",
+          "error"
+        );
+
+        emailInput.focus();
+
+        return;
+      }
 
       showMessage(
-        "If this account exists, a password reset email will arrive shortly. Check your spam folder too.",
-        "success"
+        "Requesting password reset email..."
       );
-    } catch (error) {
-      showMessage(
-        error.message || "Unable to request password reset.",
-        "error"
-      );
+
+      try {
+
+        const {
+          error
+        } = await supabase.auth.resetPasswordForEmail(
+          email,
+          {
+            redirectTo:
+              window.location.origin +
+              "/reset-password.html"
+          }
+        );
+
+        if (error) {
+          throw error;
+        }
+
+        showMessage(
+          "If this account exists, a password reset email will arrive shortly. Check your spam folder too.",
+          "success"
+        );
+
+      } catch (error) {
+
+        showMessage(
+          error.message ||
+          "Unable to request password reset.",
+          "error"
+        );
+
+      }
+
     }
-  });
+  );
+
+/* ========================================
+   START
+======================================== */
+
+checkExistingSession();
+
 </script>
+
 </body>
 </html>
