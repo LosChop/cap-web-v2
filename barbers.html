@@ -15,7 +15,6 @@
   --black:#101114;
   --charcoal:#292D33;
   --gold:#D6B45C;
-  --green:#16A77A;
   --white:#F7F7F4;
   --muted:#A9ADB5;
 }
@@ -453,10 +452,12 @@ async function verifyOwner() {
     showMessage(
       error
         ? "Access error: " + error.message
-        : "You are not the owner of this shop."
+        : "This login is not linked as owner of the test shop. Sign in with the shop owner's account, or verify barber_shops.owner_id in Supabase."
     );
 
-    showEmpty("Shop access unavailable.");
+    document.getElementById("shopName").textContent =
+      "Shop owner access required to save changes.";
+    showEmpty("Barber management is locked until ownership is verified.");
     return false;
   }
 
@@ -663,7 +664,10 @@ async function loadBarbers() {
 addForm.addEventListener("submit", async event => {
   event.preventDefault();
 
-  if (!authorized) return;
+  if (!authorized) {
+    showMessage("Please sign in as the shop owner before adding barbers.");
+    return;
+  }
 
   const nameInput =
     document.getElementById("barberName");
@@ -725,18 +729,14 @@ addForm.addEventListener("submit", async event => {
   addBtn.disabled = false;
 });
 
-addForm.querySelectorAll("input,select,button")
-  .forEach(el => {
-    el.disabled = true;
-  });
+// Keep dropdowns interactive while access is checked.
+// Only the action button is locked until ownership is verified.
+addBtn.disabled = true;
 
 if (await verifyOwner()) {
   authorized = true;
 
-  addForm.querySelectorAll("input,select,button")
-    .forEach(el => {
-      el.disabled = false;
-    });
+  addBtn.disabled = false;
 
   await loadBarbers();
 }
