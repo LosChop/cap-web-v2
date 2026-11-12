@@ -10,184 +10,359 @@
   <style>
     :root {
       --black: #101114;
-      --panel: #292D33;
+      --panel: #1D2025;
+      --panel-light: #292D33;
       --gold: #D6B45C;
       --white: #F7F7F4;
       --muted: #A9ADB5;
+      --border: #393D44;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       background: var(--black);
       color: var(--white);
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
-    a { color: inherit; }
+    a {
+      color: inherit;
+    }
 
     .container {
+      width: 100%;
       max-width: 680px;
-      margin: auto;
-      padding: 20px 16px 50px;
+      margin: 0 auto;
+      padding: 22px 16px 50px;
     }
 
     .topbar {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 12px;
-      padding-bottom: 18px;
+      margin-bottom: 25px;
     }
 
     .brand {
-      font-size: 25px;
-      font-weight: 900;
       color: var(--gold);
+      font-size: 27px;
+      font-weight: 900;
       letter-spacing: -1px;
     }
 
     .brand span {
       color: var(--white);
       font-size: 16px;
+      letter-spacing: 0;
     }
 
     .subtitle {
+      margin-top: 4px;
       color: var(--muted);
       font-size: 11px;
+      font-weight: 700;
       letter-spacing: 2px;
-      margin-top: 3px;
     }
 
     .home {
       color: var(--gold);
-      text-decoration: none;
       font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
     }
 
-    .card {
-      background: var(--panel);
-      border: 1px solid #786434;
-      border-radius: 16px;
-      overflow: hidden;
-      margin-bottom: 18px;
+    .hero {
+      position: relative;
+      margin-bottom: 90px;
     }
 
     .cover {
       width: 100%;
-      height: 280px;
-      object-fit: cover;
+      height: 250px;
       display: block;
-      background: #1C1F24;
+      object-fit: cover;
+      background: var(--panel);
+      border: 1px solid #6C5A32;
+      border-radius: 20px;
     }
 
     .cover-placeholder {
-      height: 240px;
+      height: 250px;
       display: flex;
       justify-content: center;
       align-items: center;
+      background: linear-gradient(
+        135deg,
+        #292D33,
+        #101114
+      );
+      border: 1px solid #6C5A32;
+      border-radius: 20px;
       color: var(--gold);
-      font-size: 64px;
+      font-size: 55px;
       font-weight: 900;
-      background: linear-gradient(135deg,#292D33,#101114);
     }
 
-    .content { padding: 22px; }
+    .avatar {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      left: 50%;
+      bottom: -75px;
+      transform: translateX(-50%);
+      border: 5px solid var(--gold);
+      border-radius: 50%;
+      background: var(--panel-light);
+      object-fit: cover;
+      box-shadow: 0 8px 28px rgba(0,0,0,.55);
+    }
+
+    .avatar-placeholder {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      left: 50%;
+      bottom: -75px;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 5px solid var(--gold);
+      border-radius: 50%;
+      background: var(--panel-light);
+      color: var(--gold);
+      font-size: 55px;
+      font-weight: 900;
+    }
+
+    .identity {
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
     h1 {
       margin: 0 0 8px;
-      font-size: 30px;
+      font-size: clamp(27px, 6vw, 38px);
+      line-height: 1.15;
+      letter-spacing: -.8px;
     }
 
     .username {
       color: var(--gold);
-      font-size: 14px;
-      margin-bottom: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 18px;
     }
 
     .bio {
-      color: #D3D5DA;
+      color: #C9CBD0;
       font-size: 15px;
       line-height: 1.7;
       white-space: pre-wrap;
+      max-width: 530px;
+      margin: 0 auto;
     }
 
-    .button {
-      display: block;
-      text-align: center;
-      padding: 16px;
-      border-radius: 11px;
-      background: var(--gold);
-      color: var(--black);
-      font-weight: 800;
-      text-decoration: none;
-      margin-top: 20px;
-    }
-
-    .button.secondary {
-      background: transparent;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-    }
-
-    h2 {
-      font-size: 20px;
-      margin: 0 0 15px;
-    }
-
-    .socials {
+    .links {
       display: grid;
-      grid-template-columns: repeat(2,1fr);
-      gap: 10px;
+      gap: 13px;
+      margin: 30px 0 35px;
     }
 
-    .social {
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+      min-height: 76px;
+      padding: 13px 17px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: var(--panel);
+      color: var(--white);
       text-decoration: none;
-      background: #1C1F24;
-      border: 1px solid #555960;
-      border-radius: 10px;
-      padding: 14px 10px;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 700;
+      transition: border-color .2s, transform .2s;
     }
 
-    .social:hover { border-color: var(--gold); }
+    .link-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .link-card:focus-visible,
+    .home:focus-visible,
+    .gallery-button:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    .link-card.booksy {
+      border-color: var(--gold);
+      background: linear-gradient(
+        135deg,
+        #29251B,
+        #1D2025
+      );
+    }
+
+    .link-icon {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #111216;
+    }
+
+    .link-icon img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+    }
+
+    .link-icon svg {
+      width: 34px;
+      height: 34px;
+      display: block;
+    }
+
+    .link-title {
+      flex: 1;
+      min-width: 0;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .link-arrow {
+      color: var(--muted);
+      font-size: 27px;
+      line-height: 1;
+    }
+
+    .section-title {
+      font-size: 23px;
+      font-weight: 900;
+      margin: 0 0 17px;
+    }
+
+    .portfolio {
+      margin-top: 35px;
+    }
 
     .gallery {
       display: grid;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
     }
 
-    .gallery img {
+    .gallery-button {
+      padding: 0;
+      border: 1px solid #4A4E55;
+      border-radius: 13px;
+      overflow: hidden;
+      background: var(--panel);
+      cursor: pointer;
+    }
+
+    .gallery-button img {
+      display: block;
       width: 100%;
       aspect-ratio: 1;
       object-fit: cover;
-      border-radius: 10px;
-      background: #1C1F24;
+      transition: transform .2s;
+    }
+
+    .gallery-button:hover img {
+      transform: scale(1.035);
     }
 
     .status {
+      padding: 65px 15px;
       text-align: center;
       color: var(--muted);
-      padding: 55px 15px;
       line-height: 1.6;
     }
 
-    .hidden { display: none !important; }
+    .hidden {
+      display: none !important;
+    }
 
     footer {
+      margin-top: 50px;
+      padding: 25px 0;
+      border-top: 1px solid var(--border);
       color: var(--muted);
       text-align: center;
-      font-size: 12px;
-      padding-top: 20px;
+      font-size: 13px;
+    }
+
+    footer strong {
+      color: var(--gold);
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 55px 16px;
+      background: rgba(0,0,0,.94);
+    }
+
+    .lightbox img {
+      max-width: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .close-lightbox {
+      position: absolute;
+      top: 15px;
+      right: 18px;
+      border: 0;
+      background: transparent;
+      color: white;
+      font-size: 38px;
+      cursor: pointer;
     }
 
     @media (max-width: 400px) {
-      h1 { font-size: 25px; }
-      .cover { height: 220px; }
+      .cover,
+      .cover-placeholder {
+        height: 210px;
+      }
+
+      .avatar,
+      .avatar-placeholder {
+        width: 132px;
+        height: 132px;
+        bottom: -66px;
+      }
+
+      .hero {
+        margin-bottom: 82px;
+      }
+
+      .link-card {
+        min-height: 69px;
+      }
+
+      .link-title {
+        font-size: 15px;
+      }
     }
   </style>
 </head>
@@ -200,7 +375,10 @@
         <div class="brand">CAPQ <span>PRO</span></div>
         <div class="subtitle">BARBER CONNECT</div>
       </div>
-      <a class="home" href="index.html">CAPQ Home</a>
+
+      <a class="home" href="index.html">
+        CAPQ Home
+      </a>
     </header>
 
     <div id="status" class="status">
@@ -209,47 +387,47 @@
 
     <div id="profile" class="hidden">
 
-      <section class="card">
+      <section class="hero">
         <div id="coverArea"></div>
-
-        <div class="content">
-          <h1 id="displayName"></h1>
-          <div id="username" class="username"></div>
-          <div id="bio" class="bio"></div>
-
-          <a id="bookButton"
-             class="button hidden"
-             target="_blank"
-             rel="noopener noreferrer">
-            Book Appointment
-          </a>
-
-          <a id="contactButton"
-             class="button secondary hidden"
-             target="_blank"
-             rel="noopener noreferrer">
-            Contact Barber
-          </a>
-        </div>
+        <div id="avatarArea"></div>
       </section>
 
-      <section id="socialSection" class="card hidden">
-        <div class="content">
-          <h2>Connect With Me</h2>
-          <div id="socialLinks" class="socials"></div>
-        </div>
+      <section class="identity">
+        <h1 id="displayName"></h1>
+        <div id="username" class="username"></div>
+        <div id="bio" class="bio"></div>
       </section>
 
-      <section id="portfolioSection" class="card hidden">
-        <div class="content">
-          <h2>My Work</h2>
-          <div id="gallery" class="gallery"></div>
-        </div>
+      <section id="linksSection" class="links"></section>
+
+      <section id="portfolioSection"
+               class="portfolio hidden">
+        <h2 class="section-title">My Work</h2>
+        <div id="gallery" class="gallery"></div>
       </section>
 
-      <footer>Powered by CAPQ Pro · Barber Connect</footer>
+      <footer>
+        Powered by <strong>CAPQ PRO</strong>
+        <div style="margin-top:6px">
+          BARBER CONNECT
+        </div>
+      </footer>
+
     </div>
   </main>
+
+  <div id="lightbox" class="lightbox hidden"
+       role="dialog"
+       aria-modal="true"
+       aria-label="Portfolio photo viewer">
+    <button id="closeLightbox"
+            class="close-lightbox"
+            type="button"
+            aria-label="Close photo">
+      &times;
+    </button>
+    <img id="lightboxImage" alt="Portfolio photo enlarged">
+  </div>
 
   <script type="module">
     import { createClient } from
@@ -268,6 +446,99 @@
 
     const $ = id => document.getElementById(id);
 
+    const ICONS = {
+      booksy: `
+        <svg viewBox="0 0 64 64"
+             xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+          <rect width="64" height="64"
+                rx="13" fill="#D6B45C"/>
+          <path d="M18 16h17c10 0 16 6 16 15
+                   0 8-5 14-13 15H18V16zm10 9v12h9
+                   c4 0 6-2 6-6s-2-6-6-6h-9z"
+                fill="#101114"/>
+        </svg>
+      `,
+
+      instagram: `
+        <svg viewBox="0 0 64 64"
+             xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+          <defs>
+            <linearGradient id="igGradient"
+                            x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#FEDA75"/>
+              <stop offset="35%" stop-color="#FA7E1E"/>
+              <stop offset="65%" stop-color="#D62976"/>
+              <stop offset="100%" stop-color="#4F5BD5"/>
+            </linearGradient>
+          </defs>
+          <rect x="3" y="3" width="58" height="58"
+                rx="15" fill="url(#igGradient)"/>
+          <rect x="15" y="15" width="34" height="34"
+                rx="11" fill="none"
+                stroke="white" stroke-width="5"/>
+          <circle cx="32" cy="32" r="9"
+                  fill="none" stroke="white"
+                  stroke-width="5"/>
+          <circle cx="46" cy="18" r="3.5"
+                  fill="white"/>
+        </svg>
+      `,
+
+      tiktok: `
+        <svg viewBox="0 0 64 64"
+             xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+          <rect width="64" height="64"
+                rx="13" fill="#080808"/>
+          <path d="M37 11v28a10 10 0 1 1-10-10"
+                fill="none" stroke="#25F4EE"
+                stroke-width="8"
+                stroke-linecap="round"
+                transform="translate(-3 2)"/>
+          <path d="M37 11c2 10 7 14 16 15M37 11v28
+                   a10 10 0 1 1-10-10"
+                fill="none" stroke="#FE2C55"
+                stroke-width="8"
+                stroke-linecap="round"
+                transform="translate(2 -1)"/>
+          <path d="M37 11c2 10 7 14 16 15M37 11v28
+                   a10 10 0 1 1-10-10"
+                fill="none" stroke="white"
+                stroke-width="6"
+                stroke-linecap="round"/>
+        </svg>
+      `,
+
+      youtube: `
+        <svg viewBox="0 0 64 64"
+             xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+          <rect x="3" y="13" width="58" height="38"
+                rx="12" fill="#FF0033"/>
+          <path d="M27 22L45 32L27 42Z"
+                fill="white"/>
+        </svg>
+      `,
+
+      website: `
+        <svg viewBox="0 0 64 64"
+             xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+          <path d="M26 38l12-12M23 29l-6 6
+                   a11 11 0 0 0 16 16l6-6
+                   M41 35l6-6a11 11 0 0 0-16-16
+                   l-6 6"
+                fill="none"
+                stroke="#D6B45C"
+                stroke-width="7"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </svg>
+      `
+    };
+
     function showError(message) {
       $("status").textContent = message;
       $("status").classList.remove("hidden");
@@ -275,10 +546,13 @@
     }
 
     function validUrl(value) {
-      if (!value) return null;
+      if (!value || typeof value !== "string") {
+        return null;
+      }
 
       try {
-        const url = new URL(value);
+        const url = new URL(value.trim());
+
         return ["https:", "http:"].includes(url.protocol)
           ? url.href
           : null;
@@ -287,78 +561,190 @@
       }
     }
 
-    function setLink(id, value) {
-      const url = validUrl(value);
-      if (!url) return;
+    function socialUrl(value, platform) {
+      if (!value) return null;
 
-      $(id).href = url;
-      $(id).classList.remove("hidden");
+      const text = String(value).trim();
+      if (!text) return null;
+
+      const fullUrl = validUrl(text);
+
+      if (fullUrl) return fullUrl;
+
+      const username = text.replace(/^@/, "");
+
+      if (!/^[a-zA-Z0-9._-]+$/.test(username)) {
+        return null;
+      }
+
+      if (platform === "instagram") {
+        return "https://www.instagram.com/" +
+          encodeURIComponent(username) + "/";
+      }
+
+      if (platform === "tiktok") {
+        return "https://www.tiktok.com/@" +
+          encodeURIComponent(username);
+      }
+
+      if (platform === "youtube") {
+        return "https://www.youtube.com/@" +
+          encodeURIComponent(username);
+      }
+
+      return null;
     }
 
-    function addSocial(label, value) {
+    function addLink(label, value, iconName, special = false) {
       const url = validUrl(value);
       if (!url) return;
 
       const link = document.createElement("a");
-      link.className = "social";
+      link.className = "link-card" +
+        (special ? " booksy" : "");
       link.href = url;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
-      link.textContent = label;
+      link.setAttribute("aria-label", label);
 
-      $("socialLinks").appendChild(link);
-      $("socialSection").classList.remove("hidden");
+      const icon = document.createElement("div");
+      icon.className = "link-icon";
+
+      // These are self-contained SVG icons.
+      // No external icon library is required.
+      icon.innerHTML = ICONS[iconName] || ICONS.website;
+
+      const title = document.createElement("span");
+      title.className = "link-title";
+      title.textContent = label;
+
+      const arrow = document.createElement("span");
+      arrow.className = "link-arrow";
+      arrow.setAttribute("aria-hidden", "true");
+      arrow.textContent = "›";
+
+      link.appendChild(icon);
+      link.appendChild(title);
+      link.appendChild(arrow);
+
+      $("linksSection").appendChild(link);
+    }
+
+    function renderCover(data) {
+      const coverUrl = validUrl(data.cover_url);
+
+      if (coverUrl) {
+        const cover = document.createElement("img");
+        cover.className = "cover";
+        cover.src = coverUrl;
+        cover.alt = data.display_name + " cover photo";
+        $("coverArea").appendChild(cover);
+
+        const avatar = document.createElement("img");
+        avatar.className = "avatar";
+        avatar.src = coverUrl;
+        avatar.alt = data.display_name + " profile photo";
+        $("avatarArea").appendChild(avatar);
+      } else {
+        const cover = document.createElement("div");
+        cover.className = "cover-placeholder";
+        cover.textContent = "CAPQ";
+        $("coverArea").appendChild(cover);
+
+        const avatar = document.createElement("div");
+        avatar.className = "avatar-placeholder";
+        avatar.textContent =
+          (data.display_name || "C")
+            .trim()
+            .charAt(0)
+            .toUpperCase();
+
+        $("avatarArea").appendChild(avatar);
+      }
+    }
+
+    function renderGallery(data) {
+      const photos = Array.isArray(data.gallery_urls)
+        ? data.gallery_urls.slice(0, 6)
+        : [];
+
+      photos.forEach((photo, index) => {
+        const url = validUrl(photo);
+        if (!url) return;
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "gallery-button";
+        button.setAttribute(
+          "aria-label",
+          "View portfolio photo " + (index + 1)
+        );
+
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = "Barber portfolio photo " + (index + 1);
+        img.loading = "lazy";
+
+        button.appendChild(img);
+
+        button.addEventListener("click", () => {
+          $("lightboxImage").src = url;
+          $("lightbox").classList.remove("hidden");
+          $("closeLightbox").focus();
+        });
+
+        $("gallery").appendChild(button);
+        $("portfolioSection").classList.remove("hidden");
+      });
     }
 
     function renderProfile(data) {
       document.title =
-        `${data.display_name} | CAPQ Pro`;
+        data.display_name + " | CAPQ Pro";
 
-      $("displayName").textContent = data.display_name;
+      $("displayName").textContent =
+        data.display_name || "Professional Barber";
+
       $("username").textContent =
         data.slug ? "@" + data.slug : "";
 
       $("bio").textContent =
         data.bio || "Professional barber.";
 
-      const coverUrl = validUrl(data.cover_url);
+      renderCover(data);
 
-      if (coverUrl) {
-        const img = document.createElement("img");
-        img.className = "cover";
-        img.src = coverUrl;
-        img.alt = data.display_name + " cover photo";
-        $("coverArea").appendChild(img);
-      } else {
-        const placeholder = document.createElement("div");
-        placeholder.className = "cover-placeholder";
-        placeholder.textContent = "CAPQ";
-        $("coverArea").appendChild(placeholder);
-      }
+      addLink(
+        "Book on Booksy",
+        data.booksy_url,
+        "booksy",
+        true
+      );
 
-      setLink("bookButton", data.booksy_url);
-      setLink("contactButton", data.contact_url);
+      addLink(
+        "Instagram",
+        socialUrl(data.instagram_url, "instagram"),
+        "instagram"
+      );
 
-      addSocial("Instagram", data.instagram_url);
-      addSocial("TikTok", data.tiktok_url);
-      addSocial("YouTube", data.youtube_url);
+      addLink(
+        "TikTok",
+        socialUrl(data.tiktok_url, "tiktok"),
+        "tiktok"
+      );
 
-      const photos = Array.isArray(data.gallery_urls)
-        ? data.gallery_urls.slice(0, 6)
-        : [];
+      addLink(
+        "YouTube",
+        socialUrl(data.youtube_url, "youtube"),
+        "youtube"
+      );
 
-      photos.forEach(photo => {
-        const url = validUrl(photo);
-        if (!url) return;
+      addLink(
+        "Website / Contact",
+        data.contact_url,
+        "website"
+      );
 
-        const img = document.createElement("img");
-        img.src = url;
-        img.alt = "Barber haircut portfolio photo";
-        img.loading = "lazy";
-
-        $("gallery").appendChild(img);
-        $("portfolioSection").classList.remove("hidden");
-      });
+      renderGallery(data);
 
       $("status").classList.add("hidden");
       $("profile").classList.remove("hidden");
@@ -366,6 +752,7 @@
 
     async function loadProfile() {
       const params = new URLSearchParams(location.search);
+
       const slug = (params.get("barber") || "")
         .trim()
         .toLowerCase();
@@ -402,6 +789,28 @@
 
       renderProfile(data);
     }
+
+    function closeLightbox() {
+      $("lightbox").classList.add("hidden");
+      $("lightboxImage").removeAttribute("src");
+    }
+
+    $("closeLightbox").addEventListener(
+      "click",
+      closeLightbox
+    );
+
+    $("lightbox").addEventListener("click", event => {
+      if (event.target === $("lightbox")) {
+        closeLightbox();
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeLightbox();
+      }
+    });
 
     await loadProfile();
   </script>
