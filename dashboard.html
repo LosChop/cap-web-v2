@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101114">
-<title>CAPQ Pro | Barber Dashboard</title>
+<title>CAPQ Pro | Owner Dashboard</title>
 
 <style>
 :root {
@@ -165,48 +165,6 @@ h2 { font-size:23px; margin:0; }
   color:#6de6b4;
   background:#123e30;
 }
-.wait-title {
-  color:var(--white);
-  font-size:13px;
-  font-weight:bold;
-  margin-top:16px;
-}
-.wait-options {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:9px;
-  margin-top:10px;
-}
-.wait-option {
-  background:#292D33;
-  border:1px solid #50545b;
-  color:var(--white);
-  padding:12px 5px;
-  border-radius:9px;
-  cursor:pointer;
-  font-weight:bold;
-}
-.wait-option.selected {
-  background:var(--gold);
-  color:#111;
-  border-color:var(--gold);
-}
-.action {
-  width:100%;
-  margin-top:15px;
-  background:var(--green);
-  color:white;
-  border:0;
-  border-radius:9px;
-  padding:14px 17px;
-  font-size:14px;
-  font-weight:bold;
-  cursor:pointer;
-}
-button:disabled {
-  opacity:.6;
-  cursor:wait;
-}
 .empty {
   text-align:center;
   color:var(--muted);
@@ -292,7 +250,7 @@ button:disabled {
 </header>
 
 <section class="welcome">
-  <h1>Barber Dashboard</h1>
+  <h1>Owner Dashboard</h1>
   <p id="shopName">Connecting to your shop...</p>
 </section>
 
@@ -327,8 +285,7 @@ button:disabled {
 </nav>
 
 <p class="note">
-  CAPQ live acceptance test.
-  Customers receive an estimated wait after acceptance.
+  Shop-wide queue overview. Barbers accept customers from their own dashboard.
   SMS notifications are not connected yet.
 </p>
 
@@ -357,7 +314,6 @@ const message = document.getElementById("message");
 
 let ready = false;
 let loading = false;
-let saving = false;
 let shopName = "";
 
 function setMessage(text) {
@@ -415,7 +371,7 @@ async function verifyOwner() {
   return true;
 }
 
-function render(customers, acceptedToday) {
+function render(customers, acceptedToday, barberNames) {
   const waiting = customers.filter(
     c => c.status === "Waiting"
   ).length;
@@ -472,96 +428,21 @@ function render(customers, acceptedToday) {
 
     card.append(top, service, barber);
 
+    const assignedBarber = document.createElement("p");
     if (customer.status === "Waiting") {
-      const title = document.createElement("div");
-      title.className = "wait-title";
-      title.textContent =
-        "How many minutes until you're ready?";
+      assignedBarber.textContent = "Assigned barber: Awaiting Barber";
+    } else if (customer.barber_id) {
+      assignedBarber.textContent = "Accepted by: " +
+        (barberNames.get(customer.barber_id) || "Barber name unavailable");
+    } else {
+      assignedBarber.textContent = "Accepted by: Not assigned";
+    }
+    card.appendChild(assignedBarber);
 
-      const options = document.createElement("div");
-      options.className = "wait-options";
-
-      const times = [5, 10, 15, 20, 30, 45];
-      let selectedTime = 15;
-
-      const buttons = [];
-
-      times.forEach(minutes => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "wait-option";
-        button.textContent = minutes + " min";
-
-        if (minutes === selectedTime) {
-          button.classList.add("selected");
-        }
-
-        button.addEventListener("click", () => {
-          selectedTime = minutes;
-
-          buttons.forEach(btn => {
-            btn.classList.remove("selected");
-          });
-
-          button.classList.add("selected");
-        });
-
-        buttons.push(button);
-        options.appendChild(button);
-      });
-
-      const accept = document.createElement("button");
-      accept.className = "action";
-      accept.textContent = "Accept Customer";
-
-      accept.addEventListener("click", async () => {
-        if (saving) return;
-
-        saving = true;
-        accept.disabled = true;
-
-        setMessage("Accepting customer...");
-
-        const { data, error } = await supabase
-          .from("capq_queue")
-          .update({
-            status: "Accepted",
-            estimated_wait_minutes: selectedTime,
-            accepted_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          })
-          .eq("id", customer.id)
-          .eq("shop_id", SHOP_ID)
-          .eq("status", "Waiting")
-          .select("id");
-
-        saving = false;
-
-        if (error) {
-          setMessage(
-            "Unable to accept customer: " + error.message
-          );
-          accept.disabled = false;
-          return;
-        }
-
-        if (!data || !data.length) {
-          setMessage(
-            "This customer was already handled. Refreshing..."
-          );
-        } else {
-          setMessage(
-            customer.customer_name +
-            " accepted. Estimated wait: " +
-            selectedTime + " minutes."
-          );
-        }
-
-        await loadQueue(true);
-      });
-
-      card.append(title, options, accept);
-
+    if (customer.status === "Waiting") {
+      const hint = document.createElement("p");
+      hint.textContent = "Waiting for a barber to accept this customer.";
+      card.appendChild(hint);
     } else if (customer.status === "Accepted") {
       const estimate = document.createElement("p");
       estimate.style.color = "var(--green)";
@@ -580,17 +461,17 @@ function render(customers, acceptedToday) {
 }
 
 async function loadQueue(preserveMessage = false) {
-  if (!ready || loading || saving) return;
+  if (!ready || loading) return;
 
   loading = true;
 
   try {
-    const [queueResult, countResult] = await Promise.all([
+    const [queueResult, countResult, barbersResult] = await Promise.all([
       supabase
         .from("capq_queue")
         .select(
           "id,customer_name,service,barber_preference," +
-          "status,estimated_wait_minutes,created_at"
+          "status,barber_id,estimated_wait_minutes,created_at"
         )
         .eq("shop_id", SHOP_ID)
         .in("status", ["Waiting", "Accepted"])
@@ -601,15 +482,26 @@ async function loadQueue(preserveMessage = false) {
         .select("id", { count: "exact", head: true })
         .eq("shop_id", SHOP_ID)
         .eq("status", "Accepted")
-        .gte("accepted_at", startOfToday())
+        .gte("accepted_at", startOfToday()),
+
+      supabase
+        .from("barbers")
+        .select("id,name")
+        .eq("shop_id", SHOP_ID)
     ]);
 
     if (queueResult.error) throw queueResult.error;
     if (countResult.error) throw countResult.error;
+    if (barbersResult.error) throw barbersResult.error;
+
+    const barberNames = new Map(
+      (barbersResult.data || []).map(barber => [barber.id, barber.name])
+    );
 
     render(
       queueResult.data || [],
-      countResult.count || 0
+      countResult.count || 0,
+      barberNames
     );
 
     if (!preserveMessage) {
