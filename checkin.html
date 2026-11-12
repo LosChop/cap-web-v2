@@ -5,7 +5,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101114">
-<title>CAPQ Pro | Walk-In Check-In</title>
+<title>CAPQ Pro | Check-In & Booking</title>
+
+<link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
+<link rel="stylesheet" href="assets/capq-brand.css">
 
 <style>
 :root {
@@ -24,18 +27,18 @@ body {
   font-family:Arial,Helvetica,sans-serif;
 }
 main {
-  max-width:480px;
+  max-width:520px;
   margin:auto;
-  padding:25px 20px 60px;
+  padding:35px 20px 65px;
 }
 header {
   text-align:center;
-  margin-bottom:30px;
+  margin-bottom:35px;
 }
 .logo {
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   gap:12px;
 }
 .logo-icon {
@@ -52,40 +55,97 @@ header {
   font-size:44px;
   font-weight:900;
 }
-.logo-text {
-  font-size:40px;
-  font-weight:900;
-  font-style:italic;
-  letter-spacing:-2px;
-}
-.logo-text span { color:var(--gold); }
 .tag {
   color:var(--gold);
   letter-spacing:3px;
-  font-size:10px;
-  margin-top:8px;
+  font-size:11px;
+  margin-top:12px;
 }
 h1 {
   text-align:center;
-  font-size:26px;
-  margin:35px 0 8px;
+  font-size:29px;
+  margin:28px 0 10px;
 }
+h2 { font-size:21px; }
 p {
   color:var(--muted);
   text-align:center;
   line-height:1.5;
 }
+.shop-name {
+  text-align:center;
+  color:var(--gold);
+  font-size:16px;
+  margin:20px 0 30px;
+}
+.language {
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+.language button {
+  width:auto;
+  padding:10px 14px;
+  margin:0;
+  font-size:13px;
+}
+button {
+  width:100%;
+  border:0;
+  border-radius:11px;
+  padding:16px;
+  margin-top:18px;
+  background:var(--gold);
+  color:#111;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+button:disabled {
+  opacity:.55;
+  cursor:wait;
+}
+button.secondary {
+  background:var(--charcoal);
+  color:var(--ivory);
+  border:1px solid #555;
+}
+button.selected {
+  border:2px solid var(--gold);
+}
+.choice-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:25px 0;
+}
+.choice-grid button {
+  min-height:120px;
+  margin:0;
+  padding:15px 10px;
+}
+.choice-grid strong {
+  display:block;
+  font-size:16px;
+  margin-bottom:10px;
+}
+.choice-grid small {
+  display:block;
+  font-size:12px;
+  font-weight:normal;
+  line-height:1.5;
+}
 label {
   display:block;
-  margin:18px 0 8px;
-  font-weight:bold;
+  margin:19px 0 8px;
   font-size:14px;
+  font-weight:bold;
 }
 input,select {
   width:100%;
   padding:15px;
-  border-radius:9px;
   border:1px solid #555;
+  border-radius:9px;
   background:#202227;
   color:white;
   font-size:16px;
@@ -94,70 +154,98 @@ input:focus,select:focus {
   outline:2px solid var(--gold);
   outline-offset:2px;
 }
-button {
-  width:100%;
+.checkbox-row {
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  margin-top:20px;
+}
+.checkbox-row input {
+  width:20px;
+  height:20px;
+  flex-shrink:0;
+  margin-top:2px;
+  accent-color:var(--gold);
+}
+.checkbox-row label {
+  margin:0;
+  font-size:13px;
+  font-weight:normal;
+  color:var(--muted);
+  line-height:1.5;
+}
+.panel {
+  background:#191B1F;
+  border:1px solid #373A40;
+  border-radius:14px;
+  padding:20px;
+  margin-top:22px;
+}
+.panel h2 { margin-top:0; }
+.barber-card {
+  padding:17px;
+  border:1px solid #45484F;
+  border-radius:12px;
+  margin-top:14px;
+  background:#22252A;
+}
+.barber-card h3 {
+  margin:0 0 8px;
+  font-size:18px;
+}
+.barber-card p {
+  margin:0;
+  text-align:left;
+  font-size:13px;
+}
+.barber-card a {
+  display:block;
+  text-align:center;
+  padding:13px;
+  border-radius:9px;
+  margin-top:15px;
   background:var(--gold);
   color:#111;
-  padding:17px;
-  border:0;
-  border-radius:10px;
-  font-size:17px;
   font-weight:bold;
-  margin-top:25px;
-  cursor:pointer;
-}
-button:disabled {
-  opacity:.6;
-  cursor:wait;
+  text-decoration:none;
 }
 .message {
   text-align:center;
   margin-top:18px;
-  font-weight:bold;
   font-size:14px;
   line-height:1.5;
-  color:var(--green);
+  color:#7ff0c3;
 }
 .message.error { color:#ff9999; }
-.back {
-  display:block;
-  text-align:center;
-  color:var(--gold);
-  font-size:13px;
-  text-decoration:none;
-  margin-top:35px;
-}
-.note {
-  margin-top:25px;
-  font-size:12px;
-  color:var(--muted);
-}
-.shop-name {
-  text-align:center;
-  color:var(--gold);
-  font-size:14px;
-  margin-top:10px;
-}
 .success {
   border:1px solid var(--green);
   background:#123e30;
   border-radius:12px;
-  padding:20px;
-  margin-top:20px;
+  padding:22px;
+  margin-top:25px;
 }
 .success h2 {
   text-align:center;
-  margin:0 0 10px;
   color:#7ff0c3;
+  margin:0 0 12px;
 }
 .success p {
   color:var(--ivory);
   margin:0;
 }
+.note {
+  font-size:12px;
+  margin-top:25px;
+}
+.back {
+  display:block;
+  color:var(--gold);
+  text-align:center;
+  text-decoration:none;
+  margin-top:35px;
+}
+[hidden] { display:none !important; }
 </style>
-
-<link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
-<link rel="stylesheet" href="assets/capq-brand.css">
 </head>
 
 <body>
@@ -177,113 +265,119 @@ button:disabled {
   <div class="tag">BUILT FOR BARBERS</div>
 </header>
 
-<div style="display:flex;justify-content:flex-end;gap:8px">
-  <button
-    type="button"
-    id="langEN"
-    style="width:auto;margin:0;padding:8px 12px;font-size:12px"
-    aria-pressed="true"
-  >
-    EN
-  </button>
-  <button
-    type="button"
-    id="langES"
-    style="width:auto;margin:0;padding:8px 12px;font-size:12px;background:#292D33;color:white"
-    aria-pressed="false"
-  >
-    ES
-  </button>
+<div class="language">
+  <button id="langEN" type="button" aria-pressed="true">EN</button>
+  <button id="langES" type="button" class="secondary" aria-pressed="false">ES</button>
 </div>
 
-<h1 id="checkinTitle">Walk-In Check-In</h1>
-
-<p id="checkinIntro">
-  Welcome! Join the walk-in queue in just a few seconds.
-</p>
+<h1 id="pageTitle">Welcome to CAPQ Pro</h1>
+<p id="pageIntro">How would you like to get your next haircut?</p>
 
 <div id="shopName" class="shop-name">
   CAPO Test Barbershop 1
 </div>
 
-<form id="checkin">
-
-  <label for="name" id="nameLabel">Your Name</label>
-
-  <input
-    id="name"
-    type="text"
-    required
-    minlength="2"
-    maxlength="60"
-    autocomplete="name"
-    placeholder="Enter your name"
-  >
-
-  <label for="service" id="serviceLabel">
-    Select Service
-  </label>
-
-  <select id="service" required>
-    <option
-      value="Haircut"
-      data-en="Haircut"
-      data-es="Corte de cabello"
-    >
-      Haircut
-    </option>
-
-    <option
-      value="Haircut + Beard"
-      data-en="Haircut + Beard"
-      data-es="Corte + barba"
-    >
-      Haircut + Beard
-    </option>
-
-    <option
-      value="Kids Haircut"
-      data-en="Kids Haircut"
-      data-es="Corte para niños"
-    >
-      Kids Haircut
-    </option>
-
-    <option
-      value="Beard Trim"
-      data-en="Beard Trim"
-      data-es="Recorte de barba"
-    >
-      Beard Trim
-    </option>
-  </select>
-
-  <button id="submitBtn" type="submit">
-    Join Waitlist
+<div id="choiceArea" class="choice-grid">
+  <button id="walkinChoice" type="button" class="selected">
+    <strong id="walkinTitle">Next in Line</strong>
+    <small id="walkinDescription">
+      Join the walk-in queue for the next available barber.
+    </small>
   </button>
 
-</form>
+  <button id="bookingChoice" type="button" class="secondary">
+    <strong id="bookingTitle">Pick Your Barber</strong>
+    <small id="bookingDescription">
+      Choose your barber and book an appointment.
+    </small>
+  </button>
+</div>
 
-<div
-  id="message"
-  class="message"
-  role="status"
-  aria-live="polite"
-></div>
+<section id="walkinPanel" class="panel">
+  <h2 id="walkinHeading">Join the Walk-In Queue</h2>
+
+  <form id="checkinForm">
+    <label for="customerName" id="nameLabel">Full Name</label>
+    <input
+      id="customerName"
+      type="text"
+      autocomplete="name"
+      minlength="2"
+      maxlength="60"
+      required
+      placeholder="Enter your full name"
+    >
+
+    <label for="customerPhone" id="phoneLabel">Phone Number</label>
+    <input
+      id="customerPhone"
+      type="tel"
+      autocomplete="tel"
+      inputmode="tel"
+      required
+      placeholder="(336) 555-0123"
+    >
+
+    <label for="customerEmail" id="emailLabel">Email Address</label>
+    <input
+      id="customerEmail"
+      type="email"
+      autocomplete="email"
+      maxlength="254"
+      required
+      placeholder="you@example.com"
+    >
+
+    <label for="service" id="serviceLabel">Select Service</label>
+    <select id="service" required>
+      <option value="Haircut" data-en="Haircut" data-es="Corte de cabello">
+        Haircut
+      </option>
+      <option value="Haircut + Beard" data-en="Haircut + Beard" data-es="Corte + barba">
+        Haircut + Beard
+      </option>
+      <option value="Kids Haircut" data-en="Kids Haircut" data-es="Corte para niños">
+        Kids Haircut
+      </option>
+      <option value="Beard Trim" data-en="Beard Trim" data-es="Recorte de barba">
+        Beard Trim
+      </option>
+    </select>
+
+    <div class="checkbox-row">
+      <input id="smsConsent" type="checkbox">
+      <label for="smsConsent" id="smsLabel">
+        I agree to receive optional text notifications about my visit
+        when this feature becomes available. Consent is not required
+        to join the queue.
+      </label>
+    </div>
+
+    <button id="submitBtn" type="submit">Join Waitlist</button>
+  </form>
+</section>
+
+<section id="bookingPanel" class="panel" hidden>
+  <h2 id="bookingHeading">Choose Your Barber</h2>
+  <p id="bookingIntro">
+    Select a barber to open their Booksy appointment calendar.
+  </p>
+  <div id="barberList"></div>
+</section>
+
+<div id="message" class="message" role="status" aria-live="polite"></div>
 
 <div id="successBox" class="success" hidden>
   <h2 id="successTitle">You're Checked In!</h2>
   <p id="successText"></p>
 </div>
 
-<p class="note" id="testNote">
-  CAPQ Public Check-In Test.
-  The barber will review your request and provide
-  an estimated wait time. Text notifications are
-  not enabled yet.
+<p id="footerNote" class="note">
+  Your information is used to process your visit.
+  Text notifications are not enabled yet.
 </p>
 
-<a class="back" href="index.html">
+<a id="backLink" class="back" href="index.html">
   Back to CAPQ Home
 </a>
 
@@ -298,152 +392,276 @@ const supabase = createClient(
   "sb_publishable_FtcxTtmcHvtyu3m2KJRjqA_3Nzkk2La"
 );
 
-const SHOP_ID =
-  "061c8b27-0d31-404a-b227-2839639acb35";
+const SHOP_ID = "061c8b27-0d31-404a-b227-2839639acb35";
 
 let currentLang = "en";
+let currentMode = "walkin";
+let checkedIn = false;
 
 const translations = {
   en: {
-    title: "Walk-In Check-In",
-    intro: "Welcome! Join the walk-in queue in just a few seconds.",
-    name: "Your Name",
-    placeholder: "Enter your name",
-    service: "Select Service",
-    join: "Join Waitlist",
-    success: "You're Checked In!",
-    back: "Back to CAPQ Home",
-    note: "CAPQ public check-in test. Your barber will review your request and provide an estimated wait time. Text notifications are not enabled yet.",
-    invalid: "Please enter a valid name.",
-    checking: "Checking You In...",
-    adding: "Adding you to the queue...",
-    failed: "Check-in failed: ",
-    done: (name, service) =>
-      `${name}, you've joined the queue for ${service}. Please wait for your barber to accept your request.`
+    pageTitle:"Welcome to CAPQ Pro",
+    pageIntro:"How would you like to get your next haircut?",
+    walkinTitle:"Next in Line",
+    walkinDescription:"Join the walk-in queue for the next available barber.",
+    bookingTitle:"Pick Your Barber",
+    bookingDescription:"Choose your barber and book an appointment.",
+    walkinHeading:"Join the Walk-In Queue",
+    nameLabel:"Full Name",
+    namePlaceholder:"Enter your full name",
+    phoneLabel:"Phone Number",
+    emailLabel:"Email Address",
+    serviceLabel:"Select Service",
+    smsLabel:"I agree to receive optional text notifications about my visit when this feature becomes available. Consent is not required to join the queue.",
+    submit:"Join Waitlist",
+    submitting:"Checking You In...",
+    bookingHeading:"Choose Your Barber",
+    bookingIntro:"Select a barber to open their Booksy appointment calendar.",
+    bookNow:"Book on Booksy",
+    walkinsOnly:"Walk-ins only — online booking unavailable.",
+    unavailable:"Not currently available for appointments.",
+    noBarbers:"No barbers are listed for this shop yet.",
+    loadingBarbers:"Loading barbers...",
+    failedBarbers:"Unable to load barbers: ",
+    successTitle:"You're Checked In!",
+    success:(name,service) =>
+      `${name}, you've joined the walk-in queue for ${service}. Please wait for a barber to accept your request.`,
+    invalidPhone:"Enter a valid phone number.",
+    invalidEmail:"Enter a valid email address.",
+    failed:"Check-in failed: ",
+    footer:"Your information is used to process your visit. Text notifications are not enabled yet.",
+    back:"Back to CAPQ Home"
   },
-
   es: {
-    title: "Registro sin cita",
-    intro: "¡Bienvenido! Anótate en la lista de espera en unos segundos.",
-    name: "Tu nombre",
-    placeholder: "Escribe tu nombre",
-    service: "Selecciona el servicio",
-    join: "Unirme a la lista",
-    success: "¡Registro completado!",
-    back: "Volver al inicio de CAPQ",
-    note: "Prueba del registro público de CAPQ. Tu barbero revisará tu solicitud y te dará un tiempo estimado de espera. Los mensajes de texto todavía no están habilitados.",
-    invalid: "Escribe un nombre válido.",
-    checking: "Registrando...",
-    adding: "Agregándote a la lista...",
-    failed: "Error de registro: ",
-    done: (name, service) =>
-      `${name}, estás en la lista para ${service}. Espera a que un barbero acepte tu solicitud.`
+    pageTitle:"Bienvenido a CAPQ Pro",
+    pageIntro:"¿Cómo quieres recibir tu próximo corte?",
+    walkinTitle:"Siguiente en la fila",
+    walkinDescription:"Únete a la lista de espera para el próximo barbero disponible.",
+    bookingTitle:"Elige tu barbero",
+    bookingDescription:"Elige tu barbero y reserva una cita.",
+    walkinHeading:"Únete a la lista de espera",
+    nameLabel:"Nombre completo",
+    namePlaceholder:"Escribe tu nombre completo",
+    phoneLabel:"Número de teléfono",
+    emailLabel:"Correo electrónico",
+    serviceLabel:"Selecciona el servicio",
+    smsLabel:"Acepto recibir mensajes de texto opcionales sobre mi visita cuando esta función esté disponible. No es obligatorio para unirse a la lista.",
+    submit:"Unirme a la lista",
+    submitting:"Registrando...",
+    bookingHeading:"Elige tu barbero",
+    bookingIntro:"Selecciona un barbero para abrir su calendario de citas en Booksy.",
+    bookNow:"Reservar en Booksy",
+    walkinsOnly:"Solo sin cita — reservas en línea no disponibles.",
+    unavailable:"No disponible para citas en este momento.",
+    noBarbers:"Todavía no hay barberos registrados en esta barbería.",
+    loadingBarbers:"Cargando barberos...",
+    failedBarbers:"No se pudieron cargar los barberos: ",
+    successTitle:"¡Registro completado!",
+    success:(name,service) =>
+      `${name}, estás en la lista de espera para ${service}. Espera a que un barbero acepte tu solicitud.`,
+    invalidPhone:"Escribe un número de teléfono válido.",
+    invalidEmail:"Escribe un correo electrónico válido.",
+    failed:"Error de registro: ",
+    footer:"Tu información se utiliza para gestionar tu visita. Los mensajes de texto todavía no están habilitados.",
+    back:"Volver al inicio de CAPQ"
   }
 };
+
+const $ = id => document.getElementById(id);
 
 function translate(lang) {
   currentLang = lang;
   document.documentElement.lang = lang;
-
   const t = translations[lang];
 
-  for (const [id, key] of [
-    ["checkinTitle", "title"],
-    ["checkinIntro", "intro"],
-    ["nameLabel", "name"],
-    ["serviceLabel", "service"],
-    ["successTitle", "success"],
-    ["testNote", "note"]
-  ]) {
-    document.getElementById(id).textContent = t[key];
+  const fields = [
+    "pageTitle","pageIntro","walkinTitle","walkinDescription",
+    "bookingTitle","bookingDescription","walkinHeading",
+    "nameLabel","phoneLabel","emailLabel","serviceLabel",
+    "smsLabel","bookingHeading","bookingIntro",
+    "successTitle"
+  ];
+
+  fields.forEach(id => {
+    $(id).textContent = t[id];
+  });
+
+  $("customerName").placeholder = t.namePlaceholder;
+  $("submitBtn").textContent = t.submit;
+  $("footerNote").textContent = t.footer;
+  $("backLink").textContent = t.back;
+
+  document.querySelectorAll("#service option").forEach(option => {
+    option.textContent = option.dataset[lang];
+  });
+
+  ["en","es"].forEach(code => {
+    const button = $("lang" + code.toUpperCase());
+    const active = lang === code;
+    button.setAttribute("aria-pressed", String(active));
+    button.classList.toggle("secondary", !active);
+  });
+
+  if (checkedIn) {
+    renderSuccess();
   }
 
-  document.getElementById("name").placeholder =
-    t.placeholder;
-
-  document.getElementById("submitBtn").textContent =
-    t.join;
-
-  document.querySelector(".back").textContent =
-    t.back;
-
-  document.querySelectorAll("#service option")
-    .forEach(option => {
-      option.textContent = option.dataset[lang];
-    });
-
-  for (const code of ["en", "es"]) {
-    const button = document.getElementById(
-      "lang" + code.toUpperCase()
-    );
-
-    button.setAttribute(
-      "aria-pressed",
-      String(lang === code)
-    );
-
-    button.style.background =
-      lang === code ? "#D6B45C" : "#292D33";
-
-    button.style.color =
-      lang === code ? "#111" : "#fff";
+  if (currentMode === "booking") {
+    loadBarbers();
   }
 }
 
-document.getElementById("langEN").onclick =
-  () => translate("en");
+$("langEN").onclick = () => translate("en");
+$("langES").onclick = () => translate("es");
 
-document.getElementById("langES").onclick =
-  () => translate("es");
+function selectMode(mode) {
+  currentMode = mode;
 
-const form =
-  document.getElementById("checkin");
+  $("walkinPanel").hidden = mode !== "walkin" || checkedIn;
+  $("bookingPanel").hidden = mode !== "booking";
+  $("successBox").hidden = !checkedIn || mode !== "walkin";
+  $("message").textContent = "";
 
-const message =
-  document.getElementById("message");
+  $("walkinChoice").classList.toggle("selected", mode === "walkin");
+  $("walkinChoice").classList.toggle("secondary", mode !== "walkin");
 
-const submitBtn =
-  document.getElementById("submitBtn");
+  $("bookingChoice").classList.toggle("selected", mode === "booking");
+  $("bookingChoice").classList.toggle("secondary", mode !== "booking");
 
-const successBox =
-  document.getElementById("successBox");
+  if (mode === "booking") {
+    loadBarbers();
+  }
+}
 
-const successText =
-  document.getElementById("successText");
+$("walkinChoice").onclick = () => selectMode("walkin");
+$("bookingChoice").onclick = () => selectMode("booking");
 
 function showMessage(text, error = false) {
-  message.textContent = text;
-
-  message.className = error
-    ? "message error"
-    : "message";
+  $("message").textContent = text;
+  $("message").className = error ? "message error" : "message";
 }
 
-form.addEventListener("submit", async event => {
+function validBooksyUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" &&
+      (url.hostname === "booksy.com" ||
+       url.hostname.endsWith(".booksy.com") ||
+       url.hostname === "booksy.net" ||
+       url.hostname.endsWith(".booksy.net"));
+  } catch {
+    return false;
+  }
+}
+
+async function loadBarbers() {
+  const t = translations[currentLang];
+  const list = $("barberList");
+
+  list.textContent = t.loadingBarbers;
+
+  try {
+    const { data, error } = await supabase.rpc(
+      "capq_public_barbers",
+      { p_shop_id: SHOP_ID }
+    );
+
+    if (error) throw error;
+
+    list.replaceChildren();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      list.textContent = t.noBarbers;
+      return;
+    }
+
+    data.forEach(barber => {
+      const card = document.createElement("div");
+      card.className = "barber-card";
+
+      const name = document.createElement("h3");
+      name.textContent = barber.name || "Barber";
+      card.appendChild(name);
+
+      const mode = barber.availability_mode || "walk_ins_only";
+      const url = barber.booksy_url;
+
+      if (
+        (mode === "appointments_only" || mode === "both") &&
+        url && validBooksyUrl(url)
+      ) {
+        const link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = t.bookNow;
+        card.appendChild(link);
+      } else {
+        const note = document.createElement("p");
+        note.textContent =
+          mode === "walk_ins_only" ? t.walkinsOnly : t.unavailable;
+        card.appendChild(note);
+      }
+
+      list.appendChild(card);
+    });
+
+  } catch (error) {
+    list.textContent = t.failedBarbers + error.message;
+  }
+}
+
+let lastCheckin = null;
+
+function renderSuccess() {
+  if (!lastCheckin) return;
+  const t = translations[currentLang];
+
+  const selected = [...$("service").options].find(
+    option => option.value === lastCheckin.service
+  );
+
+  const serviceLabel = selected
+    ? selected.dataset[currentLang]
+    : lastCheckin.service;
+
+  $("successText").textContent =
+    t.success(lastCheckin.name, serviceLabel);
+}
+
+$("checkinForm").addEventListener("submit", async event => {
   event.preventDefault();
 
-  const name =
-    document.getElementById("name").value.trim();
+  if (checkedIn) return;
 
-  const service =
-    document.getElementById("service").value;
+  const name = $("customerName").value.trim();
+  const phone = $("customerPhone").value.trim();
+  const email = $("customerEmail").value.trim().toLowerCase();
+  const service = $("service").value;
+  const smsOptIn = $("smsConsent").checked;
+
+  const t = translations[currentLang];
 
   if (name.length < 2 || name.length > 60) {
-    showMessage(
-      translations[currentLang].invalid,
-      true
-    );
+    showMessage(t.namePlaceholder, true);
     return;
   }
 
-  submitBtn.disabled = true;
+  if (!/^\+?[0-9 ()-]{10,20}$/.test(phone) ||
+      phone.replace(/\D/g, "").length < 10) {
+    showMessage(t.invalidPhone, true);
+    return;
+  }
 
-  submitBtn.textContent =
-    translations[currentLang].checking;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+      email.length > 254) {
+    showMessage(t.invalidEmail, true);
+    return;
+  }
 
-  showMessage(
-    translations[currentLang].adding
-  );
+  $("submitBtn").disabled = true;
+  $("submitBtn").textContent = t.submitting;
+  showMessage("");
 
   try {
     const { data, error } = await supabase.rpc(
@@ -451,46 +669,34 @@ form.addEventListener("submit", async event => {
       {
         p_shop_id: SHOP_ID,
         p_customer_name: name,
-        p_service: service
+        p_service: service,
+        p_customer_phone: phone,
+        p_customer_email: email,
+        p_sms_opt_in: smsOptIn
       }
     );
 
     if (error) throw error;
+    if (!data) throw new Error("No confirmation received.");
 
-    if (!data) {
-      throw new Error(
-        "No check-in confirmation received."
-      );
-    }
+    checkedIn = true;
+    lastCheckin = { name, service };
 
-    form.hidden = true;
-    showMessage("");
-
-    successText.textContent =
-      translations[currentLang].done(
-        name,
-        document.querySelector(
-          '#service option:checked'
-        ).textContent
-      );
-
-    successBox.hidden = false;
+    $("checkinForm").hidden = true;
+    $("successBox").hidden = false;
+    renderSuccess();
 
   } catch (error) {
-    showMessage(
-      translations[currentLang].failed +
-      error.message,
-      true
-    );
+    showMessage(t.failed + error.message, true);
 
   } finally {
-    submitBtn.disabled = false;
-
-    submitBtn.textContent =
-      translations[currentLang].join;
+    $("submitBtn").disabled = false;
+    $("submitBtn").textContent =
+      translations[currentLang].submit;
   }
 });
-</script>
 
+translate("en");
+</script>
 </body>
 </html>
