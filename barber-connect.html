@@ -124,6 +124,38 @@ input[type="file"] {
   margin:7px 0 0;
 }
 
+.url-field {
+  display:flex;
+  align-items:stretch;
+  border:1px solid #50545b;
+  border-radius:9px;
+  background:#101114;
+  overflow:hidden;
+}
+
+.url-prefix {
+  display:flex;
+  align-items:center;
+  padding:0 11px;
+  background:#292D33;
+  color:var(--gold);
+  font-size:12px;
+  white-space:nowrap;
+  border-right:1px solid #50545b;
+}
+
+.url-field input {
+  border:0;
+  border-radius:0;
+  min-width:0;
+  flex:1;
+}
+
+.url-field input:focus {
+  outline:2px solid var(--gold);
+  outline-offset:-2px;
+}
+
 .cover-preview {
   width:100%;
   aspect-ratio:16/9;
@@ -196,6 +228,7 @@ input[type="file"] {
 @media(max-width:480px) {
   .panel { padding:16px; }
   .gallery { grid-template-columns:repeat(2,1fr); }
+  .url-prefix { font-size:11px; padding:0 8px; }
 }
 </style>
 </head>
@@ -236,8 +269,7 @@ input[type="file"] {
 
   <p class="help">
     Use lowercase letters, numbers, and hyphens.
-    Your public profile link will be available
-    in a later update.
+    Your public profile link will use this username.
   </p>
 
   <label for="bio">About Me</label>
@@ -267,19 +299,38 @@ input[type="file"] {
 </section>
 
 <section class="panel">
-  <h2>Booking & Social Media</h2>
+  <h2>Booking &amp; Social Media</h2>
 
   <label for="booksy">Booksy Booking Link</label>
-  <input id="booksy" type="url"
-         placeholder="https://booksy.com/...">
+  <div class="url-field">
+    <span class="url-prefix">https://www.</span>
+    <input id="booksy" type="text"
+           inputmode="url"
+           autocomplete="url"
+           placeholder="booksy.com/..."
+           aria-label="Booksy booking address">
+  </div>
+  <p class="help">
+    Enter your Booksy address after https://www.
+    You can also paste your full booking link.
+  </p>
 
   <label for="instagram">Instagram Profile Link</label>
   <input id="instagram" type="url"
          placeholder="https://instagram.com/...">
 
   <label for="tiktok">TikTok Profile Link</label>
-  <input id="tiktok" type="url"
-         placeholder="https://www.tiktok.com/@...">
+  <div class="url-field">
+    <span class="url-prefix">https://www.tiktok.com/@</span>
+    <input id="tiktok" type="text"
+           autocomplete="off"
+           placeholder="loscuts90"
+           aria-label="TikTok username">
+  </div>
+  <p class="help">
+    Enter only your TikTok username, such as loscuts90.
+    You can also paste your full TikTok profile link.
+  </p>
 
   <label for="youtube">YouTube Channel Link</label>
   <input id="youtube" type="url"
@@ -317,8 +368,8 @@ input[type="file"] {
 
 <p class="note">
   Your profile information is stored in CAPQ Pro.
-  Public profile pages and automatic Booksy
-  photo synchronization are future features.
+  Automatic Booksy photo synchronization is not available yet.
+  You can upload your Booksy cover photo manually.
 </p>
 
 </main>
@@ -339,9 +390,62 @@ let user = null;
 let coverUrl = null;
 let galleryUrls = [];
 let selectedGalleryFiles = [];
+let existingProfile = false;
 
 function showMessage(text) {
   $("message").textContent = text;
+}
+
+function normalizeBooksy(value) {
+  let v = (value || "").trim();
+  if (!v) return null;
+
+  if (/^https?:\/\//i.test(v)) {
+    return validateWebUrl(v, "Booksy");
+  }
+
+  v = v.replace(/^www\./i, "");
+  return validateWebUrl("https://www." + v, "Booksy");
+}
+
+function normalizeTikTok(value) {
+  let v = (value || "").trim();
+  if (!v) return null;
+
+  v = v.replace(/^https?:\/\/(www\.)?tiktok\.com\/@?/i, "");
+  v = v.replace(/^(@|www\.tiktok\.com\/@?)/i, "");
+  v = v.replace(/\/.*$/, "");
+  v = v.replace(/[?#].*$/, "");
+
+  if (!/^[a-zA-Z0-9._]{2,24}$/.test(v)) {
+    throw new Error(
+      "Enter a valid TikTok username (for example: loscuts90)."
+    );
+  }
+
+  return "https://www.tiktok.com/@" + v;
+}
+
+function booksyInput(url) {
+  return (url || "").replace(/^https?:\/\/(www\.)?/i, "");
+}
+
+function tiktokInput(url) {
+  return (url || "").replace(
+    /^https?:\/\/(www\.)?tiktok\.com\/@?/i, ""
+  );
+}
+
+function validateWebUrl(value, label) {
+  try {
+    const url = new URL(value);
+    if (!["https:", "http:"].includes(url.protocol)) {
+      throw new Error("Invalid protocol");
+    }
+    return url.href;
+  } catch {
+    throw new Error("Enter a valid " + label + " link.");
+  }
 }
 
 function previewCover(url) {
@@ -503,19 +607,21 @@ async function initialize() {
       "Unable to load profile: " +
       profileResult.error.message
     );
+    $("saveButton").disabled = true;
     return;
   }
 
   const p = profileResult.data;
+  existingProfile = !!p;
 
   $("displayName").value =
     p?.display_name || barber.name || "";
 
   $("slug").value = p?.slug || "";
   $("bio").value = p?.bio || "";
-  $("booksy").value = p?.booksy_url || "";
+  $("booksy").value = booksyInput(p?.booksy_url);
   $("instagram").value = p?.instagram_url || "";
-  $("tiktok").value = p?.tiktok_url || "";
+  $("tiktok").value = tiktokInput(p?.tiktok_url);
   $("youtube").value = p?.youtube_url || "";
   $("contact").value = p?.contact_url || "";
 
@@ -586,23 +692,8 @@ $("profileForm").addEventListener("submit",async event => {
   try {
     showMessage("Saving your profile...");
 
-    const coverFile = $("coverFile").files[0];
-
-    let nextCover = coverUrl;
-    let nextGallery = [...galleryUrls];
-
-    if (coverFile) {
-      nextCover = await uploadPhoto(
-        coverFile,"cover"
-      );
-    }
-
-    for (const file of selectedGalleryFiles) {
-      const url = await uploadPhoto(
-        file,"gallery"
-      );
-      nextGallery.push(url);
-    }
+    const booksyUrl = normalizeBooksy($("booksy").value);
+    const tiktokUrl = normalizeTikTok($("tiktok").value);
 
     const slug = $("slug").value.trim().toLowerCase();
 
@@ -615,15 +706,38 @@ $("profileForm").addEventListener("submit",async event => {
       );
     }
 
+    const coverFile = $("coverFile").files[0];
+
+    let nextCover = coverUrl;
+    let nextGallery = [...galleryUrls];
+
+    if (coverFile) {
+      showMessage("Uploading cover photo...");
+      nextCover = await uploadPhoto(
+        coverFile,"cover"
+      );
+    }
+
+    if (selectedGalleryFiles.length) {
+      showMessage("Uploading portfolio photos...");
+    }
+
+    for (const file of selectedGalleryFiles) {
+      const url = await uploadPhoto(
+        file,"gallery"
+      );
+      nextGallery.push(url);
+    }
+
     const profile = {
       barber_id:barber.id,
       display_name:$("displayName").value.trim(),
       bio:$("bio").value.trim(),
       slug:slug || null,
       cover_url:nextCover,
-      booksy_url:$("booksy").value.trim() || null,
+      booksy_url:booksyUrl,
       instagram_url:$("instagram").value.trim() || null,
-      tiktok_url:$("tiktok").value.trim() || null,
+      tiktok_url:tiktokUrl,
       youtube_url:$("youtube").value.trim() || null,
       contact_url:$("contact").value.trim() || null,
       gallery_urls:nextGallery,
@@ -634,18 +748,29 @@ $("profileForm").addEventListener("submit",async event => {
       throw new Error("Display name is required.");
     }
 
-    const { error } = await supabase
-      .from("barber_connect_profiles")
-      .upsert(profile,{onConflict:"barber_id"});
+    showMessage("Saving profile to database...");
+
+    const { error } = existingProfile
+      ? await supabase
+          .from("barber_connect_profiles")
+          .update(profile)
+          .eq("barber_id",barber.id)
+      : await supabase
+          .from("barber_connect_profiles")
+          .insert(profile);
 
     if (error) throw error;
 
+    existingProfile = true;
     coverUrl = nextCover;
     galleryUrls = nextGallery;
     selectedGalleryFiles = [];
 
     $("coverFile").value = "";
     $("galleryFiles").value = "";
+
+    $("booksy").value = booksyInput(booksyUrl);
+    $("tiktok").value = tiktokInput(tiktokUrl);
 
     previewCover(coverUrl);
     renderGallery();
@@ -667,4 +792,3 @@ await initialize();
 
 </body>
 </html>
-
