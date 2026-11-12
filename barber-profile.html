@@ -1,0 +1,409 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101114">
+  <title>Barber Connect | CAPQ Pro</title>
+
+  <style>
+    :root {
+      --black: #101114;
+      --panel: #292D33;
+      --gold: #D6B45C;
+      --white: #F7F7F4;
+      --muted: #A9ADB5;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--black);
+      color: var(--white);
+      font-family: Arial, sans-serif;
+    }
+
+    a { color: inherit; }
+
+    .container {
+      max-width: 680px;
+      margin: auto;
+      padding: 20px 16px 50px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 18px;
+    }
+
+    .brand {
+      font-size: 25px;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: -1px;
+    }
+
+    .brand span {
+      color: var(--white);
+      font-size: 16px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin-top: 3px;
+    }
+
+    .home {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid #786434;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .cover {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+      background: #1C1F24;
+    }
+
+    .cover-placeholder {
+      height: 240px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--gold);
+      font-size: 64px;
+      font-weight: 900;
+      background: linear-gradient(135deg,#292D33,#101114);
+    }
+
+    .content { padding: 22px; }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    .username {
+      color: var(--gold);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .bio {
+      color: #D3D5DA;
+      font-size: 15px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .button {
+      display: block;
+      text-align: center;
+      padding: 16px;
+      border-radius: 11px;
+      background: var(--gold);
+      color: var(--black);
+      font-weight: 800;
+      text-decoration: none;
+      margin-top: 20px;
+    }
+
+    .button.secondary {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
+
+    h2 {
+      font-size: 20px;
+      margin: 0 0 15px;
+    }
+
+    .socials {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 10px;
+    }
+
+    .social {
+      text-decoration: none;
+      background: #1C1F24;
+      border: 1px solid #555960;
+      border-radius: 10px;
+      padding: 14px 10px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .social:hover { border-color: var(--gold); }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 10px;
+    }
+
+    .gallery img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #1C1F24;
+    }
+
+    .status {
+      text-align: center;
+      color: var(--muted);
+      padding: 55px 15px;
+      line-height: 1.6;
+    }
+
+    .hidden { display: none !important; }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+      padding-top: 20px;
+    }
+
+    @media (max-width: 400px) {
+      h1 { font-size: 25px; }
+      .cover { height: 220px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <header class="topbar">
+      <div>
+        <div class="brand">CAPQ <span>PRO</span></div>
+        <div class="subtitle">BARBER CONNECT</div>
+      </div>
+      <a class="home" href="index.html">CAPQ Home</a>
+    </header>
+
+    <div id="status" class="status">
+      Loading barber profile...
+    </div>
+
+    <div id="profile" class="hidden">
+
+      <section class="card">
+        <div id="coverArea"></div>
+
+        <div class="content">
+          <h1 id="displayName"></h1>
+          <div id="username" class="username"></div>
+          <div id="bio" class="bio"></div>
+
+          <a id="bookButton"
+             class="button hidden"
+             target="_blank"
+             rel="noopener noreferrer">
+            Book Appointment
+          </a>
+
+          <a id="contactButton"
+             class="button secondary hidden"
+             target="_blank"
+             rel="noopener noreferrer">
+            Contact Barber
+          </a>
+        </div>
+      </section>
+
+      <section id="socialSection" class="card hidden">
+        <div class="content">
+          <h2>Connect With Me</h2>
+          <div id="socialLinks" class="socials"></div>
+        </div>
+      </section>
+
+      <section id="portfolioSection" class="card hidden">
+        <div class="content">
+          <h2>My Work</h2>
+          <div id="gallery" class="gallery"></div>
+        </div>
+      </section>
+
+      <footer>Powered by CAPQ Pro · Barber Connect</footer>
+    </div>
+  </main>
+
+  <script type="module">
+    import { createClient } from
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const SUPABASE_URL =
+      "https://nfazsevnpfmabsipkrrh.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_FtcxTtmcHvtyu3m2KJRjqA_3Nzkk2La";
+
+    const supabase = createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const $ = id => document.getElementById(id);
+
+    function showError(message) {
+      $("status").textContent = message;
+      $("status").classList.remove("hidden");
+      $("profile").classList.add("hidden");
+    }
+
+    function validUrl(value) {
+      if (!value) return null;
+
+      try {
+        const url = new URL(value);
+        return ["https:", "http:"].includes(url.protocol)
+          ? url.href
+          : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function setLink(id, value) {
+      const url = validUrl(value);
+      if (!url) return;
+
+      $(id).href = url;
+      $(id).classList.remove("hidden");
+    }
+
+    function addSocial(label, value) {
+      const url = validUrl(value);
+      if (!url) return;
+
+      const link = document.createElement("a");
+      link.className = "social";
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = label;
+
+      $("socialLinks").appendChild(link);
+      $("socialSection").classList.remove("hidden");
+    }
+
+    function renderProfile(data) {
+      document.title =
+        `${data.display_name} | CAPQ Pro`;
+
+      $("displayName").textContent = data.display_name;
+      $("username").textContent =
+        data.slug ? "@" + data.slug : "";
+
+      $("bio").textContent =
+        data.bio || "Professional barber.";
+
+      const coverUrl = validUrl(data.cover_url);
+
+      if (coverUrl) {
+        const img = document.createElement("img");
+        img.className = "cover";
+        img.src = coverUrl;
+        img.alt = data.display_name + " cover photo";
+        $("coverArea").appendChild(img);
+      } else {
+        const placeholder = document.createElement("div");
+        placeholder.className = "cover-placeholder";
+        placeholder.textContent = "CAPQ";
+        $("coverArea").appendChild(placeholder);
+      }
+
+      setLink("bookButton", data.booksy_url);
+      setLink("contactButton", data.contact_url);
+
+      addSocial("Instagram", data.instagram_url);
+      addSocial("TikTok", data.tiktok_url);
+      addSocial("YouTube", data.youtube_url);
+
+      const photos = Array.isArray(data.gallery_urls)
+        ? data.gallery_urls.slice(0, 6)
+        : [];
+
+      photos.forEach(photo => {
+        const url = validUrl(photo);
+        if (!url) return;
+
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = "Barber haircut portfolio photo";
+        img.loading = "lazy";
+
+        $("gallery").appendChild(img);
+        $("portfolioSection").classList.remove("hidden");
+      });
+
+      $("status").classList.add("hidden");
+      $("profile").classList.remove("hidden");
+    }
+
+    async function loadProfile() {
+      const params = new URLSearchParams(location.search);
+      const slug = (params.get("barber") || "")
+        .trim()
+        .toLowerCase();
+
+      if (!/^[a-z0-9-]{3,40}$/.test(slug)) {
+        showError(
+          "Barber profile not selected. Open a barber's shared profile link."
+        );
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("barber_connect_profiles")
+        .select(
+          "display_name,slug,bio,cover_url,booksy_url," +
+          "instagram_url,tiktok_url,youtube_url," +
+          "contact_url,gallery_urls"
+        )
+        .eq("slug", slug)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Profile load error:", error);
+        showError("Unable to load this barber profile.");
+        return;
+      }
+
+      if (!data) {
+        showError(
+          "This barber profile is not available yet."
+        );
+        return;
+      }
+
+      renderProfile(data);
+    }
+
+    await loadProfile();
+  </script>
+</body>
+</html>
