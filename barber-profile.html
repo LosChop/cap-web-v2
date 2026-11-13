@@ -98,11 +98,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(
-        135deg,
-        #292D33,
-        #101114
-      );
+      background: linear-gradient(135deg, #292D33, #101114);
       border: 1px solid #6C5A32;
       border-radius: 20px;
       color: var(--gold);
@@ -110,20 +106,7 @@
       font-weight: 900;
     }
 
-    .avatar {
-      position: absolute;
-      width: 150px;
-      height: 150px;
-      left: 50%;
-      bottom: -75px;
-      transform: translateX(-50%);
-      border: 5px solid var(--gold);
-      border-radius: 50%;
-      background: var(--panel-light);
-      object-fit: cover;
-      box-shadow: 0 8px 28px rgba(0,0,0,.55);
-    }
-
+    .avatar,
     .avatar-placeholder {
       position: absolute;
       width: 150px;
@@ -131,12 +114,20 @@
       left: 50%;
       bottom: -75px;
       transform: translateX(-50%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
       border: 5px solid var(--gold);
       border-radius: 50%;
       background: var(--panel-light);
+      box-shadow: 0 8px 28px rgba(0,0,0,.55);
+    }
+
+    .avatar {
+      object-fit: cover;
+    }
+
+    .avatar-placeholder {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       color: var(--gold);
       font-size: 55px;
       font-weight: 900;
@@ -205,11 +196,7 @@
 
     .link-card.booksy {
       border-color: var(--gold);
-      background: linear-gradient(
-        135deg,
-        #29251B,
-        #1D2025
-      );
+      background: linear-gradient(135deg, #29251B, #1D2025);
     }
 
     .link-icon {
@@ -225,9 +212,10 @@
     }
 
     .link-icon img {
-      width: 34px;
-      height: 34px;
+      width: 40px;
+      height: 40px;
       object-fit: contain;
+      border-radius: 9px;
     }
 
     .link-icon svg {
@@ -376,9 +364,7 @@
         <div class="subtitle">BARBER CONNECT</div>
       </div>
 
-      <a class="home" href="index.html">
-        CAPQ Home
-      </a>
+      <a class="home" href="index.html">CAPQ Home</a>
     </header>
 
     <div id="status" class="status">
@@ -400,32 +386,33 @@
 
       <section id="linksSection" class="links"></section>
 
-      <section id="portfolioSection"
-               class="portfolio hidden">
+      <section id="portfolioSection" class="portfolio hidden">
         <h2 class="section-title">My Work</h2>
         <div id="gallery" class="gallery"></div>
       </section>
 
       <footer>
         Powered by <strong>CAPQ PRO</strong>
-        <div style="margin-top:6px">
-          BARBER CONNECT
-        </div>
+        <div style="margin-top:6px">BARBER CONNECT</div>
       </footer>
 
     </div>
   </main>
 
-  <div id="lightbox" class="lightbox hidden"
-       role="dialog"
-       aria-modal="true"
-       aria-label="Portfolio photo viewer">
-    <button id="closeLightbox"
-            class="close-lightbox"
-            type="button"
-            aria-label="Close photo">
-      &times;
-    </button>
+  <div
+    id="lightbox"
+    class="lightbox hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Portfolio photo viewer"
+  >
+    <button
+      id="closeLightbox"
+      class="close-lightbox"
+      type="button"
+      aria-label="Close photo"
+    >&times;</button>
+
     <img id="lightboxImage" alt="Portfolio photo enlarged">
   </div>
 
@@ -446,18 +433,18 @@
 
     const $ = id => document.getElementById(id);
 
+    // Booksy uses your uploaded turquoise logo.
+    // Other social icons remain unchanged.
+
     const ICONS = {
       booksy: `
-        <svg viewBox="0 0 64 64"
-             xmlns="http://www.w3.org/2000/svg"
-             aria-hidden="true">
-          <rect width="64" height="64"
-                rx="13" fill="#D6B45C"/>
-          <path d="M18 16h17c10 0 16 6 16 15
-                   0 8-5 14-13 15H18V16zm10 9v12h9
-                   c4 0 6-2 6-6s-2-6-6-6h-9z"
-                fill="#101114"/>
-        </svg>
+        <img
+          src="assets/booksy-logo.png"
+          alt=""
+          width="40"
+          height="40"
+          style="width:40px;height:40px;object-fit:contain;border-radius:9px;"
+        >
       `,
 
       instagram: `
@@ -602,6 +589,7 @@
       const link = document.createElement("a");
       link.className = "link-card" +
         (special ? " booksy" : "");
+
       link.href = url;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
@@ -609,9 +597,6 @@
 
       const icon = document.createElement("div");
       icon.className = "link-icon";
-
-      // These are self-contained SVG icons.
-      // No external icon library is required.
       icon.innerHTML = ICONS[iconName] || ICONS.website;
 
       const title = document.createElement("span");
