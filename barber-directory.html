@@ -1,0 +1,655 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101114">
+<title>Find a Barber | CAPQ Pro</title>
+
+<link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
+<link rel="stylesheet" href="assets/capq-brand.css">
+
+<style>
+:root {
+  --black:#101114;
+  --panel:#1D2025;
+  --panel-light:#292D33;
+  --gold:#D6B45C;
+  --white:#F7F7F4;
+  --muted:#A9ADB5;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:var(--black);
+  color:var(--white);
+  font-family:Arial,Helvetica,sans-serif;
+  line-height:1.5;
+}
+
+a { color:inherit; }
+
+header {
+  border-bottom:1px solid #343840;
+  padding:20px;
+}
+
+.header-inner {
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.logo {
+  display:flex;
+  flex-direction:column;
+  text-decoration:none;
+  gap:5px;
+}
+
+.logo img {
+  width:155px;
+  max-width:100%;
+}
+
+.logo small {
+  color:var(--gold);
+  letter-spacing:2px;
+  font-size:10px;
+}
+
+.home-link {
+  color:var(--gold);
+  font-size:13px;
+  text-decoration:none;
+}
+
+main {
+  max-width:1100px;
+  margin:auto;
+  padding:35px 20px 80px;
+}
+
+.hero {
+  text-align:center;
+  margin:20px auto 35px;
+  max-width:700px;
+}
+
+.eyebrow {
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:3px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+h1 {
+  font-size:clamp(30px,6vw,48px);
+  line-height:1.15;
+  margin:15px 0;
+}
+
+.hero p {
+  color:var(--muted);
+  font-size:15px;
+}
+
+.search-panel {
+  background:var(--panel);
+  border:1px solid #383C42;
+  border-radius:16px;
+  padding:20px;
+  max-width:750px;
+  margin:0 auto 32px;
+}
+
+.search-panel label {
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.search-wrap {
+  display:flex;
+  gap:10px;
+}
+
+.search-wrap input {
+  flex:1;
+  min-width:0;
+  background:#101114;
+  border:1px solid #50545b;
+  border-radius:10px;
+  color:white;
+  padding:15px;
+  font:inherit;
+}
+
+.search-wrap input:focus {
+  outline:2px solid var(--gold);
+  outline-offset:1px;
+}
+
+.clear-btn {
+  background:var(--panel-light);
+  color:var(--gold);
+  border:1px solid #50545b;
+  border-radius:10px;
+  padding:0 16px;
+  cursor:pointer;
+}
+
+.results-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.results-top h2 {
+  font-size:20px;
+  margin:0;
+}
+
+.results-count {
+  color:var(--muted);
+  font-size:13px;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:20px;
+}
+
+.card {
+  background:var(--panel);
+  border:1px solid #383C42;
+  border-radius:16px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transition:border-color .2s,transform .2s;
+}
+
+.card:hover {
+  border-color:var(--gold);
+  transform:translateY(-3px);
+}
+
+.card-photo {
+  width:100%;
+  aspect-ratio:16/10;
+  object-fit:cover;
+  background:var(--panel-light);
+  display:block;
+}
+
+.card-placeholder {
+  width:100%;
+  aspect-ratio:16/10;
+  background:linear-gradient(
+    135deg,
+    #292D33,
+    #15171B
+  );
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:var(--gold);
+  font-size:52px;
+  font-weight:bold;
+}
+
+.card-body {
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+
+.card-name {
+  font-size:21px;
+  font-weight:bold;
+  margin:0 0 4px;
+  overflow-wrap:anywhere;
+}
+
+.card-username {
+  color:var(--gold);
+  font-size:12px;
+  margin-bottom:12px;
+  overflow-wrap:anywhere;
+}
+
+.card-bio {
+  color:var(--muted);
+  font-size:13px;
+  margin:0 0 20px;
+  flex:1;
+  overflow-wrap:anywhere;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+  overflow:hidden;
+}
+
+.card-button {
+  display:block;
+  text-align:center;
+  background:var(--gold);
+  color:var(--black);
+  text-decoration:none;
+  border-radius:9px;
+  padding:13px;
+  font-size:14px;
+  font-weight:bold;
+}
+
+.card-button:hover {
+  background:#e7c875;
+}
+
+.status {
+  color:var(--muted);
+  text-align:center;
+  padding:40px 15px;
+  font-size:14px;
+}
+
+.empty {
+  background:var(--panel);
+  border:1px solid #383C42;
+  border-radius:15px;
+  text-align:center;
+  padding:45px 20px;
+  color:var(--muted);
+}
+
+.empty h3 {
+  color:var(--white);
+  margin:0 0 8px;
+}
+
+footer {
+  border-top:1px solid #343840;
+  color:var(--muted);
+  font-size:12px;
+  text-align:center;
+  padding:25px;
+}
+
+[hidden] {
+  display:none !important;
+}
+
+@media(max-width:850px) {
+  .grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:560px) {
+  .grid {
+    grid-template-columns:1fr;
+  }
+
+  .header-inner {
+    align-items:flex-start;
+  }
+
+  .logo img {
+    width:135px;
+  }
+
+  main {
+    padding:25px 16px 60px;
+  }
+
+  .search-panel {
+    padding:16px;
+  }
+
+  .results-top h2 {
+    font-size:18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <img src="assets/capq-wordmark.svg" alt="CAPQ Pro">
+      <small>BARBER CONNECT</small>
+    </a>
+
+    <a href="index.html" class="home-link">
+      Back to CAPQ
+    </a>
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <div class="eyebrow">CAPQ Barber Connect</div>
+
+  <h1>Find Your Next Barber.</h1>
+
+  <p>
+    Discover talented barbers, explore their work,
+    and connect directly with the barber who fits
+    your style.
+  </p>
+</section>
+
+<section class="search-panel">
+  <label for="searchInput">
+    Search Barbers
+  </label>
+
+  <div class="search-wrap">
+    <input
+      id="searchInput"
+      type="search"
+      placeholder="Search barber name or username..."
+      autocomplete="off"
+      maxlength="80"
+    >
+
+    <button
+      id="clearSearch"
+      class="clear-btn"
+      type="button"
+      aria-label="Clear search"
+      hidden
+    >
+      Clear
+    </button>
+  </div>
+</section>
+
+<section aria-label="Barber search results">
+
+  <div class="results-top">
+    <h2>Explore Barbers</h2>
+
+    <span
+      id="resultsCount"
+      class="results-count"
+      aria-live="polite"
+    >
+      Loading...
+    </span>
+  </div>
+
+  <div
+    id="status"
+    class="status"
+    role="status"
+    aria-live="polite"
+  >
+    Finding barber profiles...
+  </div>
+
+  <div id="barberGrid" class="grid"></div>
+
+  <div id="emptyState" class="empty" hidden>
+    <h3>No barbers found</h3>
+
+    <p>
+      Try another name or username.
+    </p>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  CAPQ Pro · Barber Connect
+</footer>
+
+<script type="module">
+
+import { createClient } from
+  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const supabase = createClient(
+  "https://nfazsevnpfmabsipkrrh.supabase.co",
+  "sb_publishable_FtcxTtmcHvtyu3m2KJRjqA_3Nzkk2La"
+);
+
+const $ = id => document.getElementById(id);
+
+let allBarbers = [];
+
+function safeImageUrl(value) {
+  if (!value) return null;
+
+  try {
+    const url = new URL(value);
+
+    if (
+      url.protocol !== "https:" &&
+      url.protocol !== "http:"
+    ) {
+      return null;
+    }
+
+    return url.href;
+
+  } catch {
+    return null;
+  }
+}
+
+function profileUrl(slug) {
+  const url = new URL(
+    "barber-profile.html",
+    window.location.href
+  );
+
+  url.searchParams.set("barber",slug);
+
+  return url.href;
+}
+
+function createBarberCard(barber) {
+  const card = document.createElement("article");
+  card.className = "card";
+
+  const imageUrl = safeImageUrl(
+    barber.cover_url
+  );
+
+  if (imageUrl) {
+    const image = document.createElement("img");
+
+    image.className = "card-photo";
+    image.src = imageUrl;
+    image.alt = barber.display_name + " cover photo";
+    image.loading = "lazy";
+
+    image.onerror = () => {
+      const placeholder =
+        createPlaceholder(barber.display_name);
+
+      image.replaceWith(placeholder);
+    };
+
+    card.appendChild(image);
+
+  } else {
+    card.appendChild(
+      createPlaceholder(barber.display_name)
+    );
+  }
+
+  const body = document.createElement("div");
+  body.className = "card-body";
+
+  const name = document.createElement("h3");
+  name.className = "card-name";
+  name.textContent =
+    barber.display_name || "CAPQ Barber";
+
+  const username = document.createElement("div");
+  username.className = "card-username";
+  username.textContent = "@" + barber.slug;
+
+  const bio = document.createElement("p");
+  bio.className = "card-bio";
+  bio.textContent =
+    barber.bio?.trim() ||
+    "Explore this barber's profile and connect.";
+
+  const link = document.createElement("a");
+  link.className = "card-button";
+  link.href = profileUrl(barber.slug);
+  link.textContent = "View Barber Profile";
+
+  body.append(
+    name,
+    username,
+    bio,
+    link
+  );
+
+  card.appendChild(body);
+
+  return card;
+}
+
+function createPlaceholder(name) {
+  const placeholder = document.createElement("div");
+  placeholder.className = "card-placeholder";
+
+  placeholder.textContent =
+    (name || "B").trim().charAt(0).toUpperCase();
+
+  return placeholder;
+}
+
+function renderBarbers() {
+  const query =
+    $("searchInput").value
+      .trim()
+      .toLowerCase();
+
+  const matches = allBarbers.filter(barber => {
+    const name =
+      (barber.display_name || "").toLowerCase();
+
+    const slug =
+      (barber.slug || "").toLowerCase();
+
+    return (
+      name.includes(query) ||
+      slug.includes(query)
+    );
+  });
+
+  const grid = $("barberGrid");
+  grid.replaceChildren();
+
+  const fragment = document.createDocumentFragment();
+
+  matches.forEach(barber => {
+    fragment.appendChild(
+      createBarberCard(barber)
+    );
+  });
+
+  grid.appendChild(fragment);
+
+  $("resultsCount").textContent =
+    matches.length +
+    (matches.length === 1 ? " barber" : " barbers");
+
+  $("emptyState").hidden =
+    matches.length !== 0;
+
+  $("clearSearch").hidden =
+    query.length === 0;
+}
+
+async function loadBarbers() {
+  $("status").hidden = false;
+  $("status").textContent =
+    "Finding barber profiles...";
+
+  $("emptyState").hidden = true;
+
+  try {
+    const { data,error } = await supabase
+      .from("barber_connect_profiles")
+      .select(
+        "display_name,slug,bio,cover_url"
+      )
+      .not("slug","is",null)
+      .order("display_name",{
+        ascending:true
+      })
+      .range(0,499);
+
+    if (error) throw error;
+
+    allBarbers = (data || []).filter(barber => {
+      return (
+        typeof barber.slug === "string" &&
+        /^[a-z0-9-]{3,40}$/.test(barber.slug)
+      );
+    });
+
+    $("status").hidden = true;
+
+    renderBarbers();
+
+  } catch(error) {
+    console.error(
+      "Unable to load CAPQ directory:",
+      error
+    );
+
+    $("status").hidden = false;
+    $("status").textContent =
+      "Unable to load barber profiles right now. Please try again later.";
+
+    $("resultsCount").textContent =
+      "Unavailable";
+  }
+}
+
+$("searchInput").addEventListener(
+  "input",
+  renderBarbers
+);
+
+$("clearSearch").addEventListener(
+  "click",
+  () => {
+    $("searchInput").value = "";
+    renderBarbers();
+    $("searchInput").focus();
+  }
+);
+
+await loadBarbers();
+
+</script>
+
+</body>
+</html>
