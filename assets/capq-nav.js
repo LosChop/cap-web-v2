@@ -1,315 +1,241 @@
 
-/*
-  CAPQ Pro — Shared Navigation Menu
-  File: assets/capq-nav.js
-
-  Add this script to any CAPQ HTML page:
-  <script src="assets/capq-nav.js" defer></script>
-*/
-
 (() => {
   "use strict";
 
+  if (document.getElementById("capq-menu-root")) return;
+
+  const GOLD = "#D6B45C";
+
   const pages = [
     {
-      label: "CAPQ Home",
-      href: "index.html",
-      icon: "⌂"
-    },
-    {
       label: "Barber Dashboard",
-      href: "barber-dashboard.html",
-      icon: "▦"
-    },
-    {
-      label: "Walk-In Check-In",
-      href: "checkin.html",
-      icon: "✓"
-    },
-    {
-      label: "Walk-In Barber Directory",
-      href: "barbers.html",
-      icon: "♟"
+      href: "barber-dashboard.html"
     },
     {
       label: "My Barber Connect",
-      href: "barber-connect.html",
-      icon: "◈"
+      href: "barber-connect.html"
     },
     {
-      label: "Find a Barber",
-      href: "barber-directory.html",
-      icon: "⌕"
+      label: "Barber Connect Directory",
+      href: "barber-directory.html"
+    },
+    {
+      label: "Customer Check-In",
+      href: "checkin.html"
     }
   ];
 
-  function buildMenu() {
-    if (document.getElementById("capqGlobalNav")) {
-      return;
+  const style = document.createElement("style");
+  style.textContent = `
+    #capq-menu-root {
+      position: relative;
+      flex: 0 0 auto;
+      z-index: 1000;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
-    const style = document.createElement("style");
-
-    style.textContent = `
-      #capqGlobalNav {
-        position:relative;
-        z-index:1000;
-        width:100%;
-        background:#15171b;
-        border-bottom:1px solid #45413a;
-        color:#F7F7F4;
-        font-family:Arial,Helvetica,sans-serif;
-      }
-
-      #capqGlobalNav * {
-        box-sizing:border-box;
-      }
-
-      .capq-nav-inner {
-        max-width:1100px;
-        margin:auto;
-        padding:10px 18px;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        gap:12px;
-      }
-
-      .capq-nav-home {
-        color:#D6B45C;
-        text-decoration:none;
-        font-size:13px;
-        font-weight:bold;
-        letter-spacing:1px;
-      }
-
-      .capq-nav-toggle {
-        display:flex;
-        align-items:center;
-        gap:10px;
-        padding:11px 16px;
-        background:#292D33;
-        border:1px solid #D6B45C;
-        border-radius:10px;
-        color:#F7F7F4;
-        font-size:14px;
-        font-weight:bold;
-        cursor:pointer;
-      }
-
-      .capq-nav-toggle:hover {
-        background:#383b40;
-      }
-
-      .capq-nav-toggle:focus-visible,
-      .capq-nav-link:focus-visible {
-        outline:2px solid #D6B45C;
-        outline-offset:3px;
-      }
-
-      .capq-nav-dropdown {
-        position:absolute;
-        top:100%;
-        right:max(18px,calc((100% - 1100px)/2));
-        width:min(350px,calc(100vw - 36px));
-        background:#1D2025;
-        border:1px solid #75633d;
-        border-radius:12px;
-        padding:10px;
-        box-shadow:0 14px 35px rgba(0,0,0,.5);
-        max-height:75vh;
-        overflow-y:auto;
-      }
-
-      .capq-nav-dropdown[hidden] {
-        display:none !important;
-      }
-
-      .capq-nav-heading {
-        padding:12px 12px 8px;
-        color:#A9ADB5;
-        font-size:11px;
-        font-weight:bold;
-        letter-spacing:2px;
-        text-transform:uppercase;
-      }
-
-      .capq-nav-link {
-        display:flex;
-        align-items:center;
-        gap:12px;
-        width:100%;
-        padding:14px 12px;
-        color:#F7F7F4;
-        text-decoration:none;
-        font-size:14px;
-        border-radius:8px;
-      }
-
-      .capq-nav-link:hover {
-        background:#292D33;
-      }
-
-      .capq-nav-link[aria-current="page"] {
-        background:#3a3425;
-        color:#D6B45C;
-        font-weight:bold;
-      }
-
-      .capq-nav-icon {
-        width:26px;
-        text-align:center;
-        color:#D6B45C;
-        font-size:20px;
-        flex-shrink:0;
-      }
-
-      .capq-nav-footer {
-        border-top:1px solid #393c42;
-        margin-top:8px;
-        padding:12px;
-        color:#A9ADB5;
-        font-size:11px;
-        text-align:center;
-      }
-
-      @media(max-width:480px) {
-        .capq-nav-inner {
-          padding:9px 15px;
-        }
-
-        .capq-nav-toggle {
-          padding:10px 13px;
-          font-size:13px;
-        }
-
-        .capq-nav-home {
-          font-size:12px;
-        }
-
-        .capq-nav-dropdown {
-          right:15px;
-          width:calc(100vw - 30px);
-        }
-      }
-    `;
-
-    document.head.appendChild(style);
-
-    const nav = document.createElement("nav");
-    nav.id = "capqGlobalNav";
-    nav.setAttribute(
-      "aria-label",
-      "CAPQ Pro main navigation"
-    );
-
-    const inner = document.createElement("div");
-    inner.className = "capq-nav-inner";
-
-    const home = document.createElement("a");
-    home.className = "capq-nav-home";
-    home.href = "index.html";
-    home.textContent = "CAPQ PRO";
-
-    const toggle = document.createElement("button");
-    toggle.type = "button";
-    toggle.className = "capq-nav-toggle";
-    toggle.textContent = "☰  Menu";
-    toggle.setAttribute("aria-expanded", "false");
-    toggle.setAttribute(
-      "aria-controls",
-      "capqNavDropdown"
-    );
-
-    const dropdown = document.createElement("div");
-    dropdown.id = "capqNavDropdown";
-    dropdown.className = "capq-nav-dropdown";
-    dropdown.hidden = true;
-
-    const heading = document.createElement("div");
-    heading.className = "capq-nav-heading";
-    heading.textContent = "Navigate CAPQ Pro";
-
-    dropdown.appendChild(heading);
-
-    const currentPage =
-      window.location.pathname.split("/").pop() ||
-      "index.html";
-
-    pages.forEach(page => {
-      const link = document.createElement("a");
-      link.className = "capq-nav-link";
-      link.href = page.href;
-
-      if (currentPage === page.href) {
-        link.setAttribute("aria-current", "page");
-      }
-
-      const icon = document.createElement("span");
-      icon.className = "capq-nav-icon";
-      icon.setAttribute("aria-hidden", "true");
-      icon.textContent = page.icon;
-
-      const label = document.createElement("span");
-      label.textContent = page.label;
-
-      link.append(icon, label);
-      dropdown.appendChild(link);
-    });
-
-    const footer = document.createElement("div");
-    footer.className = "capq-nav-footer";
-    footer.textContent = "CAPQ Pro · Built for Barbers";
-
-    dropdown.appendChild(footer);
-
-    inner.append(home, toggle);
-    nav.append(inner, dropdown);
-
-    document.body.insertBefore(
-      nav,
-      document.body.firstChild
-    );
-
-    function closeMenu() {
-      dropdown.hidden = true;
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.textContent = "☰  Menu";
+    #capq-menu-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 9px 12px;
+      background: #292D33;
+      color: ${GOLD};
+      border: 1px solid #786434;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
-    function openMenu() {
-      dropdown.hidden = false;
-      toggle.setAttribute("aria-expanded", "true");
-      toggle.textContent = "✕  Close";
+    #capq-menu-button:hover,
+    #capq-menu-button:focus-visible {
+      border-color: ${GOLD};
+      outline-color: ${GOLD};
     }
 
-    toggle.addEventListener("click", () => {
-      if (dropdown.hidden) {
-        openMenu();
-      } else {
-        closeMenu();
-      }
-    });
+    #capq-menu-button .capq-menu-icon {
+      font-size: 19px;
+      line-height: 1;
+    }
 
-    document.addEventListener("click", event => {
-      if (!nav.contains(event.target)) {
-        closeMenu();
-      }
-    });
+    #capq-menu-panel {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: min(270px, calc(100vw - 30px));
+      padding: 8px;
+      background: #1C1F24;
+      border: 1px solid #786434;
+      border-radius: 12px;
+      box-shadow: 0 15px 40px rgba(0,0,0,.5);
+      z-index: 1001;
+    }
 
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
-        closeMenu();
+    #capq-menu-panel[hidden] {
+      display: none !important;
+    }
+
+    #capq-menu-panel a {
+      display: block;
+      padding: 13px 12px;
+      color: #F7F7F4;
+      text-decoration: none;
+      font-size: 14px;
+      border-radius: 8px;
+    }
+
+    #capq-menu-panel a:hover,
+    #capq-menu-panel a:focus-visible {
+      background: #292D33;
+      color: ${GOLD};
+    }
+
+    #capq-menu-panel a[aria-current="page"] {
+      background: #302A1D;
+      color: ${GOLD};
+      font-weight: bold;
+    }
+
+    .capq-header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    @media (max-width: 550px) {
+      #capq-menu-button {
+        width: 42px;
+        min-width: 42px;
+        padding: 9px;
       }
-    });
+
+      #capq-menu-button .capq-menu-label {
+        display: none;
+      }
+
+      .capq-header-actions {
+        gap: 6px;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+
+  // Find the existing page header.
+  const header =
+    document.querySelector("main > header") ||
+    document.querySelector("header.topbar") ||
+    document.querySelector("header");
+
+  if (!header) {
+    console.warn("CAPQ Menu: Page header not found.");
+    return;
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener(
-      "DOMContentLoaded",
-      buildMenu
-    );
+  const root = document.createElement("div");
+  root.id = "capq-menu-root";
+
+  const button = document.createElement("button");
+  button.id = "capq-menu-button";
+  button.type = "button";
+  button.setAttribute("aria-label", "Open navigation menu");
+  button.setAttribute("aria-haspopup", "true");
+  button.setAttribute("aria-expanded", "false");
+  button.setAttribute("aria-controls", "capq-menu-panel");
+
+  const icon = document.createElement("span");
+  icon.className = "capq-menu-icon";
+  icon.textContent = "☰";
+  icon.setAttribute("aria-hidden", "true");
+
+  const label = document.createElement("span");
+  label.className = "capq-menu-label";
+  label.textContent = "Menu";
+
+  button.append(icon, label);
+
+  const panel = document.createElement("nav");
+  panel.id = "capq-menu-panel";
+  panel.setAttribute("aria-label", "CAPQ navigation");
+  panel.hidden = true;
+
+  const currentPage =
+    window.location.pathname.split("/").pop() || "index.html";
+
+  pages.forEach(page => {
+    const link = document.createElement("a");
+    link.href = page.href;
+    link.textContent = page.label;
+
+    if (currentPage === page.href) {
+      link.setAttribute("aria-current", "page");
+    }
+
+    panel.appendChild(link);
+  });
+
+  root.append(button, panel);
+
+  // Put the menu beside Sign Out, when available.
+  const signout =
+    header.querySelector("#signout") ||
+    header.querySelector(".signout");
+
+  if (signout) {
+    const actions = document.createElement("div");
+    actions.className = "capq-header-actions";
+
+    signout.parentNode.insertBefore(actions, signout);
+    actions.append(root, signout);
   } else {
-    buildMenu();
+    // On other pages, place it inside the existing header.
+    const actions = document.createElement("div");
+    actions.className = "capq-header-actions";
+
+    const existingRightLink =
+      header.querySelector(".back") ||
+      header.querySelector(".home");
+
+    if (existingRightLink) {
+      existingRightLink.parentNode.insertBefore(
+        actions,
+        existingRightLink
+      );
+      actions.append(root, existingRightLink);
+    } else {
+      actions.appendChild(root);
+      header.appendChild(actions);
+    }
   }
+
+  function setOpen(open) {
+    panel.hidden = !open;
+    button.setAttribute("aria-expanded", String(open));
+    button.setAttribute(
+      "aria-label",
+      open ? "Close navigation menu" : "Open navigation menu"
+    );
+  }
+
+  button.addEventListener("click", () => {
+    setOpen(panel.hidden);
+  });
+
+  document.addEventListener("click", event => {
+    if (!root.contains(event.target)) {
+      setOpen(false);
+    }
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !panel.hidden) {
+      setOpen(false);
+      button.focus();
+    }
+  });
 })();
