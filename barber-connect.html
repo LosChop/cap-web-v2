@@ -225,6 +225,64 @@ input[type="file"] {
   margin-top:20px;
 }
 
+.share-actions {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:16px;
+}
+
+.share-actions button,
+.share-actions a {
+  padding:12px 8px;
+  border:1px solid var(--gold);
+  border-radius:9px;
+  background:var(--charcoal);
+  color:var(--white);
+  text-decoration:none;
+  font:inherit;
+  font-size:13px;
+  font-weight:bold;
+  cursor:pointer;
+  text-align:center;
+}
+
+.share-actions button:hover,
+.share-actions a:hover {
+  background:#3b3a30;
+}
+
+.share-actions button:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.share-url {
+  font-size:12px;
+  color:var(--gold);
+  overflow-wrap:anywhere;
+}
+
+.qr-frame {
+  background:#fff;
+  padding:16px;
+  border-radius:12px;
+  width:max-content;
+  max-width:100%;
+  margin:16px auto;
+}
+
+.qr-frame canvas,
+.qr-frame img {
+  display:block;
+  max-width:100%;
+}
+
+.share-hint {
+  color:var(--muted);
+  font-size:12px;
+}
+
 @media(max-width:480px) {
   .panel { padding:16px; }
   .gallery { grid-template-columns:repeat(2,1fr); }
@@ -303,17 +361,26 @@ input[type="file"] {
 
   <label for="booksy">Booksy Booking Link</label>
   <div class="url-field">
-    <span class="url-prefix">https://www.</span>
     <input id="booksy" type="text"
            inputmode="url"
            autocomplete="url"
-           placeholder="booksy.com/..."
+           placeholder="https://booksy.com/en-us/dl/show-business/..."
            aria-label="Booksy booking address">
   </div>
+
   <p class="help">
-    Enter your Booksy address after https://www.
-    You can also paste your full booking link.
+    In your Booksy business account, choose
+    Share Profile or Share Booking Link.
+    Copy the official link and paste the complete
+    address here, including https://.
+    CAPQ will not add www. or change your booking path.
   </p>
+
+  <button type="button" id="testBooksy"
+          class="save"
+          style="padding:11px;margin-top:12px;background:var(--charcoal);color:var(--gold);border:1px solid var(--gold)">
+    Test Booksy Link
+  </button>
 
   <label for="instagram">Instagram Profile Link</label>
   <input id="instagram" type="url"
@@ -327,6 +394,7 @@ input[type="file"] {
            placeholder="loscuts90"
            aria-label="TikTok username">
   </div>
+
   <p class="help">
     Enter only your TikTok username, such as loscuts90.
     You can also paste your full TikTok profile link.
@@ -366,6 +434,44 @@ input[type="file"] {
 
 </form>
 
+<section class="panel" id="sharePanel" hidden>
+  <h2>Share My Barber Connect</h2>
+
+  <p class="help">
+    Share your personal CAPQ page with customers
+    or print your QR code for your barber station.
+  </p>
+
+  <p id="shareUrl" class="share-url"></p>
+
+  <div class="qr-frame">
+    <div id="qrCode"
+         aria-label="QR code for your barber profile"></div>
+  </div>
+
+  <div class="share-actions">
+    <button type="button" id="copyLink">
+      Copy Profile Link
+    </button>
+
+    <button type="button" id="shareLink">
+      Share Profile
+    </button>
+
+    <button type="button" id="downloadQr">
+      Download QR Code
+    </button>
+
+    <a id="viewProfile" href="#"
+       target="_blank" rel="noopener noreferrer">
+      View My Profile
+    </a>
+  </div>
+
+  <p id="shareStatus" class="share-hint"
+     role="status" aria-live="polite"></p>
+</section>
+
 <p class="note">
   Your profile information is stored in CAPQ Pro.
   Automatic Booksy photo synchronization is not available yet.
@@ -400,20 +506,49 @@ function normalizeBooksy(value) {
   let v = (value || "").trim();
   if (!v) return null;
 
-  if (/^https?:\/\//i.test(v)) {
-    return validateWebUrl(v, "Booksy");
+  if (!/^https?:\/\//i.test(v)) {
+    v = "https://" + v;
   }
 
-  v = v.replace(/^www\./i, "");
-  return validateWebUrl("https://www." + v, "Booksy");
+  let url;
+
+  try {
+    url = new URL(v);
+  } catch {
+    throw new Error(
+      "Paste your official Booksy booking link."
+    );
+  }
+
+  const host = url.hostname.toLowerCase();
+
+  if (
+    url.protocol !== "https:" ||
+    !(host === "booksy.com" ||
+      host.endsWith(".booksy.com"))
+  ) {
+    throw new Error(
+      "Use a secure official Booksy link copied from your Booksy business account."
+    );
+  }
+
+  return url.href;
 }
 
 function normalizeTikTok(value) {
   let v = (value || "").trim();
   if (!v) return null;
 
-  v = v.replace(/^https?:\/\/(www\.)?tiktok\.com\/@?/i, "");
-  v = v.replace(/^(@|www\.tiktok\.com\/@?)/i, "");
+  v = v.replace(
+    /^https?:\/\/(www\.)?tiktok\.com\/@?/i,
+    ""
+  );
+
+  v = v.replace(
+    /^(@|www\.tiktok\.com\/@?)/i,
+    ""
+  );
+
   v = v.replace(/\/.*$/, "");
   v = v.replace(/[?#].*$/, "");
 
@@ -427,25 +562,14 @@ function normalizeTikTok(value) {
 }
 
 function booksyInput(url) {
-  return (url || "").replace(/^https?:\/\/(www\.)?/i, "");
+  return url || "";
 }
 
 function tiktokInput(url) {
   return (url || "").replace(
-    /^https?:\/\/(www\.)?tiktok\.com\/@?/i, ""
+    /^https?:\/\/(www\.)?tiktok\.com\/@?/i,
+    ""
   );
-}
-
-function validateWebUrl(value, label) {
-  try {
-    const url = new URL(value);
-    if (!["https:", "http:"].includes(url.protocol)) {
-      throw new Error("Invalid protocol");
-    }
-    return url.href;
-  } catch {
-    throw new Error("Enter a valid " + label + " link.");
-  }
 }
 
 function previewCover(url) {
@@ -493,9 +617,12 @@ function renderGallery() {
 
     const img = document.createElement("img");
     const previewUrl = URL.createObjectURL(file);
+
     img.src = previewUrl;
     img.alt = "New portfolio photo";
-    img.onload = () => URL.revokeObjectURL(previewUrl);
+
+    img.onload = () =>
+      URL.revokeObjectURL(previewUrl);
 
     const button = document.createElement("button");
     button.type = "button";
@@ -546,7 +673,8 @@ async function uploadPhoto(file,folder) {
   validateFile(file);
 
   const extension = fileExtension(file);
-  const filename = crypto.randomUUID() + "." + extension;
+  const filename =
+    crypto.randomUUID() + "." + extension;
 
   const path =
     user.id + "/" +
@@ -570,6 +698,199 @@ async function uploadPhoto(file,folder) {
   return data.publicUrl;
 }
 
+// Share Profile and QR Code
+
+let currentShareUrl = "";
+let qrLibraryPromise = null;
+
+function loadQrLibrary() {
+  if (window.QRCode) return Promise.resolve();
+
+  if (qrLibraryPromise) {
+    return qrLibraryPromise;
+  }
+
+  qrLibraryPromise = new Promise((resolve,reject) => {
+    const script = document.createElement("script");
+
+    script.src =
+      "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+
+    script.onload = () =>
+      window.QRCode
+        ? resolve()
+        : reject(new Error("QR generator unavailable"));
+
+    script.onerror = () =>
+      reject(new Error("QR generator unavailable"));
+
+    document.head.appendChild(script);
+  });
+
+  return qrLibraryPromise;
+}
+
+async function updateSharePanel(slug) {
+  const panel = $("sharePanel");
+
+  if (!slug || !/^[a-z0-9-]{3,40}$/.test(slug)) {
+    currentShareUrl = "";
+    panel.hidden = true;
+    return;
+  }
+
+  currentShareUrl = new URL(
+    "barber-profile.html?barber=" +
+    encodeURIComponent(slug),
+    location.href
+  ).href;
+
+  panel.hidden = false;
+
+  $("shareUrl").textContent = currentShareUrl;
+  $("viewProfile").href = currentShareUrl;
+  $("qrCode").replaceChildren();
+
+  $("downloadQr").disabled = true;
+
+  $("shareStatus").textContent =
+    "Generating your QR code...";
+
+  try {
+    await loadQrLibrary();
+
+    if (
+      !currentShareUrl.endsWith(
+        "barber=" + encodeURIComponent(slug)
+      )
+    ) {
+      return;
+    }
+
+    new window.QRCode($("qrCode"), {
+      text:currentShareUrl,
+      width:210,
+      height:210,
+      colorDark:"#101114",
+      colorLight:"#ffffff",
+      correctLevel:window.QRCode.CorrectLevel.H
+    });
+
+    $("downloadQr").disabled = false;
+
+    $("shareStatus").textContent =
+      "Scan this QR code to open your public profile.";
+
+  } catch(error) {
+    $("shareStatus").textContent =
+      "QR code could not load. Copy and share your profile link instead.";
+  }
+}
+
+$("copyLink").addEventListener("click",async () => {
+  if (!currentShareUrl) return;
+
+  try {
+    await navigator.clipboard.writeText(currentShareUrl);
+
+    $("shareStatus").textContent =
+      "Profile link copied!";
+
+  } catch {
+    const field = document.createElement("textarea");
+
+    field.value = currentShareUrl;
+    field.style.position = "fixed";
+    field.style.opacity = "0";
+
+    document.body.appendChild(field);
+    field.select();
+
+    const ok = document.execCommand("copy");
+    field.remove();
+
+    $("shareStatus").textContent = ok
+      ? "Profile link copied!"
+      : "Copy the link shown above.";
+  }
+});
+
+$("shareLink").addEventListener("click",async () => {
+  if (!currentShareUrl) return;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title:"My Barber Connect Profile",
+        url:currentShareUrl
+      });
+    } catch(error) {
+      if (error.name !== "AbortError") {
+        $("shareStatus").textContent =
+          "Sharing unavailable. Use Copy Profile Link.";
+      }
+    }
+  } else {
+    $("copyLink").click();
+  }
+});
+
+$("downloadQr").addEventListener("click",() => {
+  if (!currentShareUrl) return;
+
+  const canvas =
+    $("qrCode").querySelector("canvas");
+
+  const img =
+    $("qrCode").querySelector("img");
+
+  const data =
+    canvas?.toDataURL("image/png") || img?.src;
+
+  if (!data) {
+    $("shareStatus").textContent =
+      "QR code is not ready yet.";
+    return;
+  }
+
+  const a = document.createElement("a");
+
+  a.href = data;
+  a.download =
+    "capq-barber-connect-" +
+    $("slug").value.trim().toLowerCase() +
+    "-qr.png";
+
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+});
+
+$("testBooksy").addEventListener("click",() => {
+  try {
+    const url = normalizeBooksy(
+      $("booksy").value
+    );
+
+    if (!url) {
+      throw new Error(
+        "Paste your official Booksy booking link first."
+      );
+    }
+
+    window.open(
+      url,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+  } catch(error) {
+    showMessage(error.message);
+  }
+});
+
+// Load existing barber account and profile
+
 async function initialize() {
   const auth = await supabase.auth.getUser();
 
@@ -590,6 +911,7 @@ async function initialize() {
     showMessage(
       "No barber account is linked to this login."
     );
+
     $("saveButton").disabled = true;
     return;
   }
@@ -607,6 +929,7 @@ async function initialize() {
       "Unable to load profile: " +
       profileResult.error.message
     );
+
     $("saveButton").disabled = true;
     return;
   }
@@ -619,20 +942,35 @@ async function initialize() {
 
   $("slug").value = p?.slug || "";
   $("bio").value = p?.bio || "";
-  $("booksy").value = booksyInput(p?.booksy_url);
-  $("instagram").value = p?.instagram_url || "";
-  $("tiktok").value = tiktokInput(p?.tiktok_url);
-  $("youtube").value = p?.youtube_url || "";
-  $("contact").value = p?.contact_url || "";
+
+  $("booksy").value =
+    booksyInput(p?.booksy_url);
+
+  $("instagram").value =
+    p?.instagram_url || "";
+
+  $("tiktok").value =
+    tiktokInput(p?.tiktok_url);
+
+  $("youtube").value =
+    p?.youtube_url || "";
+
+  $("contact").value =
+    p?.contact_url || "";
 
   coverUrl = p?.cover_url || null;
+
   galleryUrls = Array.isArray(p?.gallery_urls)
     ? [...p.gallery_urls]
     : [];
 
   previewCover(coverUrl);
   renderGallery();
+
+  await updateSharePanel(p?.slug || "");
 }
+
+// Cover photo selection
 
 $("coverFile").addEventListener("change",event => {
   const file = event.target.files[0];
@@ -641,12 +979,17 @@ $("coverFile").addEventListener("change",event => {
 
   try {
     validateFile(file);
-    const previewUrl = URL.createObjectURL(file);
+
+    const previewUrl =
+      URL.createObjectURL(file);
+
     previewCover(previewUrl);
+
     $("coverPreview").onload = () =>
       URL.revokeObjectURL(previewUrl);
 
     showMessage("");
+
   } catch(error) {
     event.target.value = "";
     previewCover(coverUrl);
@@ -654,9 +997,12 @@ $("coverFile").addEventListener("change",event => {
   }
 });
 
+// Portfolio photo selection
+
 $("galleryFiles").addEventListener("change",event => {
   try {
-    const files = Array.from(event.target.files);
+    const files =
+      Array.from(event.target.files);
 
     files.forEach(validateFile);
 
@@ -671,6 +1017,7 @@ $("galleryFiles").addEventListener("change",event => {
     }
 
     selectedGalleryFiles.push(...files);
+
     renderGallery();
     showMessage("");
 
@@ -681,111 +1028,142 @@ $("galleryFiles").addEventListener("change",event => {
   event.target.value = "";
 });
 
-$("profileForm").addEventListener("submit",async event => {
-  event.preventDefault();
+// Save profile
 
-  if (!barber || !user) return;
+$("profileForm").addEventListener(
+  "submit",
+  async event => {
+    event.preventDefault();
 
-  const button = $("saveButton");
-  button.disabled = true;
+    if (!barber || !user) return;
 
-  try {
-    showMessage("Saving your profile...");
+    const button = $("saveButton");
+    button.disabled = true;
 
-    const booksyUrl = normalizeBooksy($("booksy").value);
-    const tiktokUrl = normalizeTikTok($("tiktok").value);
+    try {
+      showMessage("Saving your profile...");
 
-    const slug = $("slug").value.trim().toLowerCase();
+      const booksyUrl =
+        normalizeBooksy($("booksy").value);
 
-    if (
-      slug &&
-      !/^[a-z0-9-]{3,40}$/.test(slug)
-    ) {
-      throw new Error(
-        "Username must be 3-40 lowercase letters, numbers, or hyphens."
+      const tiktokUrl =
+        normalizeTikTok($("tiktok").value);
+
+      const slug =
+        $("slug").value.trim().toLowerCase();
+
+      if (
+        slug &&
+        !/^[a-z0-9-]{3,40}$/.test(slug)
+      ) {
+        throw new Error(
+          "Username must be 3-40 lowercase letters, numbers, or hyphens."
+        );
+      }
+
+      const coverFile =
+        $("coverFile").files[0];
+
+      let nextCover = coverUrl;
+      let nextGallery = [...galleryUrls];
+
+      if (coverFile) {
+        showMessage("Uploading cover photo...");
+
+        nextCover = await uploadPhoto(
+          coverFile,
+          "cover"
+        );
+      }
+
+      if (selectedGalleryFiles.length) {
+        showMessage(
+          "Uploading portfolio photos..."
+        );
+      }
+
+      for (const file of selectedGalleryFiles) {
+        const url = await uploadPhoto(
+          file,
+          "gallery"
+        );
+
+        nextGallery.push(url);
+      }
+
+      const profile = {
+        barber_id:barber.id,
+        display_name:$("displayName").value.trim(),
+        bio:$("bio").value.trim(),
+        slug:slug || null,
+        cover_url:nextCover,
+        booksy_url:booksyUrl,
+        instagram_url:
+          $("instagram").value.trim() || null,
+        tiktok_url:tiktokUrl,
+        youtube_url:
+          $("youtube").value.trim() || null,
+        contact_url:
+          $("contact").value.trim() || null,
+        gallery_urls:nextGallery,
+        updated_at:new Date().toISOString()
+      };
+
+      if (!profile.display_name) {
+        throw new Error(
+          "Display name is required."
+        );
+      }
+
+      showMessage(
+        "Saving profile to database..."
       );
-    }
 
-    const coverFile = $("coverFile").files[0];
+      const { error } = existingProfile
+        ? await supabase
+            .from("barber_connect_profiles")
+            .update(profile)
+            .eq("barber_id",barber.id)
+        : await supabase
+            .from("barber_connect_profiles")
+            .insert(profile);
 
-    let nextCover = coverUrl;
-    let nextGallery = [...galleryUrls];
+      if (error) throw error;
 
-    if (coverFile) {
-      showMessage("Uploading cover photo...");
-      nextCover = await uploadPhoto(
-        coverFile,"cover"
+      existingProfile = true;
+      coverUrl = nextCover;
+      galleryUrls = nextGallery;
+      selectedGalleryFiles = [];
+
+      $("coverFile").value = "";
+      $("galleryFiles").value = "";
+
+      $("booksy").value =
+        booksyInput(booksyUrl);
+
+      $("tiktok").value =
+        tiktokInput(tiktokUrl);
+
+      previewCover(coverUrl);
+      renderGallery();
+
+      await updateSharePanel(slug);
+
+      showMessage(
+        "Your Barber Connect profile was saved!"
       );
-    }
 
-    if (selectedGalleryFiles.length) {
-      showMessage("Uploading portfolio photos...");
-    }
-
-    for (const file of selectedGalleryFiles) {
-      const url = await uploadPhoto(
-        file,"gallery"
+    } catch(error) {
+      showMessage(
+        "Unable to save: " +
+        (error.message || "Please try again.")
       );
-      nextGallery.push(url);
+
+    } finally {
+      button.disabled = false;
     }
-
-    const profile = {
-      barber_id:barber.id,
-      display_name:$("displayName").value.trim(),
-      bio:$("bio").value.trim(),
-      slug:slug || null,
-      cover_url:nextCover,
-      booksy_url:booksyUrl,
-      instagram_url:$("instagram").value.trim() || null,
-      tiktok_url:tiktokUrl,
-      youtube_url:$("youtube").value.trim() || null,
-      contact_url:$("contact").value.trim() || null,
-      gallery_urls:nextGallery,
-      updated_at:new Date().toISOString()
-    };
-
-    if (!profile.display_name) {
-      throw new Error("Display name is required.");
-    }
-
-    showMessage("Saving profile to database...");
-
-    const { error } = existingProfile
-      ? await supabase
-          .from("barber_connect_profiles")
-          .update(profile)
-          .eq("barber_id",barber.id)
-      : await supabase
-          .from("barber_connect_profiles")
-          .insert(profile);
-
-    if (error) throw error;
-
-    existingProfile = true;
-    coverUrl = nextCover;
-    galleryUrls = nextGallery;
-    selectedGalleryFiles = [];
-
-    $("coverFile").value = "";
-    $("galleryFiles").value = "";
-
-    $("booksy").value = booksyInput(booksyUrl);
-    $("tiktok").value = tiktokInput(tiktokUrl);
-
-    previewCover(coverUrl);
-    renderGallery();
-
-    showMessage("Your Barber Connect profile was saved!");
-
-  } catch(error) {
-    showMessage(
-      "Unable to save: " +
-      (error.message || "Please try again.")
-    );
-  } finally {
-    button.disabled = false;
   }
-});
+);
 
 await initialize();
 </script>
