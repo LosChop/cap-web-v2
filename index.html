@@ -5,8 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101114">
-  <meta name="description" content="CAPQ helps barbers and barbershops organize walk-ins, manage their line, and connect with clients.">
+  <meta name="description" content="CAPQ Pro helps barbers and barbershops organize walk-ins, manage their queue, and connect with clients.">
+
   <title>CAPQ Pro | Built for Barbers</title>
+
   <link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
   <link rel="stylesheet" href="assets/capq-brand.css">
 
@@ -21,8 +23,8 @@
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
 
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
@@ -32,8 +34,19 @@
       line-height: 1.6;
     }
 
-    a { color: inherit; text-decoration: none; }
-    button, a { -webkit-tap-highlight-color: transparent; }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 4px;
+    }
 
     .container {
       width: min(1140px, 92%);
@@ -478,6 +491,34 @@
       gap: 12px;
     }
 
+    .connect-features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 28px 0;
+      text-align: left;
+    }
+
+    .connect-feature {
+      background: #15171b;
+      border: 1px solid #414349;
+      border-radius: 12px;
+      padding: 17px;
+    }
+
+    .connect-feature strong {
+      display: block;
+      color: var(--gold);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .connect-feature span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
     .cta {
       text-align: center;
       padding: 85px 20px;
@@ -538,7 +579,8 @@
       .cards,
       .audience-grid,
       .steps,
-      .pricing-grid {
+      .pricing-grid,
+      .connect-features {
         grid-template-columns: 1fr;
       }
 
@@ -603,7 +645,7 @@
 
           <p>
             Keep your line organized, connect with clients, and manage
-            your day with less confusion. CAPQ is being built for
+            your day with less confusion. CAPQ Pro is being built for
             independent barbers and barbershop owners.
           </p>
 
@@ -634,7 +676,6 @@
           </div>
 
           <div class="preview-stats">
-
             <div class="stat">
               <strong>03</strong>
               <small>Waiting</small>
@@ -649,7 +690,6 @@
               <strong>12</strong>
               <small>Served Today</small>
             </div>
-
           </div>
 
           <div class="preview-heading">
@@ -682,7 +722,6 @@
           </div>
 
         </div>
-
       </div>
     </section>
 
@@ -714,7 +753,7 @@
             <h3>Booking Connections</h3>
             <p>
               Give customers easy access to your existing
-              booking links.
+              booking links, including Booksy and other platforms.
             </p>
           </div>
 
@@ -738,7 +777,7 @@
 
           <div class="card">
             <div class="card-icon">▥</div>
-            <h3>Reports & Insights</h3>
+            <h3>Reports &amp; Insights</h3>
             <p>
               See walk-in activity and understand how
               your business is performing.
@@ -747,10 +786,10 @@
 
           <div class="card">
             <div class="card-icon">∞</div>
-            <h3>CAPQ Connections</h3>
+            <h3>CAPQ Barber Connect</h3>
             <p>
-              Keep your professional links and barber
-              profile together.
+              Create a professional barber profile with a portfolio,
+              social links, booking information, and a shareable URL.
             </p>
           </div>
 
@@ -776,6 +815,8 @@
             <p>
               Manage your own walk-ins and clients, even if
               your barbershop doesn't subscribe to CAPQ.
+              Build a personal portfolio and connect customers
+              to your booking and social media pages.
             </p>
             <a href="signup.html" class="btn btn-gold">
               Join as a Barber
@@ -788,6 +829,8 @@
             <p>
               Build a smoother experience for your shop,
               staff, and customers with one shared queue.
+              Manage participating barbers and monitor
+              shop activity through the owner dashboard.
             </p>
             <a href="signup.html" class="btn btn-outline">
               Join as a Shop Owner
@@ -806,12 +849,66 @@
             CAPQ PRO • BARBER CONNECT
           </div>
 
-          <h2>Meet Our Barbers</h2>
+          <h2>Your Portfolio. Your Connections. Your Brand.</h2>
 
           <p>
-            Explore barber profiles, view haircut portfolios,
-            and find booking links. For walk-ins, join our
+            Give customers one place to discover your work,
+            connect with you, and book their next haircut.
+            CAPQ Barber Connect is designed to turn every
+            barber profile into a digital business card.
+          </p>
+
+          <div class="connect-features">
+
+            <div class="connect-feature">
+              <strong>Haircut Portfolio</strong>
+              <span>
+                Showcase your best haircuts and professional work.
+              </span>
+            </div>
+
+            <div class="connect-feature">
+              <strong>Social Media Links</strong>
+              <span>
+                Connect your Instagram, TikTok, and YouTube profiles.
+              </span>
+            </div>
+
+            <div class="connect-feature">
+              <strong>Booking &amp; Contact</strong>
+              <span>
+                Give clients direct access to booking and contact options.
+              </span>
+            </div>
+
+            <div class="connect-feature">
+              <strong>Shareable Profile</strong>
+              <span>
+                Share your own unique CAPQ barber profile URL.
+              </span>
+            </div>
+
+            <div class="connect-feature">
+              <strong>NFC-Ready Connections</strong>
+              <span>
+                Use your profile link with compatible NFC business cards.
+              </span>
+            </div>
+
+            <div class="connect-feature">
+              <strong>Pick Your Barber</strong>
+              <span>
+                Help customers discover barbers and explore their work.
+              </span>
+            </div>
+
+          </div>
+
+          <p>
+            Looking for a walk-in haircut? Join the general
             first-available queue without choosing a barber.
+            Prefer a specific barber? Explore their profile
+            and follow their individual booking link.
           </p>
 
           <div class="connect-actions">
@@ -850,7 +947,8 @@
             <div class="step-number">2</div>
             <h3>Set Up Your Profile</h3>
             <p>
-              Add your services, barber details, and useful links.
+              Add your services, portfolio, barber details,
+              booking link, and professional connections.
             </p>
           </div>
 
@@ -858,7 +956,8 @@
             <div class="step-number">3</div>
             <h3>Manage Your Line</h3>
             <p>
-              Let customers check in and keep your queue organized.
+              Let customers check in, keep your queue organized,
+              and connect with clients through your profile.
             </p>
           </div>
 
@@ -953,8 +1052,8 @@
         <h2>Ready for a Better Way to Manage Walk-Ins?</h2>
 
         <p>
-          Explore CAPQ as we build the next generation
-          of barber tools.
+          Explore CAPQ Pro as we build the next generation
+          of barber tools, connections, and walk-in management.
         </p>
 
         <a href="signup.html" class="btn btn-gold">
@@ -981,7 +1080,6 @@
       </div>
 
     </div>
-  
   </footer>
 
   <script src="assets/capq-nav.js" defer></script>
