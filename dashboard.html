@@ -7,6 +7,9 @@
 <meta name="theme-color" content="#101114">
 <title>CAPQ Pro | Owner Dashboard</title>
 
+<link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
+<link rel="stylesheet" href="assets/capq-brand.css">
+
 <style>
 :root {
   --black:#101114;
@@ -16,7 +19,11 @@
   --white:#F7F7F4;
   --muted:#A9ADB5;
 }
-* { box-sizing:border-box; }
+
+* {
+  box-sizing:border-box;
+}
+
 body {
   margin:0;
   background:var(--black);
@@ -24,11 +31,13 @@ body {
   font-family:Arial,Helvetica,sans-serif;
   line-height:1.5;
 }
+
 main {
   max-width:700px;
   margin:auto;
   padding:25px 18px 60px;
 }
+
 header {
   display:flex;
   align-items:center;
@@ -38,6 +47,7 @@ header {
   padding-bottom:20px;
   border-bottom:1px solid #35383d;
 }
+
 .brand {
   display:flex;
   align-items:center;
@@ -45,6 +55,7 @@ header {
   text-decoration:none;
   color:white;
 }
+
 .logo-icon {
   width:54px;
   height:54px;
@@ -54,25 +65,27 @@ header {
   display:grid;
   place-items:center;
 }
+
 .logo-icon span {
   font-size:40px;
   font-weight:900;
   color:var(--gold);
 }
-.logo-text {
-  font-size:29px;
-  font-weight:900;
-  font-style:italic;
-  letter-spacing:-1px;
-  line-height:1;
+
+.capq-pro-wordmark {
+  width:160px;
+  max-width:100%;
+  height:auto;
+  display:block;
 }
-.logo-text span { color:var(--gold); }
+
 .subtitle {
   color:var(--muted);
   font-size:9px;
   letter-spacing:2px;
   margin-top:5px;
 }
+
 .demo-badge {
   color:var(--green);
   border:1px solid #286b55;
@@ -81,39 +94,52 @@ header {
   font-size:11px;
   white-space:nowrap;
 }
-.welcome { margin-bottom:25px; }
+
+.welcome {
+  margin-bottom:25px;
+}
+
 .welcome h1 {
   font-size:clamp(27px,5vw,36px);
   margin:0 0 7px;
 }
+
 .welcome p {
   color:var(--muted);
   margin:0;
   font-size:14px;
 }
+
 .stats {
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:12px;
   margin:25px 0 35px;
 }
+
 .stat {
   background:#1c1f24;
   border:1px solid #383c42;
   border-radius:14px;
   padding:18px;
 }
+
 .stat small {
   color:var(--muted);
   font-size:12px;
 }
+
 .stat strong {
   display:block;
   font-size:34px;
   color:var(--gold);
   margin-top:6px;
 }
-.stat.available strong { color:var(--green); }
+
+.stat.available strong {
+  color:var(--green);
+}
+
 .section-header {
   display:flex;
   justify-content:space-between;
@@ -121,7 +147,12 @@ header {
   gap:12px;
   margin-bottom:15px;
 }
-h2 { font-size:23px; margin:0; }
+
+h2 {
+  font-size:23px;
+  margin:0;
+}
+
 .queue-label {
   font-size:11px;
   color:var(--green);
@@ -129,6 +160,7 @@ h2 { font-size:23px; margin:0; }
   border-radius:20px;
   padding:6px 10px;
 }
+
 .customer {
   background:#1c1f24;
   border:1px solid #383c42;
@@ -136,6 +168,7 @@ h2 { font-size:23px; margin:0; }
   padding:20px;
   margin:12px 0;
 }
+
 .customer-top {
   display:flex;
   justify-content:space-between;
@@ -143,12 +176,17 @@ h2 { font-size:23px; margin:0; }
   gap:12px;
   margin-bottom:12px;
 }
-.customer strong { font-size:18px; }
+
+.customer strong {
+  font-size:18px;
+}
+
 .customer p {
   color:var(--muted);
   font-size:13px;
   margin:6px 0;
 }
+
 .status {
   display:inline-block;
   border-radius:20px;
@@ -157,14 +195,17 @@ h2 { font-size:23px; margin:0; }
   font-weight:bold;
   white-space:nowrap;
 }
+
 .status.waiting {
   color:#e8c96e;
   background:#40361e;
 }
+
 .status.accepted {
   color:#6de6b4;
   background:#123e30;
 }
+
 .empty {
   text-align:center;
   color:var(--muted);
@@ -173,18 +214,21 @@ h2 { font-size:23px; margin:0; }
   border:1px dashed #45494f;
   border-radius:14px;
 }
+
 .message {
   color:#e8c96e;
   font-size:13px;
   min-height:20px;
   margin:12px 0;
 }
+
 .nav {
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(2,1fr);
   gap:10px;
   margin-top:35px;
 }
+
 .nav a {
   text-align:center;
   text-decoration:none;
@@ -195,12 +239,19 @@ h2 { font-size:23px; margin:0; }
   border-radius:9px;
   font-size:13px;
 }
+
+.nav a.manage-link {
+  border-color:#786434;
+  color:var(--gold);
+}
+
 .note {
   color:var(--muted);
   font-size:12px;
   text-align:center;
   margin-top:25px;
 }
+
 .signout {
   background:#292D33;
   color:white;
@@ -209,25 +260,53 @@ h2 { font-size:23px; margin:0; }
   padding:9px 12px;
   cursor:pointer;
 }
+
 .header-actions {
   display:flex;
   gap:8px;
   align-items:center;
 }
+
 @media(max-width:480px) {
-  .stats { gap:8px; }
-  .stat { padding:13px 10px; }
-  .stat strong { font-size:28px; }
-  .stat small { font-size:10px; }
-  .logo-icon { width:46px; height:46px; }
-  .logo-icon span { font-size:35px; }
-  .logo-text { font-size:25px; }
-  .customer { padding:16px; }
-  .nav a { font-size:11px; }
+  .stats {
+    gap:8px;
+  }
+
+  .stat {
+    padding:13px 10px;
+  }
+
+  .stat strong {
+    font-size:28px;
+  }
+
+  .stat small {
+    font-size:10px;
+  }
+
+  .logo-icon {
+    width:46px;
+    height:46px;
+  }
+
+  .logo-icon span {
+    font-size:35px;
+  }
+
+  .customer {
+    padding:16px;
+  }
+
+  .nav a {
+    font-size:12px;
+  }
+
+  .header-actions {
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
 }
 </style>
-<link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
-<link rel="stylesheet" href="assets/capq-brand.css">
 </head>
 
 <body>
@@ -235,15 +314,27 @@ h2 { font-size:23px; margin:0; }
 
 <header>
   <a href="index.html" class="brand">
-    <div class="logo-icon" aria-hidden="true"><span>C</span></div>
+    <div class="logo-icon" aria-hidden="true">
+      <span>C</span>
+    </div>
+
     <div>
-      <img class="capq-pro-wordmark" src="assets/capq-wordmark.svg" alt="CAPQ Pro">
+      <img
+        class="capq-pro-wordmark"
+        src="assets/capq-wordmark.svg"
+        alt="CAPQ Pro"
+      >
       <div class="subtitle">BUILT FOR BARBERS</div>
     </div>
   </a>
+
   <div class="header-actions">
     <span class="demo-badge">LIVE TEST</span>
-    <button class="signout" id="signOutButton">
+    <button
+      class="signout"
+      id="signOutButton"
+      type="button"
+    >
       Sign Out
     </button>
   </div>
@@ -251,7 +342,9 @@ h2 { font-size:23px; margin:0; }
 
 <section class="welcome">
   <h1>Owner Dashboard</h1>
-  <p id="shopName">Connecting to your shop...</p>
+  <p id="shopName">
+    Connecting to your shop...
+  </p>
 </section>
 
 <section class="stats">
@@ -259,10 +352,12 @@ h2 { font-size:23px; margin:0; }
     <small>Waiting</small>
     <strong id="waitingCount">0</strong>
   </div>
+
   <div class="stat capq-panel-border">
     <small>Accepted</small>
     <strong id="acceptedCount">0</strong>
   </div>
+
   <div class="stat available">
     <small>Accepted Today</small>
     <strong id="todayCount">0</strong>
@@ -274,18 +369,32 @@ h2 { font-size:23px; margin:0; }
     <h2>Customer Queue</h2>
     <span class="queue-label">● Live Queue</span>
   </div>
-  <p id="message" class="message" role="status"></p>
+
+  <p
+    id="message"
+    class="message"
+    role="status"
+    aria-live="polite"
+  ></p>
+
   <div id="customerList"></div>
 </section>
 
 <nav class="nav">
   <a href="index.html">Home</a>
+
   <a href="checkin.html">Check-In</a>
+
+  <a href="barber-management.html" class="manage-link">
+    Manage Barbers
+  </a>
+
   <a href="dashboard.html">Dashboard</a>
 </nav>
 
 <p class="note">
-  Shop-wide queue overview. Barbers accept customers from their own dashboard.
+  Shop-wide queue overview.
+  Barbers accept customers from their own dashboard.
   SMS notifications are not connected yet.
 </p>
 
@@ -309,8 +418,11 @@ const supabase = createClient(
   SUPABASE_KEY
 );
 
-const list = document.getElementById("customerList");
-const message = document.getElementById("message");
+const list =
+  document.getElementById("customerList");
+
+const message =
+  document.getElementById("message");
 
 let ready = false;
 let loading = false;
@@ -332,6 +444,7 @@ function showEmpty(text) {
   const empty = document.createElement("div");
   empty.className = "empty";
   empty.textContent = text;
+
   list.appendChild(empty);
 }
 
@@ -359,6 +472,7 @@ async function verifyOwner() {
         ? "Shop access error: " + error.message
         : "Your account is not assigned to this shop."
     );
+
     showEmpty("Shop access unavailable.");
     return false;
   }
@@ -429,19 +543,26 @@ function render(customers, acceptedToday, barberNames) {
     card.append(top, service, barber);
 
     const assignedBarber = document.createElement("p");
+
     if (customer.status === "Waiting") {
-      assignedBarber.textContent = "Assigned barber: Awaiting Barber";
+      assignedBarber.textContent =
+        "Assigned barber: Awaiting Barber";
     } else if (customer.barber_id) {
-      assignedBarber.textContent = "Accepted by: " +
-        (barberNames.get(customer.barber_id) || "Barber name unavailable");
+      assignedBarber.textContent =
+        "Accepted by: " +
+        (barberNames.get(customer.barber_id) ||
+          "Barber name unavailable");
     } else {
-      assignedBarber.textContent = "Accepted by: Not assigned";
+      assignedBarber.textContent =
+        "Accepted by: Not assigned";
     }
+
     card.appendChild(assignedBarber);
 
     if (customer.status === "Waiting") {
       const hint = document.createElement("p");
-      hint.textContent = "Waiting for a barber to accept this customer.";
+      hint.textContent =
+        "Waiting for a barber to accept this customer.";
       card.appendChild(hint);
     } else if (customer.status === "Accepted") {
       const estimate = document.createElement("p");
@@ -466,7 +587,11 @@ async function loadQueue(preserveMessage = false) {
   loading = true;
 
   try {
-    const [queueResult, countResult, barbersResult] = await Promise.all([
+    const [
+      queueResult,
+      countResult,
+      barbersResult
+    ] = await Promise.all([
       supabase
         .from("capq_queue")
         .select(
@@ -490,12 +615,22 @@ async function loadQueue(preserveMessage = false) {
         .eq("shop_id", SHOP_ID)
     ]);
 
-    if (queueResult.error) throw queueResult.error;
-    if (countResult.error) throw countResult.error;
-    if (barbersResult.error) throw barbersResult.error;
+    if (queueResult.error) {
+      throw queueResult.error;
+    }
+
+    if (countResult.error) {
+      throw countResult.error;
+    }
+
+    if (barbersResult.error) {
+      throw barbersResult.error;
+    }
 
     const barberNames = new Map(
-      (barbersResult.data || []).map(barber => [barber.id, barber.name])
+      (barbersResult.data || []).map(
+        barber => [barber.id, barber.name]
+      )
     );
 
     render(
@@ -509,7 +644,9 @@ async function loadQueue(preserveMessage = false) {
     }
 
   } catch (error) {
-    setMessage("Unable to load queue: " + error.message);
+    setMessage(
+      "Unable to load queue: " + error.message
+    );
   } finally {
     loading = false;
   }
@@ -523,6 +660,7 @@ document.getElementById("signOutButton")
 
 if (await verifyOwner()) {
   ready = true;
+
   await loadQueue();
 
   setInterval(() => {
@@ -531,6 +669,683 @@ if (await verifyOwner()) {
     }
   }, 5000);
 }
+
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101114">
+<title>CAPQ Pro | Owner Dashboard</title>
+
+<link rel="icon" type="image/svg+xml" href="assets/capq-mark.svg">
+<link rel="stylesheet" href="assets/capq-brand.css">
+
+<style>
+:root {
+  --black:#101114;
+  --charcoal:#292D33;
+  --gold:#D6B45C;
+  --green:#16A77A;
+  --white:#F7F7F4;
+  --muted:#A9ADB5;
+}
+
+* {
+  box-sizing:border-box;
+}
+
+body {
+  margin:0;
+  background:var(--black);
+  color:var(--white);
+  font-family:Arial,Helvetica,sans-serif;
+  line-height:1.5;
+}
+
+main {
+  max-width:700px;
+  margin:auto;
+  padding:25px 18px 60px;
+}
+
+header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:35px;
+  padding-bottom:20px;
+  border-bottom:1px solid #35383d;
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  color:white;
+}
+
+.logo-icon {
+  width:54px;
+  height:54px;
+  background:#08090b;
+  border:1px solid #786434;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+}
+
+.logo-icon span {
+  font-size:40px;
+  font-weight:900;
+  color:var(--gold);
+}
+
+.capq-pro-wordmark {
+  width:160px;
+  max-width:100%;
+  height:auto;
+  display:block;
+}
+
+.subtitle {
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:2px;
+  margin-top:5px;
+}
+
+.demo-badge {
+  color:var(--green);
+  border:1px solid #286b55;
+  padding:6px 11px;
+  border-radius:20px;
+  font-size:11px;
+  white-space:nowrap;
+}
+
+.welcome {
+  margin-bottom:25px;
+}
+
+.welcome h1 {
+  font-size:clamp(27px,5vw,36px);
+  margin:0 0 7px;
+}
+
+.welcome p {
+  color:var(--muted);
+  margin:0;
+  font-size:14px;
+}
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:25px 0 35px;
+}
+
+.stat {
+  background:#1c1f24;
+  border:1px solid #383c42;
+  border-radius:14px;
+  padding:18px;
+}
+
+.stat small {
+  color:var(--muted);
+  font-size:12px;
+}
+
+.stat strong {
+  display:block;
+  font-size:34px;
+  color:var(--gold);
+  margin-top:6px;
+}
+
+.stat.available strong {
+  color:var(--green);
+}
+
+.section-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:15px;
+}
+
+h2 {
+  font-size:23px;
+  margin:0;
+}
+
+.queue-label {
+  font-size:11px;
+  color:var(--green);
+  background:#123e30;
+  border-radius:20px;
+  padding:6px 10px;
+}
+
+.customer {
+  background:#1c1f24;
+  border:1px solid #383c42;
+  border-radius:15px;
+  padding:20px;
+  margin:12px 0;
+}
+
+.customer-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.customer strong {
+  font-size:18px;
+}
+
+.customer p {
+  color:var(--muted);
+  font-size:13px;
+  margin:6px 0;
+}
+
+.status {
+  display:inline-block;
+  border-radius:20px;
+  padding:6px 10px;
+  font-size:11px;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+.status.waiting {
+  color:#e8c96e;
+  background:#40361e;
+}
+
+.status.accepted {
+  color:#6de6b4;
+  background:#123e30;
+}
+
+.empty {
+  text-align:center;
+  color:var(--muted);
+  padding:35px 15px;
+  background:#1c1f24;
+  border:1px dashed #45494f;
+  border-radius:14px;
+}
+
+.message {
+  color:#e8c96e;
+  font-size:13px;
+  min-height:20px;
+  margin:12px 0;
+}
+
+.nav {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:35px;
+}
+
+.nav a {
+  text-align:center;
+  text-decoration:none;
+  background:var(--charcoal);
+  border:1px solid #44484e;
+  color:white;
+  padding:13px 8px;
+  border-radius:9px;
+  font-size:13px;
+}
+
+.nav a.manage-link {
+  border-color:#786434;
+  color:var(--gold);
+}
+
+.note {
+  color:var(--muted);
+  font-size:12px;
+  text-align:center;
+  margin-top:25px;
+}
+
+.signout {
+  background:#292D33;
+  color:white;
+  border:0;
+  border-radius:9px;
+  padding:9px 12px;
+  cursor:pointer;
+}
+
+.header-actions {
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+@media(max-width:480px) {
+  .stats {
+    gap:8px;
+  }
+
+  .stat {
+    padding:13px 10px;
+  }
+
+  .stat strong {
+    font-size:28px;
+  }
+
+  .stat small {
+    font-size:10px;
+  }
+
+  .logo-icon {
+    width:46px;
+    height:46px;
+  }
+
+  .logo-icon span {
+    font-size:35px;
+  }
+
+  .customer {
+    padding:16px;
+  }
+
+  .nav a {
+    font-size:12px;
+  }
+
+  .header-actions {
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+}
+</style>
+</head>
+
+<body>
+<main>
+
+<header>
+  <a href="index.html" class="brand">
+    <div class="logo-icon" aria-hidden="true">
+      <span>C</span>
+    </div>
+
+    <div>
+      <img
+        class="capq-pro-wordmark"
+        src="assets/capq-wordmark.svg"
+        alt="CAPQ Pro"
+      >
+      <div class="subtitle">BUILT FOR BARBERS</div>
+    </div>
+  </a>
+
+  <div class="header-actions">
+    <span class="demo-badge">LIVE TEST</span>
+    <button
+      class="signout"
+      id="signOutButton"
+      type="button"
+    >
+      Sign Out
+    </button>
+  </div>
+</header>
+
+<section class="welcome">
+  <h1>Owner Dashboard</h1>
+  <p id="shopName">
+    Connecting to your shop...
+  </p>
+</section>
+
+<section class="stats">
+  <div class="stat capq-panel-border">
+    <small>Waiting</small>
+    <strong id="waitingCount">0</strong>
+  </div>
+
+  <div class="stat capq-panel-border">
+    <small>Accepted</small>
+    <strong id="acceptedCount">0</strong>
+  </div>
+
+  <div class="stat available">
+    <small>Accepted Today</small>
+    <strong id="todayCount">0</strong>
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <h2>Customer Queue</h2>
+    <span class="queue-label">● Live Queue</span>
+  </div>
+
+  <p
+    id="message"
+    class="message"
+    role="status"
+    aria-live="polite"
+  ></p>
+
+  <div id="customerList"></div>
+</section>
+
+<nav class="nav">
+  <a href="index.html">Home</a>
+
+  <a href="checkin.html">Check-In</a>
+
+  <a href="barber-management.html" class="manage-link">
+    Manage Barbers
+  </a>
+
+  <a href="dashboard.html">Dashboard</a>
+</nav>
+
+<p class="note">
+  Shop-wide queue overview.
+  Barbers accept customers from their own dashboard.
+  SMS notifications are not connected yet.
+</p>
+
+</main>
+
+<script type="module">
+import { createClient } from
+  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL =
+  "https://nfazsevnpfmabsipkrrh.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_FtcxTtmcHvtyu3m2KJRjqA_3Nzkk2La";
+
+const SHOP_ID =
+  "061c8b27-0d31-404a-b227-2839639acb35";
+
+const supabase = createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const list =
+  document.getElementById("customerList");
+
+const message =
+  document.getElementById("message");
+
+let ready = false;
+let loading = false;
+let shopName = "";
+
+function setMessage(text) {
+  message.textContent = text;
+}
+
+function startOfToday() {
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
+  return date.toISOString();
+}
+
+function showEmpty(text) {
+  list.replaceChildren();
+
+  const empty = document.createElement("div");
+  empty.className = "empty";
+  empty.textContent = text;
+
+  list.appendChild(empty);
+}
+
+async function verifyOwner() {
+  const {
+    data: { user },
+    error: authError
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    window.location.replace("login.html");
+    return false;
+  }
+
+  const { data: shop, error } = await supabase
+    .from("barber_shops")
+    .select("id,name")
+    .eq("id", SHOP_ID)
+    .eq("owner_id", user.id)
+    .maybeSingle();
+
+  if (error || !shop) {
+    setMessage(
+      error
+        ? "Shop access error: " + error.message
+        : "Your account is not assigned to this shop."
+    );
+
+    showEmpty("Shop access unavailable.");
+    return false;
+  }
+
+  shopName = shop.name;
+
+  document.getElementById("shopName").textContent =
+    shopName + " · Owner Dashboard";
+
+  return true;
+}
+
+function render(customers, acceptedToday, barberNames) {
+  const waiting = customers.filter(
+    c => c.status === "Waiting"
+  ).length;
+
+  const accepted = customers.filter(
+    c => c.status === "Accepted"
+  ).length;
+
+  document.getElementById("waitingCount").textContent =
+    waiting;
+
+  document.getElementById("acceptedCount").textContent =
+    accepted;
+
+  document.getElementById("todayCount").textContent =
+    acceptedToday;
+
+  list.replaceChildren();
+
+  if (!customers.length) {
+    showEmpty("No active customer requests.");
+    return;
+  }
+
+  customers.forEach(customer => {
+    const card = document.createElement("div");
+    card.className = "customer";
+
+    const top = document.createElement("div");
+    top.className = "customer-top";
+
+    const name = document.createElement("strong");
+    name.textContent =
+      customer.customer_name || "Customer";
+
+    const status = document.createElement("span");
+    status.className =
+      "status " +
+      (customer.status === "Waiting"
+        ? "waiting"
+        : "accepted");
+
+    status.textContent = customer.status;
+    top.append(name, status);
+
+    const service = document.createElement("p");
+    service.textContent =
+      "Service: " + (customer.service || "Haircut");
+
+    const barber = document.createElement("p");
+    barber.textContent =
+      "Preference: " +
+      (customer.barber_preference || "Next Available");
+
+    card.append(top, service, barber);
+
+    const assignedBarber = document.createElement("p");
+
+    if (customer.status === "Waiting") {
+      assignedBarber.textContent =
+        "Assigned barber: Awaiting Barber";
+    } else if (customer.barber_id) {
+      assignedBarber.textContent =
+        "Accepted by: " +
+        (barberNames.get(customer.barber_id) ||
+          "Barber name unavailable");
+    } else {
+      assignedBarber.textContent =
+        "Accepted by: Not assigned";
+    }
+
+    card.appendChild(assignedBarber);
+
+    if (customer.status === "Waiting") {
+      const hint = document.createElement("p");
+      hint.textContent =
+        "Waiting for a barber to accept this customer.";
+      card.appendChild(hint);
+    } else if (customer.status === "Accepted") {
+      const estimate = document.createElement("p");
+      estimate.style.color = "var(--green)";
+      estimate.style.fontWeight = "bold";
+
+      estimate.textContent =
+        "Accepted · Estimated wait: " +
+        (customer.estimated_wait_minutes ?? "Not set") +
+        " minutes";
+
+      card.appendChild(estimate);
+    }
+
+    list.appendChild(card);
+  });
+}
+
+async function loadQueue(preserveMessage = false) {
+  if (!ready || loading) return;
+
+  loading = true;
+
+  try {
+    const [
+      queueResult,
+      countResult,
+      barbersResult
+    ] = await Promise.all([
+      supabase
+        .from("capq_queue")
+        .select(
+          "id,customer_name,service,barber_preference," +
+          "status,barber_id,estimated_wait_minutes,created_at"
+        )
+        .eq("shop_id", SHOP_ID)
+        .in("status", ["Waiting", "Accepted"])
+        .order("created_at", { ascending: true }),
+
+      supabase
+        .from("capq_queue")
+        .select("id", { count: "exact", head: true })
+        .eq("shop_id", SHOP_ID)
+        .eq("status", "Accepted")
+        .gte("accepted_at", startOfToday()),
+
+      supabase
+        .from("barbers")
+        .select("id,name")
+        .eq("shop_id", SHOP_ID)
+    ]);
+
+    if (queueResult.error) {
+      throw queueResult.error;
+    }
+
+    if (countResult.error) {
+      throw countResult.error;
+    }
+
+    if (barbersResult.error) {
+      throw barbersResult.error;
+    }
+
+    const barberNames = new Map(
+      (barbersResult.data || []).map(
+        barber => [barber.id, barber.name]
+      )
+    );
+
+    render(
+      queueResult.data || [],
+      countResult.count || 0,
+      barberNames
+    );
+
+    if (!preserveMessage) {
+      setMessage("");
+    }
+
+  } catch (error) {
+    setMessage(
+      "Unable to load queue: " + error.message
+    );
+  } finally {
+    loading = false;
+  }
+}
+
+document.getElementById("signOutButton")
+  .addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    window.location.replace("login.html");
+  });
+
+if (await verifyOwner()) {
+  ready = true;
+
+  await loadQueue();
+
+  setInterval(() => {
+    if (!document.hidden) {
+      loadQueue();
+    }
+  }, 5000);
+}
+
 </script>
 
 </body>
