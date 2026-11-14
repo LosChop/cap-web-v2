@@ -1,0 +1,544 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101114">
+<title>Edit Barber Connect | CAPQ Pro</title>
+<link rel="icon" href="assets/capq-mark.svg" type="image/svg+xml">
+<style>
+:root{
+  --bg:#101114;
+  --panel:#1D2025;
+  --gold:#D6B45C;
+  --white:#F7F7F4;
+  --muted:#A9ADB5;
+  --border:#393D44;
+  --green:#16A77A;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--white);
+  font-family:Arial,Helvetica,sans-serif;line-height:1.5
+}
+main{max-width:760px;margin:auto;padding:24px 16px 70px}
+header{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:16px;
+  padding-bottom:20px;border-bottom:1px solid var(--border)
+}
+.brand{font-size:27px;font-weight:900;color:var(--gold)}
+.brand span{color:white;font-size:16px}
+.subtitle{color:var(--muted);font-size:11px;letter-spacing:2px}
+a{color:var(--gold)}
+header a{text-decoration:none;font-size:13px}
+h1{font-size:clamp(28px,5vw,38px);margin:30px 0 7px}
+h2{font-size:21px;margin:0 0 18px;color:var(--gold)}
+.intro{color:var(--muted);font-size:14px;margin-bottom:28px}
+.panel{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:17px;padding:24px;margin-bottom:20px
+}
+.field{margin-bottom:19px}
+.field:last-child{margin-bottom:0}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:8px}
+input,textarea{
+  width:100%;padding:13px 14px;
+  background:#101216;border:1px solid #50545B;
+  border-radius:10px;color:white;font:inherit
+}
+textarea{resize:vertical;min-height:110px}
+input:focus,textarea:focus{
+  outline:2px solid var(--gold);outline-offset:1px
+}
+.help{color:var(--muted);font-size:12px;margin:6px 0 0}
+.preview{
+  display:block;max-width:100%;max-height:190px;
+  object-fit:cover;border:1px solid var(--border);
+  border-radius:12px;margin-top:12px
+}
+.hidden{display:none!important}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin:25px 0}
+button,.button{
+  border:1px solid var(--gold);border-radius:10px;
+  padding:13px 20px;background:var(--gold);
+  color:#111;font-weight:bold;cursor:pointer;
+  text-decoration:none;font-size:14px
+}
+button:disabled{opacity:.5;cursor:not-allowed}
+.button.secondary{background:#292D33;color:white;border-color:#555}
+.message{font-size:14px;color:var(--gold);min-height:22px}
+.success{color:var(--green)}
+.error{color:#FF9C9C}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.gallery-preview{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;margin-top:15px
+}
+.gallery-preview img{
+  width:100%;aspect-ratio:1;object-fit:cover;
+  border-radius:10px;border:1px solid var(--border)
+}
+footer{
+  border-top:1px solid var(--border);
+  padding-top:24px;margin-top:40px;
+  text-align:center;color:var(--muted);font-size:12px
+}
+@media(max-width:520px){
+  .grid{grid-template-columns:1fr}
+  .panel{padding:18px}
+  .gallery-preview{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div>
+    <div class="brand">CAPQ <span>PRO</span></div>
+    <div class="subtitle">BARBER CONNECT EDITOR</div>
+  </div>
+  <a href="index.html">CAPQ Home</a>
+</header>
+
+<h1>Edit Your Barber Profile</h1>
+<p class="intro">
+  Build your digital barber business card.
+  Update your details, social media, booking links,
+  and haircut portfolio.
+</p>
+
+<p id="status" class="message" role="status" aria-live="polite">
+  Checking your account...
+</p>
+
+<form id="profileForm" class="hidden">
+
+  <section class="panel">
+    <h2>Barber Information</h2>
+
+    <div class="field">
+      <label for="displayName">Display Name</label>
+      <input id="displayName" maxlength="80" required
+        placeholder="Your professional barber name">
+    </div>
+
+    <div class="field">
+      <label for="slug">Your Profile Username</label>
+      <input id="slug" maxlength="40" minlength="3"
+        pattern="[a-z0-9-]{3,40}" required
+        placeholder="your-barber-name">
+      <p class="help">
+        Lowercase letters, numbers, and hyphens only.
+        This becomes your shareable profile URL.
+      </p>
+    </div>
+
+    <div class="field">
+      <label for="bio">About You</label>
+      <textarea id="bio" maxlength="1000"
+        placeholder="Tell clients about your experience, specialties, and style."></textarea>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Profile Photos</h2>
+
+    <div class="field">
+      <label for="coverUrl">Cover Photo URL</label>
+      <input id="coverUrl" type="url"
+        placeholder="https://example.com/cover.jpg">
+      <p class="help">
+        Paste a publicly accessible HTTPS image URL.
+      </p>
+      <img id="coverPreview" class="preview hidden" alt="Cover preview">
+    </div>
+
+    <div class="field">
+      <label for="avatarUrl">Profile Picture URL</label>
+      <input id="avatarUrl" type="url"
+        placeholder="https://example.com/profile.jpg">
+      <p class="help">
+        Use a clear portrait of yourself.
+        This is separate from your cover photo.
+      </p>
+      <img id="avatarPreview" class="preview hidden" alt="Avatar preview">
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Booking & Contact</h2>
+
+    <div class="field">
+      <label for="booksyUrl">Booksy Booking Link</label>
+      <input id="booksyUrl" type="url"
+        placeholder="https://booksy.com/...">
+    </div>
+
+    <div class="field">
+      <label for="contactUrl">Website / Contact Link</label>
+      <input id="contactUrl" type="url"
+        placeholder="https://yourwebsite.com">
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Social Media</h2>
+
+    <div class="field">
+      <label for="instagramUrl">Instagram</label>
+      <input id="instagramUrl"
+        placeholder="@yourinstagram or full URL">
+    </div>
+
+    <div class="field">
+      <label for="tiktokUrl">TikTok</label>
+      <input id="tiktokUrl"
+        placeholder="@yourtiktok or full URL">
+    </div>
+
+    <div class="field">
+      <label for="youtubeUrl">YouTube</label>
+      <input id="youtubeUrl"
+        placeholder="@yourchannel or full URL">
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Haircut Portfolio</h2>
+    <p class="help">
+      Add up to six publicly accessible HTTPS image URLs.
+      Leave unused fields blank.
+    </p>
+
+    <div class="grid">
+      <div class="field">
+        <label for="photo1">Photo 1</label>
+        <input id="photo1" type="url" placeholder="https://...">
+      </div>
+      <div class="field">
+        <label for="photo2">Photo 2</label>
+        <input id="photo2" type="url" placeholder="https://...">
+      </div>
+      <div class="field">
+        <label for="photo3">Photo 3</label>
+        <input id="photo3" type="url" placeholder="https://...">
+      </div>
+      <div class="field">
+        <label for="photo4">Photo 4</label>
+        <input id="photo4" type="url" placeholder="https://...">
+      </div>
+      <div class="field">
+        <label for="photo5">Photo 5</label>
+        <input id="photo5" type="url" placeholder="https://...">
+      </div>
+      <div class="field">
+        <label for="photo6">Photo 6</label>
+        <input id="photo6" type="url" placeholder="https://...">
+      </div>
+    </div>
+
+    <div id="galleryPreview" class="gallery-preview"></div>
+  </section>
+
+  <div class="actions">
+    <button id="saveButton" type="submit">
+      Save My Profile
+    </button>
+    <a id="viewProfile" class="button secondary hidden"
+      href="#" target="_blank" rel="noopener noreferrer">
+      View Public Profile
+    </a>
+  </div>
+
+  <p id="saveMessage" class="message" role="status" aria-live="polite"></p>
+</form>
+
+<footer>CAPQ PRO · BARBER CONNECT</footer>
+</main>
+
+<script type="module">
+import { createClient } from
+  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL =
+  "https://nfazsevnpfmabsipkrrh.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_FtcxTtmcHvtyu3m2KJRjqA_3Nzkk2La";
+
+const supabase = createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const $ = id => document.getElementById(id);
+
+let currentUser = null;
+let currentProfile = null;
+let saving = false;
+
+// This editor expects barber_connect_profiles.user_id
+// to reference auth.users.id. Database RLS must enforce
+// that users can update only their own rows.
+
+function status(text,type=""){
+  $("status").textContent=text;
+  $("status").className="message "+type;
+}
+
+function saveStatus(text,type=""){
+  $("saveMessage").textContent=text;
+  $("saveMessage").className="message "+type;
+}
+
+function value(id){
+  return $(id).value.trim();
+}
+
+function setValue(id,text){
+  $(id).value=text || "";
+}
+
+function httpsUrl(text){
+  if(!text)return null;
+  try{
+    const u=new URL(text);
+    return u.protocol==="https:" ? u.href : null;
+  }catch{
+    return null;
+  }
+}
+
+function validateOptionalUrl(text,label){
+  if(!text)return null;
+  const url=httpsUrl(text);
+  if(!url)throw new Error(label+" must be a valid HTTPS URL.");
+  return url;
+}
+
+function socialValue(text,label){
+  if(!text)return null;
+  if(text.includes("://")){
+    return validateOptionalUrl(text,label);
+  }
+  const username=text.replace(/^@/,"");
+  if(!/^[a-zA-Z0-9._-]+$/.test(username)){
+    throw new Error(label+" must be a username or HTTPS URL.");
+  }
+  return text;
+}
+
+function booksyValue(text){
+  if(!text)return null;
+  const url=validateOptionalUrl(text,"Booksy");
+  const host=new URL(url).hostname.toLowerCase();
+  if(!(
+    host==="booksy.com" ||
+    host.endsWith(".booksy.com") ||
+    host==="booksy.net" ||
+    host.endsWith(".booksy.net")
+  )){
+    throw new Error("Booking link must use Booksy.");
+  }
+  return url;
+}
+
+function updatePreview(inputId,imageId){
+  const url=httpsUrl(value(inputId));
+  const image=$(imageId);
+  if(url){
+    image.src=url;
+    image.classList.remove("hidden");
+  }else{
+    image.removeAttribute("src");
+    image.classList.add("hidden");
+  }
+}
+
+function updateGalleryPreview(){
+  const gallery=$("galleryPreview");
+  gallery.replaceChildren();
+
+  for(let i=1;i<=6;i++){
+    const url=httpsUrl(value("photo"+i));
+    if(!url)continue;
+    const img=document.createElement("img");
+    img.src=url;
+    img.alt="Portfolio preview "+i;
+    img.loading="lazy";
+    gallery.appendChild(img);
+  }
+}
+
+function profileUrl(slug){
+  const url=new URL("barber-profile.html",location.href);
+  url.search="";
+  url.searchParams.set("barber",slug);
+  return url.href;
+}
+
+function updateProfileLink(slug){
+  const link=$("viewProfile");
+  if(slug){
+    link.href=profileUrl(slug);
+    link.classList.remove("hidden");
+  }else{
+    link.classList.add("hidden");
+    link.removeAttribute("href");
+  }
+}
+
+function fillForm(data){
+  setValue("displayName",data.display_name);
+  setValue("slug",data.slug);
+  setValue("bio",data.bio);
+  setValue("coverUrl",data.cover_url);
+  setValue("avatarUrl",data.avatar_url);
+  setValue("booksyUrl",data.booksy_url);
+  setValue("contactUrl",data.contact_url);
+  setValue("instagramUrl",data.instagram_url);
+  setValue("tiktokUrl",data.tiktok_url);
+  setValue("youtubeUrl",data.youtube_url);
+
+  const photos=Array.isArray(data.gallery_urls)
+    ?data.gallery_urls:[];
+
+  for(let i=1;i<=6;i++){
+    setValue("photo"+i,photos[i-1]||"");
+  }
+
+  updatePreview("coverUrl","coverPreview");
+  updatePreview("avatarUrl","avatarPreview");
+  updateGalleryPreview();
+  updateProfileLink(data.slug);
+}
+
+function formPayload(){
+  const displayName=value("displayName");
+  const slug=value("slug").toLowerCase();
+
+  if(!displayName){
+    throw new Error("Enter your display name.");
+  }
+
+  if(!/^[a-z0-9-]{3,40}$/.test(slug)){
+    throw new Error("Enter a valid profile username.");
+  }
+
+  const photos=[];
+  for(let i=1;i<=6;i++){
+    const text=value("photo"+i);
+    if(text){
+      photos.push(validateOptionalUrl(text,"Portfolio photo "+i));
+    }
+  }
+
+  return {
+    display_name:displayName,
+    slug,
+    bio:value("bio"),
+    cover_url:validateOptionalUrl(value("coverUrl"),"Cover photo"),
+    avatar_url:validateOptionalUrl(value("avatarUrl"),"Profile photo"),
+    booksy_url:booksyValue(value("booksyUrl")),
+    contact_url:validateOptionalUrl(value("contactUrl"),"Contact link"),
+    instagram_url:socialValue(value("instagramUrl"),"Instagram"),
+    tiktok_url:socialValue(value("tiktokUrl"),"TikTok"),
+    youtube_url:socialValue(value("youtubeUrl"),"YouTube"),
+    gallery_urls:photos
+  };
+}
+
+async function loadEditor(){
+  try{
+    const {data:{user},error:authError}=
+      await supabase.auth.getUser();
+
+    if(authError||!user){
+      location.replace("login.html");
+      return;
+    }
+
+    currentUser=user;
+
+    const {data,error}=await supabase
+      .from("barber_connect_profiles")
+      .select(
+        "id,user_id,display_name,slug,bio,cover_url,"+
+        "avatar_url,booksy_url,instagram_url,tiktok_url,"+
+        "youtube_url,contact_url,gallery_urls"
+      )
+      .eq("user_id",user.id)
+      .maybeSingle();
+
+    if(error)throw error;
+
+    if(!data){
+      status(
+        "No Barber Connect profile is linked to your login yet. "+
+        "The shop owner must link your barber account first."
+      );
+      return;
+    }
+
+    currentProfile=data;
+    fillForm(data);
+    $("profileForm").classList.remove("hidden");
+    status("Profile loaded. You can now edit your information.","success");
+
+  }catch(error){
+    console.error(error);
+    status("Unable to open editor: "+error.message,"error");
+  }
+}
+
+async function saveProfile(event){
+  event.preventDefault();
+  if(saving||!currentUser||!currentProfile)return;
+
+  saving=true;
+  $("saveButton").disabled=true;
+  saveStatus("Saving your changes...");
+
+  try{
+    const payload=formPayload();
+
+    const {data,error}=await supabase
+      .from("barber_connect_profiles")
+      .update(payload)
+      .eq("id",currentProfile.id)
+      .eq("user_id",currentUser.id)
+      .select("id,slug")
+      .single();
+
+    if(error)throw error;
+
+    currentProfile.slug=data.slug;
+    updateProfileLink(data.slug);
+    saveStatus("Profile saved successfully!","success");
+
+  }catch(error){
+    console.error(error);
+    saveStatus("Unable to save: "+error.message,"error");
+  }finally{
+    saving=false;
+    $("saveButton").disabled=false;
+  }
+}
+
+$("profileForm").addEventListener("submit",saveProfile);
+
+$("coverUrl").addEventListener("input",()=>{
+  updatePreview("coverUrl","coverPreview");
+});
+
+$("avatarUrl").addEventListener("input",()=>{
+  updatePreview("avatarUrl","avatarPreview");
+});
+
+for(let i=1;i<=6;i++){
+  $("photo"+i).addEventListener("input",updateGalleryPreview);
+}
+
+await loadEditor();
+</script>
+</body>
+</html>
